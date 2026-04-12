@@ -1251,9 +1251,11 @@
   setInterval(updateCountdown, 1000);
 
   /* ════════════════════════════════════════
-     RENDER DONATUR & ANNOUNCEMENT dari localStorage
-     (sync real-time dengan admin.html via storage event)
+     JSONBIN — real-time data untuk semua device
   ════════════════════════════════════════ */
+  const _BIN_URL = 'https://api.jsonbin.io/v3/b/69dbb6a9856a68218926ebd3/latest';
+  const _BIN_KEY = '$2a$10$A5iV4/87eDDDVb2YwHpDpexTh1Ea13pe3M5W0NeyqeQsNxB1vgjei';
+
   const MEDALS_IDX = ['🥇','🥈','🥉'];
   const RANK_STYLES = {
     LEGEND:  { bg:'rgba(251,191,36,0.15)',  color:'#fbbf24',  border:'rgba(251,191,36,0.3)'  },
@@ -1263,23 +1265,20 @@
   };
   const RANK_CARD_CLASS = ['rank-1','rank-2','rank-3','rank-4','rank-5'];
 
-  function lsGet(key, def) {
-    try { return JSON.parse(localStorage.getItem('arvenia_'+key) ?? 'null') ?? def; } catch { return def; }
-  }
+  let _cachedDon = null;
+  let _cachedAnn = null;
 
-  function renderDonaturGrid() {
-    const list = lsGet('donators', []);
+  function renderDonaturGrid(list) {
     const grid = document.getElementById('donaturGrid');
     if (!grid) return;
-    if (!list.length) {
-      grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-muted);font-size:.9rem;">
-        Belum ada data donatur bulan ini.</div>`;
+    if (!list || !list.length) {
+      grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-muted);font-size:.9rem;">Belum ada data donatur bulan ini.</div>`;
       return;
     }
     grid.innerHTML = list.slice(0,6).map((d, i) => {
       const medal  = MEDALS_IDX[i] || '🎖️';
       const cls    = RANK_CARD_CLASS[i] || 'rank-other';
-      const st     = RANK_STYLES[d.rank] || RANK_STYLES.EMERALD;
+      const sty    = RANK_STYLES[d.rank] || RANK_STYLES.EMERALD;
       const avatar = d.username[0].toUpperCase();
       return `
         <div class="donatur-card ${cls}">
@@ -1288,7 +1287,7 @@
           <div class="donatur-avatar">${avatar}</div>
           <div class="donatur-name">${d.username}</div>
           <div class="donatur-amount">Rp ${d.amount.toLocaleString('id-ID')}</div>
-          <div class="donatur-rank-badge" style="background:${st.bg};color:${st.color};border-color:${st.border};">${d.rank}</div>
+          <div class="donatur-rank-badge" style="background:${sty.bg};color:${sty.color};border-color:${sty.border};">${d.rank}</div>
         </div>`;
     }).join('');
   }
@@ -1299,13 +1298,11 @@
     sale:   { cls:'tag-sale',   label:'🔥 Flash Sale' },
   };
 
-  function renderNewsGrid() {
-    const list = lsGet('announcements', []);
+  function renderNewsGrid(list) {
     const grid = document.getElementById('newsGrid');
     if (!grid) return;
-    if (!list.length) {
-      grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-muted);font-size:.9rem;">
-        Belum ada pengumuman saat ini.</div>`;
+    if (!list || !list.length) {
+      grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-muted);font-size:.9rem;">Belum ada pengumuman saat ini.</div>`;
       return;
     }
     grid.innerHTML = list.slice(0,6).map(a => {
@@ -1320,46 +1317,28 @@
     }).join('');
   }
 
-  /* ── Seed data default jika localStorage masih kosong ── */
-  (function seedDefaults() {
-    if (!localStorage.getItem('arvenia_donators')) {
-      localStorage.setItem('arvenia_donators', JSON.stringify([
-        { id:1, username:'SteveKing',    amount:250000, rank:'LEGEND'  },
-        { id:2, username:'AlexCraft',    amount:185000, rank:'LEGEND'  },
-        { id:3, username:'NightWalker',  amount:120000, rank:'DIAMOND' },
-        { id:4, username:'DragonSlyr',   amount:85000,  rank:'DIAMOND' },
-        { id:5, username:'ZephyrMC',     amount:50000,  rank:'GOLD'    },
-        { id:6, username:'RedstoneKing', amount:30000,  rank:'EMERALD' },
-      ]));
+  async function fetchAndRender() {
+    try {
+      const r   = await fetch(_BIN_URL, { headers: { 'X-Access-Key': _BIN_KEY } });
+      const j   = await r.json();
+      const rec = j.record || {};
+
+      const don = rec.donators      || [];
+      const ann = rec.announcements || [];
+      const donStr = JSON.stringify(don);
+      const annStr = JSON.stringify(ann);
+
+      if (donStr !== _cachedDon) { _cachedDon = donStr; renderDonaturGrid(don); }
+      if (annStr !== _cachedAnn) { _cachedAnn = annStr; renderNewsGrid(ann); }
+    } catch(e) {
+      // Silent fail — keep existing render
     }
-    if (!localStorage.getItem('arvenia_announcements')) {
-      localStorage.setItem('arvenia_announcements', JSON.stringify([
-        { id:1, type:'sale',   title:'Diskon 30% Semua Rank — Akhir Pekan Ini!', desc:'Rayakan ulang tahun server ke-3 dengan harga spesial. Berlaku Sabtu–Minggu saja, jangan sampai ketinggalan!', date:'11 April 2026' },
-        { id:2, type:'update', title:'Update 1.21.4 — Fitur Baru Telah Hadir',   desc:'Server telah diperbarui ke versi 1.21.4. Custom enchants baru, dungeon baru, dan banyak perbaikan bug.',    date:'8 April 2026'  },
-        { id:3, type:'event',  title:'Build Contest — Hadiah Total Rp 500.000',  desc:'Tunjukkan kreativitasmu! Bangun struktur paling keren dan menangkan hadiah uang tunai serta rank gratis.',   date:'5 April 2026'  },
-      ]));
-    }
-  })();
+  }
 
-  /* render on load */
-  renderDonaturGrid();
-  renderNewsGrid();
-
-  /* real-time sync: update otomatis saat admin ubah data di tab/jendela lain */
-  window.addEventListener('storage', e => {
-    if (e.key === 'arvenia_donators')      renderDonaturGrid();
-    if (e.key === 'arvenia_announcements') renderNewsGrid();
-  });
-
-  /* polling fallback — catat snapshot awal SETELAH seed, bukan string kosong */
-  let _lastDon = localStorage.getItem('arvenia_donators')      || '';
-  let _lastAnn = localStorage.getItem('arvenia_announcements') || '';
-  setInterval(() => {
-    const nowDon = localStorage.getItem('arvenia_donators')      || '';
-    const nowAnn = localStorage.getItem('arvenia_announcements') || '';
-    if (nowDon !== _lastDon) { _lastDon = nowDon; renderDonaturGrid(); }
-    if (nowAnn !== _lastAnn) { _lastAnn = nowAnn; renderNewsGrid(); }
-  }, 1500);
+  /* Load langsung saat halaman buka */
+  fetchAndRender();
+  /* Poll setiap 15 detik — update semua device otomatis */
+  setInterval(fetchAndRender, 15000);
 </script>
 </body>
 </html>
