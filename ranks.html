@@ -668,7 +668,7 @@ footer strong{color:var(--gl);}
   </div>
 </main>
 
-<footer>© 2026 <strong>Arvenia Network</strong> — Dibuat dengan ❤️ untuk komunitas Minecraft Indonesia</footer>
+<footer>© 2026 <strong>Arvenia Network</strong> — All Rights Reserved.</footer>
 
 <!-- CART DRAWER -->
 <div class="cart-overlay" id="cartOverlay" onclick="handleCartOverlayClick(event)">
@@ -789,10 +789,11 @@ function fmt(n){return Number(n).toLocaleString('id-ID');}
 function seed(){
   if(!localStorage.getItem('arvenia_ranks'))
     localStorage.setItem('arvenia_ranks',JSON.stringify([
-      {id:1,name:'EMERALD',price:15000,icon:'🌿',perks:'Prefix & warna chat, 3 sethome, /fly survival'},
-      {id:2,name:'DIAMOND',price:30000,icon:'💎',perks:'Semua fitur Emerald, 6 sethome, Kit Diamond'},
-      {id:3,name:'GOLD',   price:50000,icon:'⭐',perks:'Semua fitur Diamond, 10 sethome, Priority queue'},
-      {id:4,name:'LEGEND', price:85000,icon:'🔮',perks:'Akses penuh, Custom prefix, VIP lounge'},
+      {id:1,name:'VIP',price:50000,icon:'🌿',perks:''},
+      {id:2,name:'VIP+',price:80000,icon:'💎',perks:'Semua fitur VIP, 6 sethome, Kit Diamond'},
+      {id:3,name:'MVP',   price:100000,icon:'⭐',perks:'Semua fitur VIP+, 10 sethome, Priority queue'},
+      {id:4,name:'MVP+', price:300000,icon:'🔮',perks:'Semua fitur MVP, Custom prefix, VIP lounge'},
+      {id:5,name:'MVP++', price:500000,icon:'👑',perks:'Semua fitur MVP+, Custom Prefix, MVP lounge'},
     ]));
   if(!localStorage.getItem('arvenia_pakets'))
     localStorage.setItem('arvenia_pakets',JSON.stringify([
