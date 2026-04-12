@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arvenia Network Store — Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --green-deep:   #0a2e1a;
+      --green-mid:    #0d4a25;
+      --green-bright: #16a34a;
+      --green-glow:   #22c55e;
+      --green-light:  #4ade80;
+      --yellow-warm:  #fbbf24;
+      --yellow-glow:  #fde047;
+      --yellow-soft:  #fef08a;
+      --text-main:    #e8fef0;
+      --text-muted:   #86efac;
+      --card-bg:      rgba(10, 46, 26, 0.75);
+      --card-border:  rgba(34, 197, 94, 0.25);
+      --nav-bg:       rgba(6, 25, 14, 0.92);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Rajdhani', sans-serif;
+      background: var(--green-deep);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ───── BACKGROUND ───── */
+    .bg-layer {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    }
+    .bg-layer::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 10%, rgba(22,163,74,0.18) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 80% 90%, rgba(251,191,36,0.10) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 70% at 60% 40%, rgba(16,185,129,0.08) 0%, transparent 60%);
+    }
+    .bg-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(34,197,94,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(34,197,94,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    /* Floating particles */
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      animation: floatUp linear infinite;
+      opacity: 0;
+    }
+    @keyframes floatUp {
+      0%   { transform: translateY(110vh) scale(0); opacity: 0; }
+      10%  { opacity: 0.6; }
+      90%  { opacity: 0.3; }
+      100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+    }
+
+    /* ───── NAVBAR ───── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--nav-bg);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(34,197,94,0.2);
+      padding: 0 clamp(1rem, 4vw, 3rem);
+      height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: 'Orbitron', monospace;
+      font-weight: 900;
+      font-size: clamp(1rem, 2.5vw, 1.35rem);
+      letter-spacing: 2px;
+      background: linear-gradient(135deg, var(--green-glow), var(--yellow-warm));
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+    }
+    .nav-logo .logo-icon {
+      width: 34px; height: 34px;
+      background: linear-gradient(135deg, var(--green-bright), var(--yellow-warm));
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; -webkit-text-fill-color: initial;
+      box-shadow: 0 0 16px rgba(34,197,94,0.5);
+      flex-shrink: 0;
+    }
+
+    .nav-links {
+      display: flex; align-items: center; gap: clamp(4px, 1.5vw, 8px);
+    }
+    .nav-link {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+      font-size: clamp(0.78rem, 1.6vw, 0.95rem);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: clamp(6px, 1vw, 8px) clamp(10px, 2vw, 18px);
+      border-radius: 6px;
+      border: 1px solid transparent;
+      transition: all 0.25s;
+      position: relative;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .nav-link::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(34,197,94,0.12), rgba(251,191,36,0.08));
+      opacity: 0; transition: opacity 0.25s;
+    }
+    .nav-link:hover { color: var(--yellow-warm); border-color: rgba(251,191,36,0.3); }
+    .nav-link:hover::before { opacity: 1; }
+    .nav-link.active {
+      color: var(--green-glow);
+      border-color: rgba(34,197,94,0.4);
+      background: rgba(34,197,94,0.08);
+    }
+
+    .nav-link .nav-icon { margin-right: 5px; font-size: 1em; }
+
+    /* hamburger */
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px; cursor: pointer;
+      padding: 4px; background: none; border: none;
+    }
+    .hamburger span {
+      display: block; width: 24px; height: 2px;
+      background: var(--green-light); border-radius: 2px;
+      transition: all 0.3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none; position: fixed; top: 64px; left: 0; right: 0;
+      background: rgba(6,25,14,0.97); backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(34,197,94,0.2);
+      flex-direction: column; padding: 12px 20px 20px;
+      z-index: 99; gap: 4px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu .nav-link { font-size: 1rem; padding: 12px 16px; }
+
+    /* ───── MAIN CONTENT ───── */
+    main {
+      position: relative; z-index: 1;
+      padding: clamp(1.5rem, 4vw, 3rem) clamp(1rem, 4vw, 3rem);
+      max-width: 1300px; margin: 0 auto;
+    }
+
+    /* ───── HERO SECTION ───── */
+    .hero {
+      text-align: center;
+      padding: clamp(1.5rem, 4vw, 3rem) 0 clamp(2rem, 5vw, 3.5rem);
+      animation: fadeSlideDown 0.7s ease both;
+    }
+    @keyframes fadeSlideDown {
+      from { opacity: 0; transform: translateY(-24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(34,197,94,0.12);
+      border: 1px solid rgba(34,197,94,0.3);
+      border-radius: 999px;
+      padding: 5px 14px;
+      font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: var(--green-light);
+      margin-bottom: 1.2rem;
+    }
+    .hero-badge .dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--green-glow);
+      box-shadow: 0 0 8px var(--green-glow);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50%       { transform: scale(1.5); opacity: 0.6; }
+    }
+    .hero h1 {
+      font-family: 'Orbitron', monospace;
+      font-weight: 900;
+      font-size: clamp(2rem, 6vw, 4.2rem);
+      line-height: 1.1;
+      background: linear-gradient(135deg, var(--green-light) 0%, var(--yellow-warm) 55%, var(--green-glow) 100%);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.9rem;
+    }
+    .hero p {
+      color: var(--text-muted); font-size: clamp(0.95rem, 2vw, 1.15rem);
+      max-width: 560px; margin: 0 auto 2rem; line-height: 1.6;
+    }
+    .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      font-family: 'Rajdhani', sans-serif; font-weight: 700;
+      font-size: 0.95rem; letter-spacing: 1.5px; text-transform: uppercase;
+      padding: 13px 28px; border-radius: 8px; border: none; cursor: pointer;
+      background: linear-gradient(135deg, var(--green-bright), var(--green-glow));
+      color: #fff; text-decoration: none;
+      box-shadow: 0 0 24px rgba(34,197,94,0.35);
+      transition: all 0.25s;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 36px rgba(34,197,94,0.55);
+    }
+    .btn-secondary {
+      font-family: 'Rajdhani', sans-serif; font-weight: 600;
+      font-size: 0.95rem; letter-spacing: 1.5px; text-transform: uppercase;
+      padding: 12px 28px; border-radius: 8px; cursor: pointer; text-decoration: none;
+      background: transparent;
+      color: var(--yellow-warm);
+      border: 1.5px solid rgba(251,191,36,0.45);
+      transition: all 0.25s;
+    }
+    .btn-secondary:hover {
+      background: rgba(251,191,36,0.1);
+      border-color: var(--yellow-warm);
+      transform: translateY(-2px);
+    }
+
+    /* ───── SERVER STATUS BAR ───── */
+    .status-bar {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: clamp(1rem, 2.5vw, 1.4rem) clamp(1.2rem, 3vw, 2rem);
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem;
+      margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+      backdrop-filter: blur(12px);
+      animation: fadeIn 0.8s 0.2s ease both;
+      position: relative; overflow: hidden;
+    }
+    .status-bar::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--green-glow), var(--yellow-warm), var(--green-glow));
+      background-size: 200% 100%;
+      animation: shimmer 3s linear infinite;
+    }
+    @keyframes shimmer {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .status-item { display: flex; align-items: center; gap: 12px; }
+    .status-icon {
+      width: 42px; height: 42px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; flex-shrink: 0;
+    }
+    .status-icon.green { background: rgba(34,197,94,0.15); box-shadow: 0 0 14px rgba(34,197,94,0.2); }
+    .status-icon.yellow { background: rgba(251,191,36,0.12); box-shadow: 0 0 14px rgba(251,191,36,0.2); }
+    .status-label { font-size: 0.72rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); }
+    .status-value {
+      font-family: 'Orbitron', monospace; font-size: clamp(1rem, 2vw, 1.3rem);
+      font-weight: 700; color: var(--text-main);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .status-value .online-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--green-glow); box-shadow: 0 0 8px var(--green-glow);
+      animation: pulse 1.8s infinite;
+    }
+    .status-value .player-count {
+      color: var(--yellow-warm);
+    }
+    .status-divider {
+      width: 1px; height: 44px; background: rgba(34,197,94,0.18);
+      flex-shrink: 0;
+    }
+    @media (max-width: 600px) { .status-divider { display: none; } }
+
+    .copy-ip-btn {
+      font-family: 'Rajdhani', sans-serif; font-weight: 600;
+      font-size: 0.8rem; letter-spacing: 1.5px; text-transform: uppercase;
+      padding: 8px 16px; border-radius: 7px; cursor: pointer;
+      background: rgba(34,197,94,0.1);
+      color: var(--green-light);
+      border: 1px solid rgba(34,197,94,0.3);
+      transition: all 0.2s;
+    }
+    .copy-ip-btn:hover { background: rgba(34,197,94,0.2); border-color: var(--green-glow); }
+    .copy-ip-btn.copied { color: var(--yellow-warm); border-color: var(--yellow-warm); background: rgba(251,191,36,0.1); }
+
+    /* ───── SECTION TITLE ───── */
+    .section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 1.2rem; flex-wrap: wrap; gap: 0.5rem;
+    }
+    .section-title {
+      font-family: 'Orbitron', monospace; font-weight: 700;
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: var(--text-main);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .section-title::before {
+      content: '';
+      display: inline-block; width: 4px; height: 22px;
+      background: linear-gradient(to bottom, var(--green-glow), var(--yellow-warm));
+      border-radius: 2px;
+    }
+    .view-all {
+      font-size: 0.82rem; font-weight: 600; letter-spacing: 1px;
+      color: var(--green-light); text-decoration: none; text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .view-all:hover { color: var(--yellow-warm); }
+
+    /* ───── STAT CARDS ───── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: clamp(12px, 2vw, 18px);
+      margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+      animation: fadeIn 0.8s 0.35s ease both;
+    }
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px; padding: 1.3rem 1.5rem;
+      backdrop-filter: blur(12px);
+      position: relative; overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+    }
+    .stat-card::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(34,197,94,0.06), transparent);
+      opacity: 0; transition: opacity 0.25s;
+    }
+    .stat-card:hover { transform: translateY(-4px); border-color: rgba(34,197,94,0.45); box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
+    .stat-card:hover::after { opacity: 1; }
+
+    .stat-card-icon {
+      font-size: 1.8rem; margin-bottom: 0.7rem;
+      display: block;
+      filter: drop-shadow(0 0 8px rgba(34,197,94,0.4));
+    }
+    .stat-card-label {
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.3rem;
+    }
+    .stat-card-value {
+      font-family: 'Orbitron', monospace; font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 700;
+    }
+    .stat-card-value.green { color: var(--green-glow); }
+    .stat-card-value.yellow { color: var(--yellow-warm); }
+    .stat-card-sub {
+      font-size: 0.78rem; color: var(--text-muted); margin-top: 4px;
+    }
+    .stat-card-bar {
+      margin-top: 10px; height: 3px; background: rgba(255,255,255,0.07); border-radius: 2px;
+    }
+    .stat-card-bar-fill {
+      height: 100%; border-radius: 2px;
+      background: linear-gradient(90deg, var(--green-bright), var(--yellow-warm));
+      transition: width 1s ease;
+    }
+
+    /* ───── RANK SHOWCASE ───── */
+    .ranks-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr));
+      gap: clamp(10px, 2vw, 16px);
+      margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+      animation: fadeIn 0.8s 0.5s ease both;
+    }
+    .rank-card {
+      background: var(--card-bg);
+      border-radius: 14px; border: 1px solid var(--card-border);
+      padding: 1.3rem; text-align: center;
+      backdrop-filter: blur(12px);
+      position: relative; overflow: hidden;
+      cursor: pointer; text-decoration: none; color: inherit;
+      transition: transform 0.28s, box-shadow 0.28s;
+    }
+    .rank-card:hover { transform: translateY(-6px) scale(1.02); }
+    .rank-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: var(--rank-gradient, linear-gradient(135deg, rgba(34,197,94,0.12), transparent));
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .rank-card:hover::before { opacity: 1; }
+    .rank-card::after {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: var(--rank-color, var(--green-glow));
+      border-radius: 14px 14px 0 0;
+    }
+
+    .rank-gem {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: var(--rank-color-bg, rgba(34,197,94,0.15));
+      border: 2px solid var(--rank-color, var(--green-glow));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; margin: 0 auto 0.8rem;
+      box-shadow: 0 0 20px var(--rank-glow, rgba(34,197,94,0.3));
+      transition: box-shadow 0.3s;
+    }
+    .rank-card:hover .rank-gem {
+      box-shadow: 0 0 32px var(--rank-glow, rgba(34,197,94,0.5));
+    }
+    .rank-name {
+      font-family: 'Orbitron', monospace; font-weight: 700;
+      font-size: 0.85rem; letter-spacing: 1.5px;
+      color: var(--rank-color, var(--green-glow));
+      margin-bottom: 0.3rem;
+    }
+    .rank-price {
+      font-family: 'Rajdhani', sans-serif; font-size: 1.2rem; font-weight: 700;
+      color: var(--text-main);
+    }
+    .rank-price span { font-size: 0.75rem; color: var(--text-muted); font-weight: 400; }
+    .rank-perks {
+      margin-top: 8px; font-size: 0.75rem; color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .rank-btn {
+      display: block; margin-top: 12px;
+      font-family: 'Rajdhani', sans-serif; font-weight: 700;
+      font-size: 0.78rem; letter-spacing: 1.5px; text-transform: uppercase;
+      padding: 8px; border-radius: 7px;
+      background: rgba(34,197,94,0.1); color: var(--green-light);
+      border: 1px solid rgba(34,197,94,0.25); text-decoration: none;
+      transition: all 0.2s;
+    }
+    .rank-card:hover .rank-btn { background: rgba(34,197,94,0.2); border-color: var(--green-glow); }
+
+    /* ───── NEWS / ANNOUNCEMENT ───── */
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+      gap: clamp(10px, 2vw, 16px);
+      margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+      animation: fadeIn 0.8s 0.65s ease both;
+    }
+    .news-card {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 14px; padding: 1.3rem; backdrop-filter: blur(12px);
+      display: flex; flex-direction: column; gap: 0.6rem;
+      transition: transform 0.25s, border-color 0.25s;
+      cursor: pointer;
+    }
+    .news-card:hover { transform: translateY(-3px); border-color: rgba(34,197,94,0.4); }
+    .news-tag {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 10px; border-radius: 99px; font-size: 0.7rem;
+      font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+    }
+    .tag-update { background: rgba(34,197,94,0.15); color: var(--green-light); }
+    .tag-event  { background: rgba(251,191,36,0.15); color: var(--yellow-warm); }
+    .tag-sale   { background: rgba(239,68,68,0.15); color: #f87171; }
+    .news-title { font-weight: 700; font-size: 1rem; color: var(--text-main); line-height: 1.4; }
+    .news-desc  { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; flex: 1; }
+    .news-date  { font-size: 0.72rem; color: rgba(134,239,172,0.5); letter-spacing: 0.5px; }
+
+    /* ───── FOOTER ───── */
+    footer {
+      position: relative; z-index: 1;
+      border-top: 1px solid rgba(34,197,94,0.12);
+      padding: 2rem clamp(1rem, 4vw, 3rem);
+      text-align: center; color: rgba(134,239,172,0.45);
+      font-size: 0.8rem; letter-spacing: 0.5px;
+    }
+    footer strong { color: var(--green-light); }
+
+    /* ───── TOAST ───── */
+    .toast {
+      position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+      background: rgba(22,163,74,0.9); color: #fff;
+      padding: 10px 20px; border-radius: 8px;
+      font-family: 'Rajdhani', sans-serif; font-weight: 600; font-size: 0.9rem;
+      letter-spacing: 1px;
+      transform: translateY(80px); opacity: 0;
+      transition: all 0.3s;
+      pointer-events: none;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+
+    /* ───── RESPONSIVE ───── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .status-bar { flex-direction: column; align-items: flex-start; }
+    }
+    /* ───── AUTH BUTTONS ───── */
+    .nav-auth { display: flex; align-items: center; gap: 8px; }
+    .btn-login {
+      font-family: 'Rajdhani', sans-serif; font-weight: 700;
+      font-size: 0.8rem; letter-spacing: 1.5px; text-transform: uppercase;
+      padding: 7px 16px; border-radius: 7px; cursor: pointer;
+      background: transparent; color: var(--green-light);
+      border: 1px solid rgba(34,197,94,0.4); text-decoration: none;
+      transition: all 0.2s; white-space: nowrap;
+    }
+    .btn-login:hover { background: rgba(34,197,94,0.1); border-color: var(--green-glow); }
+    .btn-register {
+      font-family: 'Rajdhani', sans-serif; font-weight: 700;
+      font-size: 0.8rem; letter-spacing: 1.5px; text-transform: uppercase;
+      padding: 7px 16px; border-radius: 7px; cursor: pointer;
+      background: linear-gradient(135deg, var(--green-bright), var(--green-glow));
+      color: #fff; border: none; text-decoration: none;
+      box-shadow: 0 0 12px rgba(34,197,94,0.3);
+      transition: all 0.2s; white-space: nowrap;
+    }
+    .btn-register:hover { box-shadow: 0 0 20px rgba(34,197,94,0.5); transform: translateY(-1px); }
+
+    /* user chip saat sudah login */
+    .user-chip {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.25);
+      border-radius: 99px; padding: 5px 12px 5px 6px;
+      cursor: pointer; position: relative; transition: border-color 0.2s;
+    }
+    .user-chip:hover { border-color: rgba(34,197,94,0.5); }
+    .user-avatar {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--green-bright), var(--yellow-warm));
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Orbitron', monospace; font-size: 0.7rem; font-weight: 700; color: #fff;
+    }
+    .user-name { font-size: 0.82rem; font-weight: 700; color: var(--text-main); letter-spacing: 0.5px; }
+    .user-role-badge {
+      font-size: 0.6rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+      padding: 1px 6px; border-radius: 99px;
+    }
+    .role-admin { background: rgba(251,191,36,0.2); color: var(--yellow-warm); }
+    .role-user  { background: rgba(34,197,94,0.15); color: var(--green-light); }
+
+    /* dropdown menu user */
+    .user-dropdown {
+      position: absolute; top: calc(100% + 8px); right: 0;
+      background: rgba(6,25,14,0.97); backdrop-filter: blur(20px);
+      border: 1px solid rgba(34,197,94,0.2); border-radius: 12px;
+      min-width: 180px; padding: 8px;
+      display: none; flex-direction: column; gap: 2px;
+      z-index: 200;
+      animation: dropIn 0.15s ease;
+    }
+    @keyframes dropIn { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
+    .user-dropdown.open { display: flex; }
+    .dropdown-item {
+      font-family: 'Rajdhani', sans-serif; font-weight: 600; font-size: 0.85rem;
+      letter-spacing: 0.5px; color: var(--text-muted);
+      padding: 9px 12px; border-radius: 8px; cursor: pointer;
+      border: none; background: none; text-align: left; text-decoration: none;
+      display: flex; align-items: center; gap: 8px;
+      transition: all 0.15s;
+    }
+    .dropdown-item:hover { background: rgba(34,197,94,0.1); color: var(--text-main); }
+    .dropdown-item.danger { color: #f87171; }
+    .dropdown-item.danger:hover { background: rgba(248,113,113,0.1); }
+    .dropdown-divider { height: 1px; background: rgba(34,197,94,0.12); margin: 4px 0; }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 999;
+      background: rgba(0,0,0,0.7); backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 1rem;
+      opacity: 0; pointer-events: none; transition: opacity 0.25s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal {
+      background: rgba(8,30,18,0.98); border: 1px solid rgba(34,197,94,0.25);
+      border-radius: 18px; padding: clamp(1.5rem,4vw,2.2rem);
+      width: 100%; max-width: 420px;
+      transform: translateY(20px); transition: transform 0.25s;
+    }
+    .modal-overlay.open .modal { transform: translateY(0); }
+    .modal-title {
+      font-family: 'Orbitron', monospace; font-weight: 700; font-size: 1.2rem;
+      background: linear-gradient(135deg, var(--green-glow), var(--yellow-warm));
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+      margin-bottom: 0.3rem;
+    }
+    .modal-sub { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+    .modal-tabs { display: flex; gap: 6px; margin-bottom: 1.5rem; }
+    .modal-tab {
+      flex: 1; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 0.85rem;
+      letter-spacing: 1px; text-transform: uppercase;
+      padding: 9px; border-radius: 8px; cursor: pointer; border: 1px solid rgba(34,197,94,0.2);
+      background: none; color: var(--text-muted); transition: all 0.2s;
+    }
+    .modal-tab.active { background: rgba(34,197,94,0.12); color: var(--green-glow); border-color: rgba(34,197,94,0.4); }
+    .modal-form { display: flex; flex-direction: column; gap: 12px; }
+    .modal-form.hidden { display: none; }
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    .form-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); }
+    .form-input {
+      font-family: 'Rajdhani', sans-serif; font-size: 0.95rem; font-weight: 600;
+      padding: 10px 14px; border-radius: 8px;
+      background: rgba(34,197,94,0.06); border: 1px solid rgba(34,197,94,0.2);
+      color: var(--text-main); outline: none; transition: border-color 0.2s;
+    }
+    .form-input:focus { border-color: rgba(34,197,94,0.5); background: rgba(34,197,94,0.09); }
+    .form-input::placeholder { color: rgba(134,239,172,0.35); }
+    .form-error { font-size: 0.75rem; color: #f87171; min-height: 16px; }
+    .modal-btn {
+      font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 0.95rem;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      padding: 12px; border-radius: 8px; cursor: pointer; border: none;
+      background: linear-gradient(135deg, var(--green-bright), var(--green-glow));
+      color: #fff; box-shadow: 0 0 18px rgba(34,197,94,0.3);
+      transition: all 0.2s; margin-top: 4px;
+    }
+    .modal-btn:hover { box-shadow: 0 0 28px rgba(34,197,94,0.5); transform: translateY(-1px); }
+    .modal-close {
+      position: absolute; top: 14px; right: 16px;
+      background: none; border: none; color: var(--text-muted);
+      font-size: 1.3rem; cursor: pointer; line-height: 1;
+      transition: color 0.2s;
+    }
+    .modal-close:hover { color: var(--text-main); }
+    .modal { position: relative; }
+
+    /* ───── TOP DONATUR ───── */
+    .donatur-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 170px), 1fr));
+      gap: clamp(10px, 2vw, 14px);
+      margin-bottom: 0.75rem;
+      animation: fadeIn 0.8s 0.5s ease both;
+    }
+    .donatur-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.2rem 1rem;
+      text-align: center;
+      backdrop-filter: blur(12px);
+      position: relative; overflow: hidden;
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+    .donatur-card:hover { transform: translateY(-4px); box-shadow: 0 8px 28px rgba(0,0,0,0.3); }
+
+    .donatur-card.rank-1 { border-color: rgba(251,191,36,0.45); box-shadow: 0 0 18px rgba(251,191,36,0.12); }
+    .donatur-card.rank-1::before { content:''; position:absolute; top:0;left:0;right:0;height:3px; background:linear-gradient(90deg,#fbbf24,#fde047,#fbbf24); }
+    .donatur-card.rank-2 { border-color: rgba(148,163,184,0.4); }
+    .donatur-card.rank-2::before { content:''; position:absolute; top:0;left:0;right:0;height:3px; background:linear-gradient(90deg,#94a3b8,#cbd5e1); }
+    .donatur-card.rank-3 { border-color: rgba(180,120,60,0.4); }
+    .donatur-card.rank-3::before { content:''; position:absolute; top:0;left:0;right:0;height:3px; background:linear-gradient(90deg,#b47a3c,#d4975a); }
+
+    .donatur-medal { font-size: 1.5rem; margin-bottom: 2px; }
+    .donatur-pos {
+      font-family: 'Orbitron', monospace; font-size: 0.65rem;
+      color: var(--text-muted); letter-spacing: 1px; margin-bottom: 8px;
+    }
+    .donatur-avatar {
+      width: 46px; height: 46px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--green-mid), var(--green-bright));
+      border: 2px solid rgba(34,197,94,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Orbitron', monospace; font-weight: 700; font-size: 1.1rem;
+      color: var(--green-light); margin: 0 auto 8px;
+    }
+    .donatur-card.rank-1 .donatur-avatar { border-color: rgba(251,191,36,0.5); background: linear-gradient(135deg,rgba(251,191,36,0.2),rgba(34,197,94,0.2)); color: #fbbf24; }
+    .donatur-card.rank-2 .donatur-avatar { border-color: rgba(148,163,184,0.4); }
+    .donatur-card.rank-3 .donatur-avatar { border-color: rgba(180,120,60,0.35); }
+
+    .donatur-name {
+      font-weight: 700; font-size: 0.9rem; color: var(--text-main);
+      margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .donatur-amount {
+      font-family: 'Orbitron', monospace; font-size: 0.82rem;
+      color: var(--yellow-warm); font-weight: 700; margin-bottom: 8px;
+    }
+    .donatur-rank-badge {
+      display: inline-block; padding: 2px 10px; border-radius: 99px;
+      font-size: 0.65rem; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; border: 1px solid;
+    }
+
+  </style>
+</head>
+<body>
+
+<!-- Background -->
+<div class="bg-layer">
+  <div class="bg-grid"></div>
+  <div id="particles"></div>
+</div>
+
+<!-- NAVBAR -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <span class="logo-icon">⛏️</span>
+    Arvenia Network
+  </a>
+
+  <div class="nav-links">
+    <a href="ranks.html"   class="nav-link active"><span class="nav-icon">👑</span>Ranks</a>
+    <a href="balance.html" class="nav-link"><span class="nav-icon">💰</span>Balance</a>
+    <a href="support.html" class="nav-link"><span class="nav-icon">🎧</span>Support</a>
+    <a href="key.html"     class="nav-link"><span class="nav-icon">🔑</span>Key</a>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:8px;">
+    <!-- Auth area — toggled by JS -->
+    <div class="nav-auth" id="navAuth">
+      <a href="#" class="btn-login" id="btnOpenLogin">Masuk</a>
+      <a href="#" class="btn-register" id="btnOpenRegister">Daftar</a>
+    </div>
+    <!-- User chip (shown when logged in) -->
+    <div class="user-chip" id="userChip" style="display:none;" onclick="toggleDropdown()">
+      <div class="user-avatar" id="userAvatarNav">?</div>
+      <span class="user-name" id="userNameNav">—</span>
+      <span class="user-role-badge" id="userRoleNav">—</span>
+      <div class="user-dropdown" id="userDropdown">
+        <a href="#" class="dropdown-item" id="adminPanelLink" style="display:none;" onclick="window.location='admin.html'">⚙️ Admin Panel</a>
+        <div class="dropdown-divider" id="adminDivider" style="display:none;"></div>
+        <span class="dropdown-item">👤 Profil Saya</span>
+        <span class="dropdown-item">🛒 Riwayat Pembelian</span>
+        <div class="dropdown-divider"></div>
+        <span class="dropdown-item danger" onclick="logout()">🚪 Keluar</span>
+      </div>
+    </div>
+    <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="ranks.html"   class="nav-link"><span class="nav-icon">👑</span>Ranks</a>
+  <a href="balance.html" class="nav-link"><span class="nav-icon">💰</span>Balance</a>
+  <a href="support.html" class="nav-link"><span class="nav-icon">🎧</span>Support</a>
+  <a href="key.html"     class="nav-link"><span class="nav-icon">🔑</span>Key</a>
+</div>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badge"><span class="dot"></span>Server Online</div>
+    <h1>Arvenia Network Store</h1>
+    <p>Dapatkan rank eksklusif, item, dan keuntungan untuk pengalaman bermain yang lebih seru di server kami.</p>
+    <div class="hero-actions">
+      <a href="ranks.html" class="btn-primary">🛒 Beli Rank</a>
+      <a href="support.html" class="btn-secondary">🎧 Bantuan</a>
+    </div>
+  </section>
+
+  <!-- SERVER STATUS BAR -->
+  <div class="status-bar" id="statusBar">
+    <div class="status-item">
+      <div class="status-icon green">🌐</div>
+      <div>
+        <div class="status-label">IP Server</div>
+        <div class="status-value" id="serverIP">play.arvenia.xyz</div>
+      </div>
+    </div>
+    <div class="status-divider"></div>
+    <div class="status-item">
+      <div class="status-icon green">🎮</div>
+      <div>
+        <div class="status-label">Player Online</div>
+        <div class="status-value">
+          <span class="online-dot"></span>
+          <span class="player-count" id="playerCount">…</span>
+          <span style="font-size:0.75rem;color:var(--text-muted);font-family:'Rajdhani',sans-serif;">&nbsp;/ <span id="maxPlayers">…</span></span>
+        </div>
+      </div>
+    </div>
+    <div class="status-divider"></div>
+    <div class="status-item">
+      <div class="status-icon yellow">📡</div>
+      <div>
+        <div class="status-label">Status</div>
+        <div class="status-value" id="serverStatus" style="color:var(--green-glow);">Mengecek…</div>
+      </div>
+    </div>
+    <button class="copy-ip-btn" id="copyBtn" onclick="copyIP()">📋 Copy IP</button>
+  </div>
+
+  <!-- STATS CARDS -->
+  <div class="section-header">
+    <h2 class="section-title">Statistik Server</h2>
+    <span id="lastUpdated" style="font-size:0.75rem;color:var(--text-muted);letter-spacing:0.5px;">Memuat…</span>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <span class="stat-card-icon">⏱️</span>
+      <div class="stat-card-label">Uptime Server</div>
+      <div class="stat-card-value green" id="statUptime">—</div>
+      <div class="stat-card-sub" id="statUptimeSub">Mengecek…</div>
+      <div class="stat-card-bar"><div class="stat-card-bar-fill" id="barUptime" style="width:0%"></div></div>
+    </div>
+    <div class="stat-card">
+      <span class="stat-card-icon">📶</span>
+      <div class="stat-card-label">Ping / Latensi</div>
+      <div class="stat-card-value yellow" id="statPing">—</div>
+      <div class="stat-card-sub" id="statPingSub">Mengecek…</div>
+      <div class="stat-card-bar"><div class="stat-card-bar-fill" id="barPing" style="width:0%"></div></div>
+    </div>
+    <div class="stat-card">
+      <span class="stat-card-icon">🔖</span>
+      <div class="stat-card-label">Versi Server</div>
+      <div class="stat-card-value green" id="statVersion" style="font-size:clamp(0.9rem,2vw,1.2rem);">—</div>
+      <div class="stat-card-sub" id="statSoftware">Mengecek…</div>
+      <div class="stat-card-bar"><div class="stat-card-bar-fill" style="width:100%"></div></div>
+    </div>
+    <div class="stat-card">
+      <span class="stat-card-icon">📡</span>
+      <div class="stat-card-label">Status Server</div>
+      <div class="stat-card-value" id="statStatus" style="color:var(--text-muted);">—</div>
+      <div class="stat-card-sub" id="statStatusSub">Mengecek koneksi…</div>
+      <div class="stat-card-bar"><div class="stat-card-bar-fill" id="barStatus" style="width:0%"></div></div>
+    </div>
+  </div>
+
+  <!-- TOP DONATUR -->
+  <div class="section-header">
+    <h2 class="section-title">🏆 Top Donatur Bulan Ini</h2>
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+      <span style="font-size:0.75rem;color:var(--text-muted);">Reset dalam:</span>
+      <span id="resetCountdown" style="font-family:'Orbitron',monospace;font-size:0.82rem;color:var(--yellow-warm);letter-spacing:1px;">—</span>
+    </div>
+  </div>
+
+  <div class="donatur-month" id="donaturMonth" style="font-size:0.8rem;color:var(--text-muted);margin-bottom:1rem;letter-spacing:1px;text-transform:uppercase;"></div>
+
+  <div class="donatur-grid" id="donaturGrid">
+    <!-- Dirender otomatis dari localStorage oleh JS -->
+  </div>
+
+  <div style="margin-top:0.75rem;padding:0.85rem 1.1rem;background:rgba(251,191,36,0.06);border:1px solid rgba(251,191,36,0.15);border-radius:10px;font-size:0.78rem;color:rgba(251,191,36,0.7);letter-spacing:0.3px;">
+    ⚡ Leaderboard direset setiap awal bulan oleh admin. Jadilah donatur terbesar bulan ini!
+  </div>
+
+  <!-- ANNOUNCEMENTS -->
+  <div class="section-header">
+    <h2 class="section-title">Pengumuman</h2>
+    <a href="#" class="view-all">Semua berita →</a>
+  </div>
+  <div class="news-grid" id="newsGrid">
+    <!-- Dirender otomatis dari localStorage oleh JS -->
+  </div>
+
+</main>
+
+<footer>
+  © 2026 <strong>Arvenia Network</strong> — Dibuat dengan ❤️ untuk komunitas Minecraft Indonesia
+</footer>
+
+<!-- ── AUTH MODAL ── -->
+<div class="modal-overlay" id="authModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-title">⛏️ Arvenia Network</div>
+    <div class="modal-sub" id="modalSub">Masuk ke akun kamu</div>
+    <div class="modal-tabs">
+      <button class="modal-tab active" id="tabLogin" onclick="switchTab('login')">Masuk</button>
+      <button class="modal-tab" id="tabRegister" onclick="switchTab('register')">Daftar</button>
+    </div>
+
+    <!-- LOGIN FORM -->
+    <div class="modal-form" id="formLogin">
+      <div class="form-group">
+        <label class="form-label">Username</label>
+        <input class="form-input" id="loginUser" placeholder="Username kamu" autocomplete="username" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input class="form-input" id="loginPass" type="password" placeholder="••••••••" autocomplete="current-password" />
+      </div>
+      <div class="form-error" id="loginError"></div>
+      <button class="modal-btn" onclick="doLogin()">🔓 Masuk</button>
+    </div>
+
+    <!-- REGISTER FORM -->
+    <div class="modal-form hidden" id="formRegister">
+      <div class="form-group">
+        <label class="form-label">Username</label>
+        <input class="form-input" id="regUser" placeholder="Min. 3 karakter" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input class="form-input" id="regEmail" type="email" placeholder="email@kamu.com" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input class="form-input" id="regPass" type="password" placeholder="Min. 6 karakter" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Konfirmasi Password</label>
+        <input class="form-input" id="regPass2" type="password" placeholder="Ulangi password" />
+      </div>
+      <div class="form-error" id="regError"></div>
+      <button class="modal-btn" onclick="doRegister()">✅ Buat Akun</button>
+    </div>
+  </div>
+</div>
+
+
+
+<script>
+  /* ── Hamburger ── */
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const mobileMenuEl = document.getElementById('mobileMenu');
+  hamburgerBtn.addEventListener('click', () => {
+    hamburgerBtn.classList.toggle('open');
+    mobileMenuEl.classList.toggle('open');
+  });
+
+  /* ══════════════════════════════════════
+     AUTH SYSTEM (localStorage-based)
+  ══════════════════════════════════════ */
+  const ADMIN_ACCOUNT = { username: 'ArveniaAdmin', password: 'Arvenia@2026!', role: 'admin' };
+
+  function getUsers() {
+    try { return JSON.parse(localStorage.getItem('arvenia_users') || '[]'); } catch { return []; }
+  }
+  function saveUsers(u) { localStorage.setItem('arvenia_users', JSON.stringify(u)); }
+  function getSession() {
+    try { return JSON.parse(localStorage.getItem('arvenia_session') || 'null'); } catch { return null; }
+  }
+  function saveSession(s) { localStorage.setItem('arvenia_session', JSON.stringify(s)); }
+
+  /* seed admin account once */
+  (function seedAdmin() {
+    const users = getUsers();
+    if (!users.find(u => u.username === ADMIN_ACCOUNT.username)) {
+      users.push(ADMIN_ACCOUNT);
+      saveUsers(users);
+    }
+  })();
+
+  /* update navbar UI */
+  function refreshAuthUI() {
+    const session = getSession();
+    const navAuth  = document.getElementById('navAuth');
+    const userChip = document.getElementById('userChip');
+    if (session) {
+      navAuth.style.display  = 'none';
+      userChip.style.display = 'flex';
+      document.getElementById('userAvatarNav').textContent = session.username[0].toUpperCase();
+      document.getElementById('userNameNav').textContent   = session.username;
+      const roleBadge = document.getElementById('userRoleNav');
+      const adminLink = document.getElementById('adminPanelLink');
+      const adminDiv  = document.getElementById('adminDivider');
+      if (session.role === 'admin') {
+        roleBadge.textContent = 'ADMIN';
+        roleBadge.className   = 'user-role-badge role-admin';
+        adminLink.style.display = 'flex';
+        adminDiv.style.display  = 'block';
+      } else {
+        roleBadge.textContent = 'USER';
+        roleBadge.className   = 'user-role-badge role-user';
+        adminLink.style.display = 'none';
+        adminDiv.style.display  = 'none';
+      }
+    } else {
+      navAuth.style.display  = 'flex';
+      userChip.style.display = 'none';
+    }
+  }
+
+  function toggleDropdown() {
+    document.getElementById('userDropdown').classList.toggle('open');
+  }
+  document.addEventListener('click', e => {
+    const chip = document.getElementById('userChip');
+    if (chip && !chip.contains(e.target))
+      document.getElementById('userDropdown').classList.remove('open');
+  });
+
+  /* modal */
+  function openModal(tab = 'login') {
+    switchTab(tab);
+    document.getElementById('authModal').classList.add('open');
+  }
+  function closeModal() {
+    document.getElementById('authModal').classList.remove('open');
+    ['loginError','regError'].forEach(id => { const el = document.getElementById(id); if(el) el.textContent=''; });
+  }
+  function switchTab(tab) {
+    const isLogin = tab === 'login';
+    document.getElementById('tabLogin').classList.toggle('active', isLogin);
+    document.getElementById('tabRegister').classList.toggle('active', !isLogin);
+    document.getElementById('formLogin').classList.toggle('hidden', !isLogin);
+    document.getElementById('formRegister').classList.toggle('hidden', isLogin);
+    document.getElementById('modalSub').textContent = isLogin ? 'Masuk ke akun kamu' : 'Buat akun baru';
+  }
+  document.getElementById('authModal').addEventListener('click', e => {
+    if (e.target === document.getElementById('authModal')) closeModal();
+  });
+  document.getElementById('btnOpenLogin').addEventListener('click', e => { e.preventDefault(); openModal('login'); });
+  document.getElementById('btnOpenRegister').addEventListener('click', e => { e.preventDefault(); openModal('register'); });
+
+  /* login */
+  function doLogin() {
+    const user = document.getElementById('loginUser').value.trim();
+    const pass = document.getElementById('loginPass').value;
+    const errEl = document.getElementById('loginError');
+    if (!user || !pass) { errEl.textContent = 'Username dan password wajib diisi.'; return; }
+    const users = getUsers();
+    const found = users.find(u => u.username === user && u.password === pass);
+    if (!found) { errEl.textContent = '❌ Username atau password salah.'; return; }
+    saveSession({ username: found.username, role: found.role });
+    closeModal();
+    refreshAuthUI();
+    showToast(`👋 Selamat datang, ${found.username}!`);
+  }
+
+  /* register */
+  function doRegister() {
+    const user  = document.getElementById('regUser').value.trim();
+    const email = document.getElementById('regEmail').value.trim();
+    const pass  = document.getElementById('regPass').value;
+    const pass2 = document.getElementById('regPass2').value;
+    const errEl = document.getElementById('regError');
+    if (!user || !email || !pass || !pass2) { errEl.textContent = 'Semua field wajib diisi.'; return; }
+    if (user.length < 3) { errEl.textContent = 'Username minimal 3 karakter.'; return; }
+    if (pass.length < 6) { errEl.textContent = 'Password minimal 6 karakter.'; return; }
+    if (pass !== pass2)  { errEl.textContent = 'Password tidak cocok.'; return; }
+    const users = getUsers();
+    if (users.find(u => u.username.toLowerCase() === user.toLowerCase())) {
+      errEl.textContent = '❌ Username sudah dipakai.'; return;
+    }
+    users.push({ username: user, email, password: pass, role: 'user' });
+    saveUsers(users);
+    saveSession({ username: user, role: 'user' });
+    closeModal();
+    refreshAuthUI();
+    showToast(`🎉 Akun berhasil dibuat, ${user}!`);
+  }
+
+  /* logout */
+  function logout() {
+    localStorage.removeItem('arvenia_session');
+    refreshAuthUI();
+    showToast('👋 Kamu telah keluar.');
+  }
+
+  /* enter key on inputs */
+  document.getElementById('loginPass').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+  document.getElementById('regPass2').addEventListener('keydown', e => { if(e.key==='Enter') doRegister(); });
+
+  refreshAuthUI();
+
+  /* ── Particles ── */
+  (function spawnParticles() {
+    const container = document.getElementById('particles');
+    const colors = ['rgba(34,197,94,0.5)', 'rgba(74,222,128,0.4)', 'rgba(251,191,36,0.35)', 'rgba(134,239,172,0.3)'];
+    for (let i = 0; i < 28; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const size = 2 + Math.random() * 4;
+      p.style.cssText = `
+        width:${size}px; height:${size}px;
+        left:${Math.random()*100}%;
+        background:${colors[Math.floor(Math.random()*colors.length)]};
+        animation-duration:${8+Math.random()*12}s;
+        animation-delay:${Math.random()*10}s;
+      `;
+      container.appendChild(p);
+    }
+  })();
+
+  /* ── Toast helper ── */
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  /* ── Copy IP ── */
+  function copyIP() {
+    const ip = document.getElementById('serverIP').textContent.trim();
+    navigator.clipboard.writeText(ip).catch(() => {});
+    const copyBtn = document.getElementById('copyBtn');
+    copyBtn.classList.add('copied');
+    copyBtn.textContent = '✅ Tersalin!';
+    setTimeout(() => { copyBtn.classList.remove('copied'); copyBtn.textContent = '📋 Copy IP'; }, 2000);
+    showToast('✅ IP berhasil disalin!');
+  }
+
+  /* ── Real-time Server Stats via mcsrvstat.us v3 ── */
+  const SERVER_IP = 'play.arvenia.xyz';
+
+  // Uptime tracker — catat kapan server pertama kali terdeteksi online sesi ini
+  let serverOnlineSince = null;
+
+  async function fetchServerStatus() {
+    const countEl    = document.getElementById('playerCount');
+    const maxEl      = document.getElementById('maxPlayers');
+    const statusEl   = document.getElementById('serverStatus');
+    // stat cards
+    const stUptime   = document.getElementById('statUptime');
+    const stUptimeSub= document.getElementById('statUptimeSub');
+    const barUptime  = document.getElementById('barUptime');
+    const stPing     = document.getElementById('statPing');
+    const stPingSub  = document.getElementById('statPingSub');
+    const stVer      = document.getElementById('statVersion');
+    const stSoft     = document.getElementById('statSoftware');
+    const stStat     = document.getElementById('statStatus');
+    const stStatSub  = document.getElementById('statStatusSub');
+    const barPing    = document.getElementById('barPing');
+    const barStatus  = document.getElementById('barStatus');
+    const lastUpd    = document.getElementById('lastUpdated');
+
+    const t0 = performance.now();
+    try {
+      const res  = await fetch(`https://api.mcsrvstat.us/3/${SERVER_IP}`);
+      const ping = Math.round(performance.now() - t0);
+      const data = await res.json();
+
+      const now = new Date();
+      lastUpd.textContent = `Diperbarui: ${now.toLocaleTimeString('id-ID')}`;
+
+      if (data.online) {
+        const online = data.players?.online ?? 0;
+        const max    = data.players?.max    ?? 0;
+
+        // Status bar
+        countEl.textContent  = online;
+        maxEl.textContent    = max;
+        statusEl.textContent = '🟢 Online';
+        statusEl.style.color = 'var(--green-glow)';
+
+        // --- Uptime ---
+        if (!serverOnlineSince) serverOnlineSince = Date.now();
+        const uptimeSec = Math.floor((Date.now() - serverOnlineSince) / 1000);
+        const uh = Math.floor(uptimeSec / 3600);
+        const um = Math.floor((uptimeSec % 3600) / 60);
+        const us = uptimeSec % 60;
+        const uptimeStr = uh > 0
+          ? `${uh}j ${um}m ${us}d`
+          : um > 0 ? `${um}m ${us}d` : `${us}d`;
+
+        // mcsrvstat kadang kirim debug.ping (ms sejak server start)
+        const srvPingDebug = data.debug?.ping ?? null;
+        let uptimeLabel = uptimeStr;
+        if (srvPingDebug !== null) {
+          // debug.ping = ms sejak server last seen, jadikan jam:menit:detik
+          const srvSec = Math.floor(srvPingDebug / 1000);
+          const sh = Math.floor(srvSec / 3600);
+          const sm = Math.floor((srvSec % 3600) / 60);
+          uptimeLabel = sh > 0 ? `${sh}j ${sm}m` : `${sm}m`;
+        }
+
+        stUptime.textContent    = uptimeLabel;
+        stUptimeSub.textContent = '⚡ Server berjalan normal';
+        // bar: max 24jam = 86400 detik
+        const upPct = Math.min(100, Math.round(uptimeSec / 864));
+        barUptime.style.width = Math.max(5, upPct) + '%';
+
+        // Ping
+        stPing.textContent    = ping + ' ms';
+        stPingSub.textContent = ping < 80 ? 'Koneksi sangat baik ⚡' : ping < 150 ? 'Koneksi stabil' : 'Koneksi lambat';
+        barPing.style.width   = Math.max(0, 100 - Math.round(ping / 3)) + '%';
+
+        // Versi
+        stVer.textContent  = data.version  ?? '—';
+        stSoft.textContent = data.software ?? 'Vanilla';
+
+        // Status
+        stStat.textContent    = '🟢 Online';
+        stStat.style.color    = 'var(--green-glow)';
+        stStatSub.textContent = `${online} player aktif`;
+        barStatus.style.width = '100%';
+        barStatus.style.background = 'linear-gradient(90deg, var(--green-bright), var(--green-glow))';
+
+      } else {
+        serverOnlineSince = null;
+        countEl.textContent  = '0';
+        maxEl.textContent    = '?';
+        statusEl.textContent = '🔴 Offline';
+        statusEl.style.color = '#f87171';
+
+        stUptime.textContent    = '0d';
+        stUptimeSub.textContent = 'Server tidak aktif';
+        barUptime.style.width   = '0%';
+
+        stPing.textContent    = ping + ' ms';
+        stPingSub.textContent = 'Server tidak merespons';
+        barPing.style.width   = '0%';
+
+        stVer.textContent  = '—';
+        stSoft.textContent = 'Tidak tersedia';
+
+        stStat.textContent    = '🔴 Offline';
+        stStat.style.color    = '#f87171';
+        stStatSub.textContent = 'Server sedang mati / restart';
+        barStatus.style.width = '15%';
+        barStatus.style.background = '#f87171';
+      }
+    } catch {
+      countEl.textContent     = '—'; maxEl.textContent = '—';
+      statusEl.textContent    = '⚠️ Error'; statusEl.style.color = '#fbbf24';
+      stUptime.textContent    = '—'; stUptimeSub.textContent = 'Gagal terhubung';
+      stPing.textContent      = '—'; stPingSub.textContent   = 'Gagal terhubung ke API';
+      stVer.textContent       = '—'; stSoft.textContent      = 'Tidak dapat dijangkau';
+      stStat.textContent      = '⚠️ Error'; stStat.style.color = '#fbbf24';
+      stStatSub.textContent   = 'Cek koneksi internet';
+      lastUpd.textContent     = 'Gagal memperbarui';
+    }
+  }
+
+  fetchServerStatus();
+  setInterval(fetchServerStatus, 30_000);
+
+  /* ── Countdown reset donatur (tiap 1 awal bulan 00:00) ── */
+  function updateCountdown() {
+    const now   = new Date();
+    const next  = new Date(now.getFullYear(), now.getMonth() + 1, 1, 0, 0, 0);
+    const diff  = next - now;
+
+    const days  = Math.floor(diff / 86400000);
+    const hours = Math.floor((diff % 86400000) / 3600000);
+    const mins  = Math.floor((diff % 3600000)  / 60000);
+    const secs  = Math.floor((diff % 60000)    / 1000);
+
+    const el = document.getElementById('resetCountdown');
+    if (el) el.textContent = `${days}h ${hours}j ${mins}m ${secs}d`;
+
+    const mEl = document.getElementById('donaturMonth');
+    if (mEl) {
+      const bulan = now.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
+      mEl.textContent = `📅 Periode: ${bulan}`;
+    }
+  }
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+
+  /* ════════════════════════════════════════
+     RENDER DONATUR & ANNOUNCEMENT dari localStorage
+     (sync real-time dengan admin.html via storage event)
+  ════════════════════════════════════════ */
+  const MEDALS_IDX = ['🥇','🥈','🥉'];
+  const RANK_STYLES = {
+    LEGEND:  { bg:'rgba(251,191,36,0.15)',  color:'#fbbf24',  border:'rgba(251,191,36,0.3)'  },
+    DIAMOND: { bg:'rgba(56,189,248,0.15)',  color:'#38bdf8',  border:'rgba(56,189,248,0.3)'  },
+    GOLD:    { bg:'rgba(251,191,36,0.12)',  color:'#fde047',  border:'rgba(251,191,36,0.25)' },
+    EMERALD: { bg:'rgba(74,222,128,0.12)',  color:'#4ade80',  border:'rgba(74,222,128,0.25)' },
+  };
+  const RANK_CARD_CLASS = ['rank-1','rank-2','rank-3','rank-4','rank-5'];
+
+  function lsGet(key, def) {
+    try { return JSON.parse(localStorage.getItem('arvenia_'+key) ?? 'null') ?? def; } catch { return def; }
+  }
+
+  function renderDonaturGrid() {
+    const list = lsGet('donators', []);
+    const grid = document.getElementById('donaturGrid');
+    if (!grid) return;
+    if (!list.length) {
+      grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-muted);font-size:.9rem;">
+        Belum ada data donatur bulan ini.</div>`;
+      return;
+    }
+    grid.innerHTML = list.slice(0,6).map((d, i) => {
+      const medal  = MEDALS_IDX[i] || '🎖️';
+      const cls    = RANK_CARD_CLASS[i] || 'rank-other';
+      const st     = RANK_STYLES[d.rank] || RANK_STYLES.EMERALD;
+      const avatar = d.username[0].toUpperCase();
+      return `
+        <div class="donatur-card ${cls}">
+          <div class="donatur-medal">${medal}</div>
+          <div class="donatur-pos">#${i+1}</div>
+          <div class="donatur-avatar">${avatar}</div>
+          <div class="donatur-name">${d.username}</div>
+          <div class="donatur-amount">Rp ${d.amount.toLocaleString('id-ID')}</div>
+          <div class="donatur-rank-badge" style="background:${st.bg};color:${st.color};border-color:${st.border};">${d.rank}</div>
+        </div>`;
+    }).join('');
+  }
+
+  const ANN_TYPE_MAP = {
+    update: { cls:'tag-update', label:'🔧 Update'    },
+    event:  { cls:'tag-event',  label:'🎉 Event'     },
+    sale:   { cls:'tag-sale',   label:'🔥 Flash Sale' },
+  };
+
+  function renderNewsGrid() {
+    const list = lsGet('announcements', []);
+    const grid = document.getElementById('newsGrid');
+    if (!grid) return;
+    if (!list.length) {
+      grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-muted);font-size:.9rem;">
+        Belum ada pengumuman saat ini.</div>`;
+      return;
+    }
+    grid.innerHTML = list.slice(0,6).map(a => {
+      const t = ANN_TYPE_MAP[a.type] || ANN_TYPE_MAP.update;
+      return `
+        <div class="news-card">
+          <span class="news-tag ${t.cls}">${t.label}</span>
+          <div class="news-title">${a.title}</div>
+          <div class="news-desc">${a.desc}</div>
+          <div class="news-date">${a.date}</div>
+        </div>`;
+    }).join('');
+  }
+
+  /* ── Seed data default jika localStorage masih kosong ── */
+  (function seedDefaults() {
+    if (!localStorage.getItem('arvenia_donators')) {
+      localStorage.setItem('arvenia_donators', JSON.stringify([
+        { id:1, username:'SteveKing',    amount:250000, rank:'LEGEND'  },
+        { id:2, username:'AlexCraft',    amount:185000, rank:'LEGEND'  },
+        { id:3, username:'NightWalker',  amount:120000, rank:'DIAMOND' },
+        { id:4, username:'DragonSlyr',   amount:85000,  rank:'DIAMOND' },
+        { id:5, username:'ZephyrMC',     amount:50000,  rank:'GOLD'    },
+        { id:6, username:'RedstoneKing', amount:30000,  rank:'EMERALD' },
+      ]));
+    }
+    if (!localStorage.getItem('arvenia_announcements')) {
+      localStorage.setItem('arvenia_announcements', JSON.stringify([
+        { id:1, type:'sale',   title:'Diskon 30% Semua Rank — Akhir Pekan Ini!', desc:'Rayakan ulang tahun server ke-3 dengan harga spesial. Berlaku Sabtu–Minggu saja, jangan sampai ketinggalan!', date:'11 April 2026' },
+        { id:2, type:'update', title:'Update 1.21.4 — Fitur Baru Telah Hadir',   desc:'Server telah diperbarui ke versi 1.21.4. Custom enchants baru, dungeon baru, dan banyak perbaikan bug.',    date:'8 April 2026'  },
+        { id:3, type:'event',  title:'Build Contest — Hadiah Total Rp 500.000',  desc:'Tunjukkan kreativitasmu! Bangun struktur paling keren dan menangkan hadiah uang tunai serta rank gratis.',   date:'5 April 2026'  },
+      ]));
+    }
+  })();
+
+  /* render on load */
+  renderDonaturGrid();
+  renderNewsGrid();
+
+  /* real-time sync: update otomatis saat admin ubah data di tab/jendela lain */
+  window.addEventListener('storage', e => {
+    if (e.key === 'arvenia_donators')      renderDonaturGrid();
+    if (e.key === 'arvenia_announcements') renderNewsGrid();
+  });
+
+  /* polling fallback — catat snapshot awal SETELAH seed, bukan string kosong */
+  let _lastDon = localStorage.getItem('arvenia_donators')      || '';
+  let _lastAnn = localStorage.getItem('arvenia_announcements') || '';
+  setInterval(() => {
+    const nowDon = localStorage.getItem('arvenia_donators')      || '';
+    const nowAnn = localStorage.getItem('arvenia_announcements') || '';
+    if (nowDon !== _lastDon) { _lastDon = nowDon; renderDonaturGrid(); }
+    if (nowAnn !== _lastAnn) { _lastAnn = nowAnn; renderNewsGrid(); }
+  }, 1500);
+</script>
+</body>
+</html>
