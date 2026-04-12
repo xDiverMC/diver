@@ -668,7 +668,7 @@ footer strong{color:var(--gl);}
   </div>
 </main>
 
-<footer>© 2026 <strong>Arvenia Network</strong> — All Rights Reserved.</footer>
+<footer>© 2026 <strong>Arvenia Network</strong> — Dibuat dengan ❤️ untuk komunitas Minecraft Indonesia</footer>
 
 <!-- CART DRAWER -->
 <div class="cart-overlay" id="cartOverlay" onclick="handleCartOverlayClick(event)">
@@ -782,26 +782,25 @@ const PALETTES = [
   {rc:'#34d399',rgb:'rgba(52,211,153,.12)', rl:'rgba(52,211,153,.35)', rg:'linear-gradient(135deg,rgba(52,211,153,.1),transparent)', rcb:'rgba(52,211,153,.28)'},
 ];
 
-function lsGet(k,def){try{return JSON.parse(localStorage.getItem('arvenia_'+k)??'null')??def;}catch{return def;}}
-function fmt(n){return Number(n).toLocaleString('id-ID');}
+/* ── JSONBIN CONFIG ── */
+const BIN_URL  = 'https://api.jsonbin.io/v3/b/69dbb6a9856a68218926ebd3/latest';
+const BIN_KEY  = '$2a$10$A5iV4/87eDDDVb2YwHpDpexTh1Ea13pe3M5W0NeyqeQsNxB1vgjei';
 
-/* ── SEED ── */
-function seed(){
-  if(!localStorage.getItem('arvenia_ranks'))
-    localStorage.setItem('arvenia_ranks',JSON.stringify([
-      {id:1,name:'VIP',price:50000,icon:'🌿',perks:''},
-      {id:2,name:'VIP+',price:80000,icon:'💎',perks:'Semua fitur VIP, 6 sethome, Kit Diamond'},
-      {id:3,name:'MVP',   price:100000,icon:'⭐',perks:'Semua fitur VIP+, 10 sethome, Priority queue'},
-      {id:4,name:'MVP+', price:300000,icon:'🔮',perks:'Semua fitur MVP, Custom prefix, VIP lounge'},
-      {id:5,name:'MVP++', price:500000,icon:'👑',perks:'Semua fitur MVP+, Custom Prefix, MVP lounge'},
-    ]));
-  if(!localStorage.getItem('arvenia_pakets'))
-    localStorage.setItem('arvenia_pakets',JSON.stringify([
-      {id:1,name:'Starter Pack',icon:'🌟',tag:'HEMAT 10%',desc:'Paket terbaik untuk pemain baru. Dapatkan rank Emerald + 5.000 coin + Kit Starter.',includes:['Rank EMERALD (1 bulan)','5.000 in-game coin','Kit Starter Eksklusif','Akses channel VIP Discord'],price:20000},
-      {id:2,name:'Pro Bundle',  icon:'💥',tag:'POPULER',  desc:'Bundling Diamond + Gold untuk 2 bulan penuh. Hemat lebih banyak!',includes:['Rank DIAMOND (1 bulan)','Rank GOLD (1 bulan)','10.000 in-game coin','Priority Queue Akses'],price:70000},
-      {id:3,name:'Legend Pack', icon:'🔱',tag:'BEST VALUE',desc:'Paket lengkap untuk pemain hardcore. Legend rank + semua keuntungan premium.',includes:['Rank LEGEND (1 bulan)','20.000 in-game coin','Custom Nick Color','VIP Lounge Access','Priority Support'],price:95000},
-    ]));
+// In-memory cache
+let _db = {ranks:[],pakets:[],compare_rows:[]};
+let _dbLoaded = false;
+
+async function loadDB(){
+  try{
+    const r = await fetch(BIN_URL,{headers:{'X-Access-Key':BIN_KEY}});
+    const j = await r.json();
+    _db = Object.assign({ranks:[],pakets:[],compare_rows:[]}, j.record||{});
+    _dbLoaded = true;
+  }catch(e){console.error('JSONBin load error',e);}
 }
+
+function lsGet(k,def){ const v=_db[k]; return (v!==undefined&&v!==null)?v:def; }
+function fmt(n){return Number(n).toLocaleString('id-ID');}
 
 /* ── CART ── */
 let cart = [];
@@ -851,7 +850,7 @@ function checkoutCart(){
 /* ── ORDER MODAL ── */
 let _orderItems = [];
 function openOrderSingle(type, id){
-  const list = type==='rank' ? lsGet('ranks',[]) : lsGet('pakets',[]);
+  const list = type==='rank' ? (_db.ranks||[]) : (_db.pakets||[]);
   const item = list.find(x=>x.id===id);
   if(!item) return;
   _orderItems = [{...item, type}];
@@ -1103,31 +1102,36 @@ function logout(){localStorage.removeItem('arvenia_session');refreshAuthUI();sho
 document.getElementById('loginPass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 document.getElementById('regPass2').addEventListener('keydown',e=>{if(e.key==='Enter')doRegister();});
 
-/* ── INIT ── */
-seed();
-refreshAuthUI();
-renderRanks();
+/* ── INIT — load dari JSONBin lalu render ── */
+async function init(){
+  refreshAuthUI();
+  await loadDB();
+  renderRanks();
+  if(activeView==='paket') renderPakets();
+}
+init();
 
-/* ── REAL-TIME SYNC ── */
-let _lrk=localStorage.getItem('arvenia_ranks')||'';
-let _lpk=localStorage.getItem('arvenia_pakets')||'';
-let _lcm=localStorage.getItem('arvenia_compare_rows')||'';
-window.addEventListener('storage',e=>{
-  if(['arvenia_ranks','arvenia_pakets','arvenia_compare_rows'].includes(e.key)){
-    renderRanks();
-    if(activeView==='paket') renderPakets();
-  }
-});
-setInterval(()=>{
-  const rk=localStorage.getItem('arvenia_ranks')||'';
-  const pk=localStorage.getItem('arvenia_pakets')||'';
-  const cm=localStorage.getItem('arvenia_compare_rows')||'';
-  if(rk!==_lrk||pk!==_lpk||cm!==_lcm){
-    _lrk=rk;_lpk=pk;_lcm=cm;
-    renderRanks();
-    if(activeView==='paket') renderPakets();
-  }
-},1500);
+/* ── REAL-TIME POLL setiap 15 detik — semua device ikut update ── */
+let _cacheRk='', _cachePk='', _cacheCm='';
+setInterval(async()=>{
+  try{
+    const r=await fetch(BIN_URL,{headers:{'X-Access-Key':BIN_KEY}});
+    const j=await r.json();
+    const rec=j.record||{};
+    const rk=JSON.stringify(rec.ranks||[]);
+    const pk=JSON.stringify(rec.pakets||[]);
+    const cm=JSON.stringify(rec.compare_rows||[]);
+    if(rk!==_cacheRk||pk!==_cachePk||cm!==_cacheCm){
+      _cacheRk=rk;_cachePk=pk;_cacheCm=cm;
+      _db.ranks=rec.ranks||[];
+      _db.pakets=rec.pakets||[];
+      _db.compare_rows=rec.compare_rows||[];
+      renderRanks();
+      if(activeView==='paket') renderPakets();
+    }
+  }catch(e){}
+},15000);
+
 </script>
 </body>
 </html>
