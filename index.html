@@ -1,99 +1,162 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-
-<head>
-  <meta charset="utf-8" />
-  <title>Arvenia Network | Home</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="image.png">
-  
-  <link rel="stylesheet" href="template.css" />
-  <link rel="stylesheet" href="home.css" />
-  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-  <meta property="og:title" content="Arvenia Network">
-  <meta property="og:description" content="Official Website Arvenia Network Minecraft Server.">
-  <meta property="og:image" content="https://media.discordapp.net/attachments/1135145482797207622/1218410978610511872/image.png">
-  <meta property="og:url" content="https://store.arvenia.xyz/">
-</head>
-
-<body>
-  <nav>
-    <input type="checkbox" id="check" />
-    <label for="check" class="checkbtn">
-      <img src="assets/img/button.svg" alt="menu" />
-    </label>
-    <label class="logo">Arvenia Network</label>
-    <ul>
-      <li><a class="active" href="#">&fHome</a></li>
-      <li><a href="/ranks">&bRanks</a></li>
-      <li><a href="/keys">&6Keys</a></li>
-      <li><a href="https://discord.gg/arvenia" target="_blank">&dSupport</a></li>
-    </ul>
-  </nav>
-
-  <div class="header">
-    <div class="text">
-      <h1 id="playerName">&aArvenia Network</h1>
-      <p>&fSelamat datang di portal resmi Arvenia. Jelajahi fitur unggulan dan bergabunglah dengan komunitas kami!</p>
-      <div class="server-status" style="margin-top: 20px;">
-        <span style="background: #2ecc71; padding: 10px 20px; border-radius: 5px; font-weight: bold;">
-          &fIP: play.arvenia.xyz
-        </span>
-      </div>
+<div class="hero-actions">
+      <a href="ranks.html" class="btn-primary">🛒 Beli Rank</a>
+      <a href="#server-info" class="btn-secondary">📡 Info Server</a>
     </div>
-    <div class="banner"></div>
-  </div>
+  </section>
 
-  <div class="container">
+  <section class="status-bar" id="server-info">
+    <div class="status-item">
+      <div class="status-icon green">📡</div>
+      <div>
+        <div class="status-label">Server Address</div>
+        <div class="status-value" id="serverIP">play.arvenia.xyz</div>
+      </div>
+      <button class="copy-ip-btn" onclick="copyIP()">Salin</button>
+    </div>
     
-    <div class="announcement-section" style="margin-bottom: 40px;">
-      <h2 style="border-bottom: 2px solid #&e; padding-bottom: 10px;">&e📢 Announcement</h2>
-      <div class="info-card" style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; margin-top: 15px;">
-        <p>&fUpdate Season baru telah tiba! Nikmati map baru dan sistem ekonomi yang lebih seimbang. Jangan lupa cek &bRanks &fbaru di store!</p>
-        <small>&7Diposting pada: 15 April 2026</small>
-      </div>
-    </div>
+    <div class="status-divider"></div>
 
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
-      
-      <div class="features-section">
-        <h2>&b✨ Fitur Server</h2>
-        <ul style="list-style: none; padding: 0; margin-top: 15px;">
-          <li style="margin-bottom: 10px;">&a✔ &fCustom Items & Weapons</li>
-          <li style="margin-bottom: 10px;">&a✔ &fDungeons & Boss Fights</li>
-          <li style="margin-bottom: 10px;">&a✔ &fLand Claim & Grief Prevent</li>
-          <li style="margin-bottom: 10px;">&a✔ &fFriendly Community</li>
-        </ul>
-      </div>
-
-      <div class="donator-section">
-        <h2>&d🏆 Top Donators</h2>
-        <div class="donator-list" style="margin-top: 15px;">
-          <div style="display: flex; justify-content: space-between; padding: 10px; background: rgba(0,0,0,0.2); margin-bottom: 5px;">
-            <span>&e1. &fPlayer_Satu</span>
-            <span style="color: #2ecc71;">Rp 500.000</span>
-          </div>
-          <div style="display: flex; justify-content: space-between; padding: 10px; background: rgba(0,0,0,0.2); margin-bottom: 5px;">
-            <span>&72. &fPlayer_Dua</span>
-            <span style="color: #2ecc71;">Rp 250.000</span>
-          </div>
-          <div style="display: flex; justify-content: space-between; padding: 10px; background: rgba(0,0,0,0.2); margin-bottom: 5px;">
-            <span>&63. &fPlayer_Tiga</span>
-            <span style="color: #2ecc71;">Rp 100.000</span>
-          </div>
+    <div class="status-item">
+      <div class="status-icon yellow">👥</div>
+      <div>
+        <div class="status-label">Pemain Online</div>
+        <div class="status-value">
+          <span class="online-dot"></span>
+          <span class="player-count">124</span> &f/ 500
         </div>
       </div>
-
     </div>
+
+    <div class="status-divider"></div>
+
+    <div class="status-item">
+      <div class="status-icon green">🛠️</div>
+      <div>
+        <div class="status-label">Versi Server</div>
+        <div class="status-value">&a1.16.5 - 1.20.x</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-header">
+    <h2 class="section-title">&d🏆 Hall of Fame</h2>
+    <span class="view-all">&7Bulan April 2026</span>
   </div>
 
-  <footer class="footer" style="margin-top: 50px; text-align: center; padding: 20px;">
-    <p>&copy; 2026 Arvenia Network. All rights reserved.</p>
-  </footer>
+  <section class="donatur-grid">
+    <div class="donatur-card rank-1">
+      <div class="donatur-medal">🥇</div>
+      <div class="donatur-pos">TOP DONATOR</div>
+      <div class="donatur-avatar">S</div>
+      <div class="donatur-name">Sultan_Arvenia</div>
+      <div class="donatur-amount">Rp 1.500.000</div>
+      <div class="donatur-rank-badge" style="border-color: #fbbf24; color: #fbbf24;">&6TITAN</div>
+    </div>
 
-  <script src="home.js"></script>
+    <div class="donatur-card rank-2">
+      <div class="donatur-medal">🥈</div>
+      <div class="donatur-pos">RUNNER UP</div>
+      <div class="donatur-avatar">R</div>
+      <div class="donatur-name">Raja_Mining</div>
+      <div class="donatur-amount">Rp 750.000</div>
+      <div class="donatur-rank-badge" style="border-color: #94a3b8; color: #cbd5e1;">&bMVP+</div>
+    </div>
+
+    <div class="donatur-card rank-3">
+      <div class="donatur-medal">🥉</div>
+      <div class="donatur-pos">THIRD PLACE</div>
+      <div class="donatur-avatar">M</div>
+      <div class="donatur-name">Member_Setia</div>
+      <div class="donatur-amount">Rp 300.000</div>
+      <div class="donatur-rank-badge" style="border-color: #b47a3c; color: #d4975a;">&eVIP</div>
+    </div>
+  </section>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; margin-top: 40px;">
+    
+    <div class="announcement-col">
+      <div class="section-header">
+        <h2 class="section-title">&e📢 Berita Terbaru</h2>
+      </div>
+      <div class="news-grid" style="grid-template-columns: 1fr;">
+        <div class="news-card">
+          <div class="news-tag tag-update">Update v2.1</div>
+          <div class="news-title">Sistem Dungeons Baru Telah Dibuka!</div>
+          <div class="news-desc">Kalahkan boss monster dan dapatkan legendary loot setiap hari Sabtu & Minggu.</div>
+          <div class="news-date">15 April 2026</div>
+        </div>
+        <div class="news-card">
+          <div class="news-tag tag-sale">Diskon Ramadhan</div>
+          <div class="news-title">Flash Sale 40% Semua Ranks!</div>
+          <div class="news-desc">Gunakan kode kupon &a"BERKAH"&f saat checkout untuk mendapatkan potongan harga.</div>
+          <div class="news-date">12 April 2026</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="features-col">
+      <div class="section-header">
+        <h2 class="section-title">&b✨ Fitur Unggulan</h2>
+      </div>
+      <div class="stats-grid" style="grid-template-columns: 1fr;">
+        <div class="stat-card">
+          <div class="stat-card-icon">⚔️</div>
+          <div class="stat-card-label">Custom RPG Systems</div>
+          <div class="stat-card-sub">&fSkill, Leveling, dan Senjata Unik.</div>
+          <div class="stat-card-bar"><div class="stat-card-bar-fill" style="width: 100%;"></div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-icon">🏗️</div>
+          <div class="stat-card-label">Land Claim System</div>
+          <div class="stat-card-sub">&fLindungi bangunanmu dari para griefer.</div>
+          <div class="stat-card-bar"><div class="stat-card-bar-fill" style="width: 100%;"></div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-icon">💎</div>
+          <div class="stat-card-label">Player Economy</div>
+          <div class="stat-card-sub">&fMarketplace, Auction House, & Jobs.</div>
+          <div class="stat-card-bar"><div class="stat-card-bar-fill" style="width: 100%;"></div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<footer>
+  <p>&copy; 2026 <strong>Arvenia Network</strong>. Dikembangkan dengan penuh semangat untuk komunitas Minecraft Indonesia.</p>
+</footer>
+
+<div class="toast" id="copyToast">IP Berhasil disalin!</div>
+
+<script>
+  function copyIP() {
+    const ip = document.getElementById('serverIP').innerText;
+    navigator.clipboard.writeText(ip);
+    
+    const toast = document.getElementById('copyToast');
+    toast.classList.add('show');
+    
+    const btn = document.querySelector('.copy-ip-btn');
+    btn.innerText = 'Tersalin!';
+    btn.classList.add('copied');
+
+    setTimeout(() => {
+      toast.classList.remove('show');
+      btn.innerText = 'Salin';
+      btn.classList.remove('copied');
+    }, 2000);
+  }
+
+  // Hamburger menu logic
+  const hb = document.getElementById('hamburgerBtn');
+  const mm = document.getElementById('mobileMenu');
+  hb.onclick = () => {
+    hb.classList.toggle('open');
+    mm.classList.toggle('open');
+  };
+</script>
+
 </body>
 </html>
