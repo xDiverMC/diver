@@ -3,144 +3,409 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>Arvenia Network - Ranks & Permissions Store</title>
+  <title>Arvenia Network - Minecraft Server Store</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="./assets/img/image.png">
-  <link rel="stylesheet" href="./assets/style/style.css" />
+  <link rel="icon" href="image.png">
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <meta name="discount" content="0.40" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <meta property="og:title" content="Arvenia Network - Ranks Store">
   <meta property="og:description" content="Purchase exclusive ranks and permissions on Arvenia Network. Unlock VIP features and enhance your gameplay experience.">
   <meta property="og:image" content="https://media.discordapp.net/attachments/1135145482797207622/1218410978610511872/image.png">
-  <meta property="og:url" content="https://store.arvenianetwork.com/">
+  <meta property="og:url" content="https://store.arvenia.xyz/">
 </head>
 
 <body>
+  <!-- Floating Background Elements -->
+  <div class="floating-bg"></div>
+
   <!-- Navigation Bar -->
   <nav class="navbar">
     <input type="checkbox" id="check" />
     <label for="check" class="checkbtn">
-      <img src="./assets/img/button.svg" alt="Menu" />
+      <i class="fas fa-bars"></i>
     </label>
-    <label class="logo">Arvenia Network Store</label>
+    <label class="logo">
+      <i class="fas fa-crown"></i> Arvenia Network
+    </label>
     <ul class="nav-menu">
-      <li><a class="active" href="#">Home</a></li>
+      <li><a class="active" href="#home">Home</a></li>
       <li><a href="#ranks">Ranks</a></li>
-      <li><a href="https://discord.gg/arvenianetwork">Discord Server</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="https://discord.gg/arvenianetwork" target="_blank"><i class="fab fa-discord"></i> Discord</a></li>
     </ul>
   </nav>
 
   <!-- Hero Section -->
-  <div class="header">
+  <div class="header" id="home">
     <div class="header-content">
-      <h1 id="playerName">Welcome, Player</h1>
-      <p>Purchase exclusive ranks and unlock premium features on Arvenia Network with LuckPerms permissions</p>
+      <div class="hero-badge">🎮 Welcome to Arvenia Network</div>
+      <h1 id="playerName" class="glitch">Welcome, Player</h1>
+      <p class="hero-subtitle">Purchase exclusive ranks and unlock premium features with LuckPerms permissions</p>
+      
       <div class="button-group">
-        <button class="button button-primary" id="logout">Change Account</button>
+        <button class="button button-primary" id="logout">
+          <i class="fas fa-exchange-alt"></i> Change Account
+        </button>
+        <button class="button button-secondary" onclick="document.getElementById('ranks').scrollIntoView({behavior: 'smooth'})">
+          <i class="fas fa-arrow-down"></i> View Ranks
+        </button>
+      </div>
+
+      <!-- Player Stats (Optional) -->
+      <div class="player-stats">
+        <div class="stat">
+          <i class="fas fa-users"></i>
+          <span>50K+ Players</span>
+        </div>
+        <div class="stat">
+          <i class="fas fa-star"></i>
+          <span>⭐ 4.9 Rating</span>
+        </div>
+        <div class="stat">
+          <i class="fas fa-bolt"></i>
+          <span>100% Uptime</span>
+        </div>
       </div>
     </div>
-    <div class="banner"></div>
+    <div class="banner">
+      <div class="banner-content">
+        <div class="floating-cube"></div>
+        <div class="floating-cube"></div>
+        <div class="floating-cube"></div>
+      </div>
+    </div>
   </div>
+
+  <!-- Features Section -->
+  <section class="features" id="features">
+    <h2>Why Choose Arvenia?</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <h3>Secure Payments</h3>
+        <p>Multiple payment methods with SSL encryption</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-clock"></i>
+        </div>
+        <h3>Instant Delivery</h3>
+        <p>Ranks delivered instantly after purchase</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-headset"></i>
+        </div>
+        <h3>24/7 Support</h3>
+        <p>Get help anytime from our support team</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-gift"></i>
+        </div>
+        <h3>Bonus Rewards</h3>
+        <p>Earn points with every purchase</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-lock"></i>
+        </div>
+        <h3>Lifetime Access</h3>
+        <p>Keep your rank forever, no expiration</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-gamepad"></i>
+        </div>
+        <h3>LuckPerms Ready</h3>
+        <p>Full LuckPerms integration & permissions</p>
+      </div>
+    </div>
+  </section>
 
   <!-- Ranks Section -->
-  <div class="container">
-    <h2 class="section-title">Available Ranks</h2>
-    <p class="section-subtitle">Choose a rank and enhance your gameplay experience</p>
+  <div class="container" id="ranks">
+    <div class="section-header">
+      <h2 class="section-title">Available Ranks</h2>
+      <p class="section-subtitle">Choose a rank and enhance your gameplay experience</p>
+      
+      <div class="filter-buttons">
+        <button class="filter-btn active" data-filter="all">All Ranks</button>
+        <button class="filter-btn" data-filter="popular">Popular</button>
+        <button class="filter-btn" data-filter="elite">Elite</button>
+      </div>
+    </div>
     
     <div class="rank-grid">
-      <!-- Rank Cards -->
-      <div class="rank-card" data-price="5000">
-        <div class="rank-badge">Bronze</div>
+      <!-- Bronze Rank -->
+      <div class="rank-card" data-price="5000" data-filter="all">
+        <div class="rank-corner"></div>
+        <div class="rank-header bronze">
+          <div class="rank-badge">Bronze</div>
+          <span class="rank-tier">Tier 1</span>
+        </div>
         <h3>Starter Pack</h3>
+        <p class="rank-description">Perfect for new players</p>
+        
         <ul class="rank-features">
-          <li>✓ Color codes in chat</li>
-          <li>✓ Increased pet limit</li>
-          <li>✓ Special prefix</li>
+          <li><i class="fas fa-check"></i> Color codes in chat</li>
+          <li><i class="fas fa-check"></i> Increased pet limit (2x)</li>
+          <li><i class="fas fa-check"></i> Special prefix</li>
+          <li><i class="fas fa-check"></i> 1.2x rewards</li>
         </ul>
-        <div class="rank-price"><p></p></div>
-        <button class="buy-btn">Purchase Now</button>
+        
+        <div class="rank-price">
+          <span class="original-price" style="display:none;"></span>
+          <span class="discounted-price" style="display:none;"></span>
+          <p></p>
+        </div>
+        
+        <button class="buy-btn">
+          <i class="fas fa-shopping-cart"></i> Purchase Now
+        </button>
       </div>
 
-      <div class="rank-card" data-price="10000">
-        <div class="rank-badge">Silver</div>
+      <!-- Silver Rank -->
+      <div class="rank-card" data-price="10000" data-filter="all">
+        <div class="rank-corner"></div>
+        <div class="rank-header silver">
+          <div class="rank-badge">Silver</div>
+          <span class="rank-tier">Tier 2</span>
+        </div>
         <h3>Silver Rank</h3>
+        <p class="rank-description">Great for casual players</p>
+        
         <ul class="rank-features">
-          <li>✓ All Bronze features</li>
-          <li>✓ Ability to create warps</li>
-          <li>✓ Priority support</li>
-          <li>✓ 1.5x rewards</li>
+          <li><i class="fas fa-check"></i> All Bronze features</li>
+          <li><i class="fas fa-check"></i> Ability to create warps</li>
+          <li><i class="fas fa-check"></i> Priority support</li>
+          <li><i class="fas fa-check"></i> 1.5x rewards</li>
+          <li><i class="fas fa-check"></i> /pet command access</li>
         </ul>
-        <div class="rank-price"><p></p></div>
-        <button class="buy-btn">Purchase Now</button>
+        
+        <div class="rank-price">
+          <span class="original-price" style="display:none;"></span>
+          <span class="discounted-price" style="display:none;"></span>
+          <p></p>
+        </div>
+        
+        <button class="buy-btn">
+          <i class="fas fa-shopping-cart"></i> Purchase Now
+        </button>
       </div>
 
-      <div class="rank-card featured" data-price="25000">
-        <div class="rank-badge featured-badge">Gold ★</div>
+      <!-- Gold Rank (Featured) -->
+      <div class="rank-card featured" data-price="25000" data-filter="all popular">
+        <div class="rank-corner"></div>
+        <div class="rank-header gold">
+          <div class="rank-badge featured-badge">Gold ★</div>
+          <span class="rank-tier">Tier 3 - Popular</span>
+        </div>
         <h3>Gold Rank</h3>
-        <p class="popular-badge">Most Popular</p>
+        <p class="popular-badge"><i class="fas fa-fire"></i> Most Popular</p>
+        <p class="rank-description">Our most popular choice</p>
+        
         <ul class="rank-features">
-          <li>✓ All Silver features</li>
-          <li>✓ Particle effects</li>
-          <li>✓ Custom head items</li>
-          <li>✓ 2x rewards</li>
-          <li>✓ 32 player homes</li>
+          <li><i class="fas fa-check"></i> All Silver features</li>
+          <li><i class="fas fa-check"></i> Particle effects</li>
+          <li><i class="fas fa-check"></i> Custom head items</li>
+          <li><i class="fas fa-check"></i> 2x rewards</li>
+          <li><i class="fas fa-check"></i> 32 player homes</li>
+          <li><i class="fas fa-check"></i> /hat command</li>
         </ul>
-        <div class="rank-price"><p></p></div>
-        <button class="buy-btn">Purchase Now</button>
+        
+        <div class="rank-price">
+          <span class="original-price" style="display:none;"></span>
+          <span class="discounted-price" style="display:none;"></span>
+          <p></p>
+        </div>
+        
+        <button class="buy-btn featured-btn">
+          <i class="fas fa-shopping-cart"></i> Get Gold Now
+        </button>
       </div>
 
-      <div class="rank-card" data-price="50000">
-        <div class="rank-badge">Emerald</div>
+      <!-- Emerald Rank -->
+      <div class="rank-card" data-price="50000" data-filter="all">
+        <div class="rank-corner"></div>
+        <div class="rank-header emerald">
+          <div class="rank-badge">Emerald</div>
+          <span class="rank-tier">Tier 4</span>
+        </div>
         <h3>Emerald Rank</h3>
+        <p class="rank-description">For dedicated players</p>
+        
         <ul class="rank-features">
-          <li>✓ All Gold features</li>
-          <li>✓ Custom effects</li>
-          <li>✓ VIP lounge access</li>
-          <li>✓ 3x rewards</li>
-          <li>✓ 64 player homes</li>
+          <li><i class="fas fa-check"></i> All Gold features</li>
+          <li><i class="fas fa-check"></i> Custom effects & auras</li>
+          <li><i class="fas fa-check"></i> VIP lounge access</li>
+          <li><i class="fas fa-check"></i> 3x rewards</li>
+          <li><i class="fas fa-check"></i> 64 player homes</li>
+          <li><i class="fas fa-check"></i> Monthly crate key</li>
         </ul>
-        <div class="rank-price"><p></p></div>
-        <button class="buy-btn">Purchase Now</button>
+        
+        <div class="rank-price">
+          <span class="original-price" style="display:none;"></span>
+          <span class="discounted-price" style="display:none;"></span>
+          <p></p>
+        </div>
+        
+        <button class="buy-btn">
+          <i class="fas fa-shopping-cart"></i> Purchase Now
+        </button>
       </div>
 
-      <div class="rank-card" data-price="100000">
-        <div class="rank-badge">Diamond</div>
+      <!-- Diamond Rank -->
+      <div class="rank-card" data-price="100000" data-filter="all">
+        <div class="rank-corner"></div>
+        <div class="rank-header diamond">
+          <div class="rank-badge">Diamond</div>
+          <span class="rank-tier">Tier 5</span>
+        </div>
         <h3>Diamond Rank</h3>
+        <p class="rank-description">Elite gaming experience</p>
+        
         <ul class="rank-features">
-          <li>✓ All Emerald features</li>
-          <li>✓ Custom enchant glow</li>
-          <li>✓ Exclusive cosmetics</li>
-          <li>✓ 5x rewards</li>
-          <li>✓ 128 player homes</li>
+          <li><i class="fas fa-check"></i> All Emerald features</li>
+          <li><i class="fas fa-check"></i> Custom enchant glows</li>
+          <li><i class="fas fa-check"></i> Exclusive cosmetics</li>
+          <li><i class="fas fa-check"></i> 5x rewards</li>
+          <li><i class="fas fa-check"></i> 128 player homes</li>
+          <li><i class="fas fa-check"></i> 2x monthly crate keys</li>
         </ul>
-        <div class="rank-price"><p></p></div>
-        <button class="buy-btn">Purchase Now</button>
+        
+        <div class="rank-price">
+          <span class="original-price" style="display:none;"></span>
+          <span class="discounted-price" style="display:none;"></span>
+          <p></p>
+        </div>
+        
+        <button class="buy-btn">
+          <i class="fas fa-shopping-cart"></i> Purchase Now
+        </button>
       </div>
 
-      <div class="rank-card elite" data-price="150000">
-        <div class="rank-badge elite-badge">Elite</div>
+      <!-- Elite Rank -->
+      <div class="rank-card elite" data-price="150000" data-filter="all elite">
+        <div class="rank-corner"></div>
+        <div class="elite-crown">👑</div>
+        <div class="rank-header elite-header">
+          <div class="rank-badge elite-badge">Elite</div>
+          <span class="rank-tier">Tier 6 - Ultimate</span>
+        </div>
         <h3>Elite Rank</h3>
-        <p class="vip-badge">Ultimate VIP</p>
+        <p class="vip-badge"><i class="fas fa-crown"></i> Ultimate VIP</p>
+        <p class="rank-description">The ultimate gaming experience</p>
+        
         <ul class="rank-features">
-          <li>✓ All Diamond features</li>
-          <li>✓ Staff-only cosmetics</li>
-          <li>✓ Priority queue</li>
-          <li>✓ 10x rewards</li>
-          <li>✓ Unlimited homes</li>
-          <li>✓ Custom rank name</li>
+          <li><i class="fas fa-check"></i> All Diamond features</li>
+          <li><i class="fas fa-check"></i> Staff-only cosmetics</li>
+          <li><i class="fas fa-check"></i> Priority queue access</li>
+          <li><i class="fas fa-check"></i> 10x rewards multiplier</li>
+          <li><i class="fas fa-check"></i> Unlimited player homes</li>
+          <li><i class="fas fa-check"></i> Custom rank name & color</li>
+          <li><i class="fas fa-check"></i> 5x monthly crate keys</li>
+          <li><i class="fas fa-check"></i> VIP-only commands</li>
         </ul>
-        <div class="rank-price"><p></p></div>
-        <button class="buy-btn">Purchase Now</button>
+        
+        <div class="rank-price">
+          <span class="original-price" style="display:none;"></span>
+          <span class="discounted-price" style="display:none;"></span>
+          <p></p>
+        </div>
+        
+        <button class="buy-btn elite-btn">
+          <i class="fas fa-crown"></i> Become Elite
+        </button>
       </div>
     </div>
   </div>
+
+  <!-- FAQ Section -->
+  <section class="faq-section">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-grid">
+      <div class="faq-item">
+        <h4><i class="fas fa-question-circle"></i> How long do ranks last?</h4>
+        <p>All ranks are permanent and never expire. Once purchased, they're yours forever!</p>
+      </div>
+      <div class="faq-item">
+        <h4><i class="fas fa-question-circle"></i> Can I upgrade my rank?</h4>
+        <p>Yes! You can upgrade anytime. We'll apply the price difference to your new rank.</p>
+      </div>
+      <div class="faq-item">
+        <h4><i class="fas fa-question-circle"></i> What payment methods do you accept?</h4>
+        <p>We accept PayPal, credit/debit cards, and cryptocurrency for maximum flexibility.</p>
+      </div>
+      <div class="faq-item">
+        <h4><i class="fas fa-question-circle"></i> How quickly will I receive my rank?</h4>
+        <p>Instantly! Upon successful payment, your rank is applied to your account immediately.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <h2>Ready to Level Up?</h2>
+    <p>Join thousands of players enjoying premium perks on Arvenia Network</p>
+    <button class="button button-primary button-large" onclick="document.getElementById('ranks').scrollIntoView({behavior: 'smooth'})">
+      <i class="fas fa-rocket"></i> Choose Your Rank
+    </button>
+  </section>
 
   <!-- Footer -->
   <footer class="footer">
-    <p>&copy; 2026 Arvenia Network. All rights reserved. | <a href="https://discord.gg/arvenianetwork">Join our Discord</a></p>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>Arvenia Network</h4>
+        <p>The ultimate Minecraft server experience</p>
+      </div>
+      <div class="footer-section">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#ranks">Ranks</a></li>
+          <li><a href="#features">Features</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Community</h4>
+        <ul>
+          <li><a href="https://discord.gg/arvenianetwork" target="_blank"><i class="fab fa-discord"></i> Discord</a></li>
+          <li><a href="#" target="_blank"><i class="fab fa-twitter"></i> Twitter</a></li>
+          <li><a href="#" target="_blank"><i class="fab fa-youtube"></i> YouTube</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Arvenia Network. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+    </div>
   </footer>
 
   <script src="./assets/js/home.js"></script>
+  <script>
+    // Filter functionality
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const filter = this.dataset.filter;
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        
+        document.querySelectorAll('.rank-card').forEach(card => {
+          if (filter === 'all' || card.dataset.filter.includes(filter)) {
+            card.style.display = '';
+            setTimeout(() => card.classList.add('show'), 10);
+          } else {
+            card.classList.remove('show');
+          }
+        });
+      });
+    });
+  </script>
 </body>
 </html>
