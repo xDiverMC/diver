@@ -1,93 +1,166 @@
-/* --- TEMPLATE GLOBAL CONFIG --- */
+/* template.css - Global Layout & Navigation */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style: none;
+}
+
 :root {
-  --primary-green: #2ecc71;
-  --primary-yellow: #f1c40f;
-  --grad-main: linear-gradient(135deg, #2ecc71 0%, #f1c40f 100%);
-  --dark-surface: rgba(49, 49, 60, 0.6);
-  --border-color: rgba(46, 204, 113, 0.3);
+  --primary-gradient: linear-gradient(135deg, #2ecc71 0%, #f1c40f 100%);
+  --bg-color: #0f0f0f;
+  --nav-bg: rgba(10, 10, 10, 0.95);
+  --text-white: #ffffff;
+  --text-gray: #b3b3b3;
 }
 
-/* Penyesuaian Scrollbar Global */
-::-webkit-scrollbar {
-  width: 8px;
+body {
+  background-color: var(--bg-color);
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  color: var(--text-white);
+  overflow-x: hidden;
 }
 
-::-webkit-scrollbar-track {
-  background: #1e1e29;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--grad-main);
-  border-radius: 10px;
-}
-
-/* --- UI ELEMENTS --- */
-
-/* Input Field (Jika ada SweetAlert atau form) */
-input[type="text"], input[type="number"] {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--border-color);
-  padding: 12px 20px;
-  border-radius: 12px;
-  color: #fff;
-  font-family: 'Montserrat', sans-serif;
-  outline: none;
-  transition: 0.3s;
-}
-
-input[type="text"]:focus {
-  border-color: var(--primary-yellow);
-  box-shadow: 0 0 10px rgba(241, 196, 15, 0.2);
-}
-
-/* SweetAlert Custom Styling */
-.swal2-popup {
-  background: #282832 !important;
-  color: #fff !important;
-  border-radius: 20px !important;
-  border: 1px solid var(--border-color) !important;
-}
-
-.swal2-title {
-  color: #fff !important;
-  font-family: 'Plus Jakarta Sans', sans-serif !important;
-}
-
-.swal2-confirm {
-  background: var(--grad-main) !important;
-  color: #000 !important;
-  font-weight: bold !important;
-  border-radius: 10px !important;
-}
-
-/* Tag / Badge Arvenia */
-.badge-premium {
-  display: inline-block;
-  padding: 5px 12px;
-  background: var(--grad-main);
-  color: #000;
-  font-weight: 800;
-  font-size: 10px;
-  border-radius: 5px;
-  text-transform: uppercase;
-  margin-bottom: 10px;
-}
-
-/* --- ANIMATIONS --- */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.container, .header {
-  animation: fadeIn 0.8s ease-out forwards;
-}
-
-/* Card Glassmorphism Effect */
-.glass-card {
-  background: var(--dark-surface);
+/* --- NAVIGATION BAR --- */
+nav {
+  background: var(--nav-bg);
+  height: 80px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 5%;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);
-  border: 1px solid var(--border-color);
-  border-radius: 15px;
-  padding: 20px;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+nav ul {
+  display: flex;
+}
+
+nav ul li {
+  margin: 0 10px;
+}
+
+nav ul li a {
+  color: var(--text-white);
+  font-size: 15px;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+nav ul li a:hover, 
+nav ul li a.active {
+  background: var(--primary-gradient);
+  color: #000 !important;
+  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+}
+
+/* Mobile Menu Button */
+.checkbtn {
+  font-size: 30px;
+  color: white;
+  cursor: pointer;
+  display: none;
+}
+
+#check {
+  display: none;
+}
+
+/* --- FOOTER --- */
+.footer {
+  padding: 40px 0;
+  text-align: center;
+  background: #0a0a0a;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  margin-top: 100px;
+}
+
+.footer p {
+  color: var(--text-gray);
+  font-size: 14px;
+}
+
+/* --- REUSABLE BUTTONS --- */
+.button {
+  background: var(--primary-gradient);
+  border: none;
+  padding: 12px 24px;
+  color: #000;
+  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+  text-transform: uppercase;
+  font-size: 13px;
+}
+
+.button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(241, 196, 15, 0.4);
+}
+
+/* --- RESPONSIVE DESIGN --- */
+@media (max-width: 952px) {
+  .logo {
+    font-size: 20px;
+    padding-left: 20px;
+  }
+  nav ul li a {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 858px) {
+  .checkbtn {
+    display: block;
+    margin-right: 20px;
+  }
+  
+  nav ul {
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    background: #111;
+    top: 80px;
+    left: -100%;
+    text-align: center;
+    transition: all 0.5s;
+    flex-direction: column;
+    padding-top: 50px;
+  }
+  
+  nav ul li {
+    margin: 20px 0;
+  }
+  
+  nav ul li a {
+    font-size: 20px;
+  }
+
+  #check:checked ~ ul {
+    left: 0;
+  }
+}
+
+/* Utility Class untuk Spacing */
+.container {
+  padding-top: 120px; /* Jarak agar tidak tertutup Navbar Fixed */
 }
