@@ -1,237 +1,191 @@
-@import url("https://fonts.googleapis.com/css2?family=Lato&family=Montserrat:wght@500&family=Plus+Jakarta+Sans:wght@500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lato&family=Montserrat:wght@500;700&family=Plus+Jakarta+Sans:wght@500;800&display=swap");
 
-.header {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: 0.5fr 0.5fr;
-  grid-column-gap: 0px;
-  grid-row-gap: 0px;
+/* --- ROOT VARIABLES --- */
+:root {
+  /* Gradient Hijau ke Kuning */
+  --primary-gradient: linear-gradient(135deg, #2ecc71 0%, #f1c40f 100%);
+  --hover-gradient: linear-gradient(135deg, #27ae60 0%, #f39c12 100%);
+  --accent-color: #2ecc71;
+  --bg-dark: #1e1e29;
 }
 
-.text {
-  grid-area: 1 / 1 / 2 / 4;
-  z-index: 2;
-  padding: 0 0 0 10%;
-  margin: 10% 0 0 0;
-  line-height: 100%;
+* {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-dark);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: "Montserrat", sans-serif;
+}
+
+/* --- NAVBAR --- */
+nav {
+  background: rgba(49, 49, 60, 0.7);
+  backdrop-filter: blur(20px);
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 80px;
+  border-bottom: 2px solid #2ecc71; /* Garis bawah hijau tipis */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+label.logo {
+  color: #fff;
+  font-size: 30px;
+  font-weight: 800;
   font-family: "Plus Jakarta Sans", sans-serif;
+  line-height: 80px;
+  padding: 0 5%;
+  /* Efek text gradient pada logo */
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
+nav ul {
+  float: right;
+  margin-right: 5%;
+}
+
+nav ul li {
+  display: inline-block;
+  line-height: 80px;
+  margin: 0 15px;
+}
+
+nav ul li a {
+  color: white;
+  font-size: 16px;
+  font-family: "Montserrat", sans-serif;
+  padding: 7px 13px;
+  transition: 0.3s;
+}
+
+nav a::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 15px;
+  transform: translateX(-50%);
+  width: 0%;
+  height: 3px;
+  background: var(--primary-gradient);
+  transition: 0.3s ease-in-out;
+  border-radius: 50px;
+  visibility: hidden;
+}
+
+nav a.active::after,
+nav a:hover::after {
+  width: 70%;
+  visibility: visible;
+}
+
+/* --- BUTTONS --- */
+.button {
+  display: inline-block;
+  text-align: center;
+  background: var(--primary-gradient);
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 12px 35px;
+  color: #000 !important;
+  cursor: pointer;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: none;
+}
+
+.button:hover {
+  background: var(--hover-gradient);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(46, 204, 113, 0.3);
+}
+
+/* --- HEADER --- */
 .header h1 {
-  font-size: 5.5rem;
-  line-height: 100%;
   font-family: "Plus Jakarta Sans", sans-serif;
+  margin: 150px 0 0 5%;
+  color: #fff;
+  font-weight: 800;
+  font-size: 3rem;
 }
 
 .header p {
-  margin: 28px 0 0 5%;
-  line-height: 1.2;
-  font-size: 1.1rem;
+  color: #dcd9d9;
+  margin: 20px 5% 40px 5%;
+  max-width: 600px;
+  line-height: 1.6;
 }
 
-.logout {
-  margin: 30px 0 0 0;
-  padding: 0 0 0 5%;
-}
-
-.banner {
-  z-index: 0;
-  grid-area: 1 / 2 / 4 / 6;
-  background: linear-gradient(to left, rgba(30, 30, 41, 0) 45%, rgba(30, 30, 41, 1) 100%),
-    linear-gradient(to bottom, rgba(30, 30, 41, 0) 45%, rgba(30, 30, 41, 1) 100%), url(../img/banner.png);
-  background-size: cover;
-  background-position: top;
-  background-repeat: no-repeat;
-}
-
-.header a:hover,
-.container a:hover {
-  text-decoration: none;
-  background-color: #6b948ddb;
-}
-
-.coin-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  align-content: flex-start;
-  flex-direction: row;
-  margin: -5% 10% 0;
-}
-
+/* --- COIN CARD (TAMBAHAN) --- */
+/* Agar list coin kamu juga senada */
 .coin {
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 2fr 1fr;
-  grid-column-gap: 0px;
-  grid-row-gap: 0px;
-  width: 350px;
-  height: 380px;
-  margin: 16px 16px;
-  background-color: #2c2c3c;
-  border-radius: 25px;
-  text-align: center;
-  align-items: center;
-  transition: 0.3s ease;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(46, 204, 113, 0.2);
+  border-radius: 20px;
+  padding: 20px;
+  transition: 0.3s;
   cursor: pointer;
-}
-
-.coin p {
-  font-size: 1.5rem;
-  color: #fff;
-}
-
-.coin p b {
-  font-size: 5rem;
-}
-
-.coin-price {
-  grid-area: 2 / 1 / 3 / 2;
-  background-color: #a7d5ec;
-  height: 90%;
-  margin: 0 3%;
-  border-radius: 0 0 25px 25px;
-  font-size: 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   text-align: center;
 }
 
-.coin-price p {
-  margin: 10px;
-  color: #010202;
-}
 .coin:hover {
+  border-color: #f1c40f;
+  background: rgba(46, 204, 113, 0.1);
   transform: scale(1.05);
-  transition: 0.3s ease;
 }
 
-.coin:active {
-  transform: scale(0.95);
-  transition: 0.1s ease;
+.discounted-price {
+    color: #f1c40f !important; /* Warna kuning untuk harga diskon */
 }
 
-iframe {  
-  z-index: 999;
-  top: 0;
-  left: 0;
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  border: none;
-  backdrop-filter: blur(5px);
-  display: none;
+/* --- SCROLLBAR --- */
+::-webkit-scrollbar {
+  width: 8px;
+  background-color: #1e1e29;
 }
 
-/* Make them responsive */
-@media all and (min-width: 481px) and (max-width: 768px) {
-  .header h1 {
-    font-size: 5rem;
-  }
-  .header p {
-    margin: 16px 0 10% 6%;
-    font-size: 1rem;
-  }
+::-webkit-scrollbar-thumb {
+  background: var(--primary-gradient);
+  border-radius: 50px;
 }
 
-@media all and (min-width: 334px) and (max-width: 480px) {
-  .store,
-  .rules,
-  .sosmed {
-    display: grid;
-    grid-template-columns: 0.5fr 1.5fr;
-    grid-template-rows: repeat(2, 0.5fr);
-    grid-column-gap: 0px;
-    grid-row-gap: 0px;
+/* --- MOBILE RESPONSIVE --- */
+@media (max-width: 860px) {
+  .checkbtn {
+    display: block;
+    color: #2ecc71;
+    float: right;
+    margin-right: 30px;
+    line-height: 80px;
   }
-  .container .button {
-    grid-area: 2 / 1 / 3 / 3;
-    margin: 0 20px;
-    padding: 12px 0;
-  }
-  .content2 {
-    margin: 0 60px 5px 0;
-  }
-  .content2 h2 {
-    margin: 24px 0 3px 0;
-    font-size: 1.4rem;
-  }
-  .content2 p {
-    margin: 5px 0 3px 0;
-    font-size: 0.8rem;
-  }
-  .icon {
-    margin: 20px;
-    padding: 15px;
-  }
-  .header h1 {
-    font-size: 350%;
-  }
-  .header p {
-    margin: 16px 0 10% 6%;
-    font-size: 100%;
-  }
-  .button {
-    font-size: 0.8rem;
-    padding: 12px 30px;
-  }
-}
 
-@media all and (max-width: 333px) {
-  .store,
-  .rules,
-  .sosmed {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: repeat(2, 0.5fr);
-    grid-column-gap: 0px;
-    grid-row-gap: 0px;
-  }
-  .icon {
-    display: none;
-  }
-  .container .button {
-    grid-area: 2 / 1 / 3 / 2;
-    margin: 0 20px;
-    padding: 12px 0;
-  }
-  .content2 {
-    grid-area: 1 / 1 / 2 / 2;
-    margin: 0 10% 15px 10%;
+  nav ul {
+    background: rgba(30, 30, 41, 0.98);
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    top: 80px;
+    left: -100%;
     text-align: center;
+    transition: all 0.5s;
+    float: none;
   }
-  .content2 h2 {
-    margin: 15px 0 3px 0;
-    font-size: 1.4rem;
-  }
-  .content2 p {
-    margin: 5px 0 3px 0;
-    font-size: 0.8rem;
-  }
-  .icon {
-    margin: 20px;
-    padding: 15px;
-  }
-  .header h1 {
-    font-size: 350%;
-  }
-  .header p {
-    margin: 16px 0 10% 6%;
-    font-size: 100%;
-  }
-  .container .button {
-    font-size: 0.8rem;
-    padding: 12px 30px;
-    margin: 0 10% 5%;
-  }
-  .header .button {
-    font-size: 100%;
-    padding: 10px 20px;
-  }
-  .ip {
-    margin: 30px 0 0 0;
+
+  #check:checked ~ ul {
+    left: 0;
   }
 }
