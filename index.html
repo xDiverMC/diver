@@ -1,0 +1,2325 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Arvenia Network - Minecraft Server Store</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="image.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta name="discount" content="0.40" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <meta property="og:title" content="Arvenia Network - Ranks Store">
+  <meta property="og:description" content="Purchase exclusive ranks and permissions on Arvenia Network. Unlock VIP features and enhance your gameplay experience.">
+  <meta property="og:image" content="https://media.discordapp.net/attachments/1135145482797207622/1218410978610511872/image.png">
+  <meta property="og:url" content="https://store.arvenia.xyz/">
+
+  <style>
+    :root {
+      --primary-color: #10b981;
+      --primary-dark: #059669;
+      --secondary-color: #f59e0b;
+      --accent-color: #84cc16;
+      --success-color: #22c55e;
+      --danger-color: #ef4444;
+      --dark-bg: #1a2332;
+      --light-bg: #f0fdf4;
+      --text-primary: #1a2d20;
+      --text-secondary: #6b7280;
+      --border-color: #d1fae5;
+      --shadow: 0 10px 30px rgba(16, 185, 129, 0.15);
+      --transition: all 0.3s ease;
+      
+      /* Rank Colors */
+      --bronze: #cd7f32;
+      --silver: #c0c0c0;
+      --gold: #ffd700;
+      --emerald: #50c878;
+      --diamond: #00ffff;
+      --elite: #ff69b4;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f0fdf4 0%, #fef3c7 100%);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+      animation: pageLoadIn 0.8s ease-out;
+    }
+
+    @keyframes pageLoadIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Floating Background */
+    .floating-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2310b981' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Navigation Bar */
+    .navbar {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 8px 32px rgba(16, 185, 129, 0.2);
+      backdrop-filter: blur(10px);
+      animation: slideDown 0.6s ease-out;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: white;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav-menu {
+      display: flex;
+      list-style: none;
+      gap: 2.5rem;
+    }
+
+    .nav-menu a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav-menu a:hover,
+    .nav-menu a.active {
+      color: var(--accent-color);
+      transform: translateY(-2px);
+    }
+
+    .nav-menu a.active::after {
+      content: '';
+      position: absolute;
+      bottom: -12px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: var(--accent-color);
+      border-radius: 2px;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+
+    #check {
+      display: none;
+    }
+
+    .checkbtn {
+      display: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .checkbtn:hover {
+      transform: scale(1.1);
+    }
+
+    /* Header/Hero Section */
+    .header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 4rem;
+      padding: 6rem 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+      min-height: 600px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(16, 185, 129, 0.1);
+      border: 2px solid var(--primary-color);
+      color: var(--primary-dark);
+      padding: 0.7rem 1.5rem;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      animation: fadeInUp 0.6s ease 0.1s both;
+    }
+
+    .header-content h1 {
+      font-size: 4rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-color) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+      animation: fadeInUp 0.8s ease 0.2s both;
+    }
+
+    .hero-subtitle {
+      font-size: 1.25rem;
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+      line-height: 1.8;
+      animation: fadeInUp 0.8s ease 0.3s both;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      animation: fadeInUp 0.8s ease 0.4s both;
+    }
+
+    .button {
+      padding: 1rem 2.5rem;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      white-space: nowrap;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .button::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .button:active::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .button-primary {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+      color: white;
+      box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+    }
+
+    .button-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(16, 185, 129, 0.6);
+    }
+
+    .button-primary:active {
+      transform: scale(0.98);
+    }
+
+    .button-secondary {
+      background: white;
+      color: var(--primary-dark);
+      border: 2px solid var(--primary-color);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .button-secondary:hover {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+      color: white;
+      transform: translateY(-3px);
+    }
+
+    .button-secondary:active {
+      transform: scale(0.98);
+    }
+
+    .button-large {
+      padding: 1.2rem 3.5rem;
+      font-size: 1.15rem;
+    }
+
+    .player-stats {
+      display: flex;
+      gap: 2rem;
+      margin-top: 3rem;
+      animation: fadeInUp 0.8s ease 0.5s both;
+    }
+
+    .stat {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 1rem;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      transition: var(--transition);
+    }
+
+    .stat:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .stat i {
+      font-size: 1.5rem;
+      color: var(--primary-color);
+    }
+
+    .stat span {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    /* Banner */
+    .banner {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+      border-radius: 20px;
+      min-height: 400px;
+      box-shadow: 0 20px 60px rgba(16, 185, 129, 0.3);
+      position: relative;
+      overflow: hidden;
+      animation: fadeInUp 0.8s ease 0.3s both;
+    }
+
+    .banner::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 600px;
+      height: 600px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .banner-content {
+      position: relative;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      padding: 2rem;
+    }
+
+    .floating-cube {
+      width: 60px;
+      height: 60px;
+      background: rgba(255, 255, 255, 0.2);
+      border: 2px solid white;
+      border-radius: 8px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .floating-cube:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .floating-cube:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-30px); }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Features Section */
+    .features {
+      background: white;
+      padding: 6rem 2rem;
+      max-width: 1400px;
+      margin: 4rem auto;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(16, 185, 129, 0.08);
+      position: relative;
+      z-index: 10;
+      animation: fadeInUp 0.8s ease 0.6s both;
+    }
+
+    .features h2 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 4rem;
+      color: var(--primary-dark);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .feature-card {
+      padding: 2rem;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(245, 158, 11, 0.05) 100%);
+      border: 2px solid var(--border-color);
+      border-radius: 16px;
+      text-align: center;
+      transition: var(--transition);
+      cursor: pointer;
+      animation: fadeInUp 0.6s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 40px rgba(16, 185, 129, 0.15);
+      border-color: var(--primary-color);
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(245, 158, 11, 0.1) 100%);
+    }
+
+    .feature-icon {
+      width: 70px;
+      height: 70px;
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: white;
+      margin: 0 auto 1.5rem;
+      transition: var(--transition);
+    }
+
+    .feature-card:hover .feature-icon {
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    .feature-card h3 {
+      font-size: 1.3rem;
+      color: var(--text-primary);
+      margin-bottom: 0.8rem;
+    }
+
+    .feature-card p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+
+    /* Pricing Toggle Section */
+    .pricing-toggle-section {
+      background: white;
+      padding: 4rem 2rem;
+      text-align: center;
+      max-width: 1200px;
+      margin: 4rem auto;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(16, 185, 129, 0.08);
+      position: relative;
+      z-index: 10;
+      animation: fadeInUp 0.8s ease 0.7s both;
+    }
+
+    .pricing-toggle-section h2 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-bottom: 2rem;
+      color: var(--primary-dark);
+    }
+
+    .pricing-toggle-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .toggle-label {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 70px;
+      height: 34px;
+      display: inline-block;
+      background-color: #e5e7eb;
+      border-radius: 17px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .toggle-switch input {
+      display: none;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: var(--transition);
+      border-radius: 17px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: var(--transition);
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(36px);
+    }
+
+    .savings-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--success-color) 0%, #15803d 100%);
+      color: white;
+      padding: 0.5rem 1.2rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .toggle-description {
+      color: var(--text-secondary);
+      font-size: 1rem;
+    }
+
+    /* Container & Sections */
+    .container {
+      max-width: 1400px;
+      margin: 4rem auto;
+      padding: 0 2rem;
+      position: relative;
+      z-index: 10;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+      animation: fadeInUp 0.8s ease 0.8s both;
+    }
+
+    .section-title {
+      font-size: 2.8rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-color) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1rem;
+    }
+
+    .section-subtitle {
+      font-size: 1.15rem;
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+    }
+
+    .filter-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+
+    .filter-btn {
+      padding: 0.7rem 1.8rem;
+      background: white;
+      border: 2px solid var(--border-color);
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      color: var(--text-primary);
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+      color: white;
+      border-color: transparent;
+      transform: scale(1.05);
+    }
+
+    /* Rank Grid */
+    .rank-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2.5rem;
+      margin-top: 3rem;
+    }
+
+    .rank-card {
+      background: white;
+      border-radius: 16px;
+      padding: 0;
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(16, 185, 129, 0.08);
+      transition: var(--transition);
+      position: relative;
+      animation: fadeInUp 0.6s ease;
+    }
+
+    .rank-card:hover {
+      transform: translateY(-12px);
+      box-shadow: 0 20px 50px rgba(16, 185, 129, 0.15);
+    }
+
+    .rank-corner {
+      position: absolute;
+      top: -1px;
+      right: -1px;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 0 50px 50px 0;
+      border-color: transparent var(--primary-color) transparent transparent;
+      z-index: 2;
+    }
+
+    .rank-card.featured .rank-corner {
+      border-color: transparent var(--secondary-color) transparent transparent;
+    }
+
+    .rank-card.elite .rank-corner {
+      border-color: transparent var(--elite) transparent transparent;
+    }
+
+    .rank-header {
+      padding: 2rem 2rem 1.5rem;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(245, 158, 11, 0.1) 100%);
+      border-bottom: 2px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .rank-header.bronze {
+      background: linear-gradient(135deg, rgba(205, 127, 50, 0.1) 0%, rgba(205, 127, 50, 0.05) 100%);
+      border-bottom-color: var(--bronze);
+    }
+
+    .rank-header.silver {
+      background: linear-gradient(135deg, rgba(192, 192, 192, 0.1) 0%, rgba(192, 192, 192, 0.05) 100%);
+      border-bottom-color: var(--silver);
+    }
+
+    .rank-header.gold {
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 215, 0, 0.05) 100%);
+      border-bottom-color: var(--gold);
+    }
+
+    .rank-header.emerald {
+      background: linear-gradient(135deg, rgba(80, 200, 120, 0.1) 0%, rgba(80, 200, 120, 0.05) 100%);
+      border-bottom-color: var(--emerald);
+    }
+
+    .rank-header.diamond {
+      background: linear-gradient(135deg, rgba(0, 255, 255, 0.1) 0%, rgba(0, 255, 255, 0.05) 100%);
+      border-bottom-color: var(--diamond);
+    }
+
+    .rank-header.elite-header {
+      background: linear-gradient(135deg, rgba(255, 105, 180, 0.15) 0%, rgba(255, 105, 180, 0.05) 100%);
+      border-bottom-color: var(--elite);
+    }
+
+    .rank-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+      color: white;
+      padding: 0.6rem 1.2rem;
+      border-radius: 25px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .rank-badge.featured-badge {
+      background: linear-gradient(135deg, var(--secondary-color) 0%, #d97706 100%);
+    }
+
+    .rank-badge.elite-badge {
+      background: linear-gradient(135deg, var(--elite) 0%, #ff1493 100%);
+    }
+
+    .rank-tier {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .rank-card > h3 {
+      font-size: 1.8rem;
+      color: var(--text-primary);
+      padding: 1.5rem 2rem 0.5rem;
+    }
+
+    .rank-description {
+      padding: 0 2rem;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+
+    .popular-badge,
+    .vip-badge {
+      display: inline-block;
+      background: var(--secondary-color);
+      color: white;
+      padding: 0.4rem 1rem;
+      border-radius: 25px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin: 0 2rem 1rem;
+      text-transform: uppercase;
+    }
+
+    .vip-badge {
+      background: var(--elite);
+    }
+
+    .rank-features {
+      list-style: none;
+      margin: 1.5rem 0;
+      padding: 0 2rem;
+    }
+
+    .rank-features li {
+      padding: 0.8rem 0;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .rank-features li:last-child {
+      border-bottom: none;
+    }
+
+    .rank-features i {
+      color: var(--success-color);
+      font-weight: bold;
+    }
+
+    .rank-price {
+      text-align: center;
+      margin: 1.5rem 2rem;
+      padding: 1rem;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(245, 158, 11, 0.05) 100%);
+      border-radius: 12px;
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .rank-price p {
+      font-size: 0.9rem;
+    }
+
+    .original-price {
+      text-decoration: line-through;
+      color: var(--danger-color);
+      display: block;
+      font-size: 0.9rem;
+    }
+
+    .discounted-price {
+      font-weight: 800;
+      font-size: 2.2rem;
+      color: var(--success-color);
+      margin-top: 0.5rem;
+    }
+
+    .buy-btn {
+      width: calc(100% - 4rem);
+      margin: 0 2rem 2rem;
+      padding: 1rem;
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.7rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .buy-btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .buy-btn:active::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .buy-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+    }
+
+    .buy-btn:active {
+      transform: scale(0.98);
+    }
+
+    .featured-btn {
+      background: linear-gradient(135deg, var(--secondary-color) 0%, #d97706 100%);
+    }
+
+    .featured-btn:hover {
+      box-shadow: 0 10px 30px rgba(245, 158, 11, 0.4);
+    }
+
+    .elite-btn {
+      background: linear-gradient(135deg, var(--elite) 0%, #ff1493 100%);
+    }
+
+    .elite-btn:hover {
+      box-shadow: 0 10px 30px rgba(255, 105, 180, 0.4);
+    }
+
+    .rank-card.featured {
+      border: 2px solid var(--secondary-color);
+    }
+
+    .rank-card.elite {
+      border: 2px solid var(--elite);
+    }
+
+    .elite-crown {
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 2rem;
+      z-index: 3;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(-10px); }
+    }
+
+    /* Testimonials Section */
+    .testimonials {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(245, 158, 11, 0.1) 100%);
+      padding: 6rem 2rem;
+      max-width: 1400px;
+      margin: 4rem auto;
+      border-radius: 20px;
+      position: relative;
+      z-index: 10;
+      animation: fadeInUp 0.8s ease 0.9s both;
+    }
+
+    .testimonials h2 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 0.5rem;
+      color: var(--primary-dark);
+    }
+
+    .testimonials-subtitle {
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      margin-bottom: 4rem;
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .testimonial-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 8px 25px rgba(16, 185, 129, 0.08);
+      transition: var(--transition);
+      animation: fadeInUp 0.6s ease;
+    }
+
+    .testimonial-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 40px rgba(16, 185, 129, 0.15);
+    }
+
+    .testimonial-header {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .testimonial-avatar {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .testimonial-info h4 {
+      color: var(--text-primary);
+      margin-bottom: 0.2rem;
+      font-size: 1.1rem;
+    }
+
+    .testimonial-role {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem !important;
+    }
+
+    .rating {
+      display: flex;
+      gap: 0.3rem;
+    }
+
+    .rating i {
+      color: var(--secondary-color);
+      font-size: 0.9rem;
+    }
+
+    .testimonial-text {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.7;
+      font-style: italic;
+    }
+
+    .testimonial-text::before {
+      content: '"';
+      font-size: 2rem;
+      color: var(--primary-color);
+      opacity: 0.3;
+      margin-right: 0.5rem;
+    }
+
+    /* FAQ Section */
+    .faq-section {
+      background: white;
+      padding: 6rem 2rem;
+      max-width: 1200px;
+      margin: 4rem auto;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(16, 185, 129, 0.08);
+      position: relative;
+      z-index: 10;
+      animation: fadeInUp 0.8s ease 1s both;
+    }
+
+    .faq-section h2 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 4rem;
+      color: var(--primary-dark);
+    }
+
+    .faq-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .faq-item {
+      padding: 2rem;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(245, 158, 11, 0.05) 100%);
+      border: 2px solid var(--border-color);
+      border-radius: 12px;
+      transition: var(--transition);
+      animation: fadeInUp 0.6s ease;
+    }
+
+    .faq-item:hover {
+      transform: translateY(-5px);
+      border-color: var(--primary-color);
+      box-shadow: 0 10px 30px rgba(16, 185, 129, 0.1);
+    }
+
+    .faq-item h4 {
+      color: var(--primary-dark);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      font-size: 1.1rem;
+    }
+
+    .faq-item i {
+      color: var(--primary-color);
+    }
+
+    .faq-item p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    /* Stats Section */
+    .stats-section {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+      padding: 6rem 2rem;
+      position: relative;
+      z-index: 10;
+      overflow: hidden;
+      animation: fadeInUp 0.8s ease 1.1s both;
+    }
+
+    .stats-section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 600px;
+      height: 600px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .stats-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .stat-box {
+      text-align: center;
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+      transition: var(--transition);
+      color: white;
+    }
+
+    .stat-box:hover {
+      transform: translateY(-8px);
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .stat-box h3 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .stat-value {
+      font-size: 2.5rem;
+      font-weight: 900;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+
+    /* CTA Section */
+    .cta-section {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+      padding: 6rem 2rem;
+      text-align: center;
+      max-width: 1200px;
+      margin: 4rem auto;
+      border-radius: 20px;
+      color: white;
+      position: relative;
+      z-index: 10;
+      overflow: hidden;
+      animation: fadeInUp 0.8s ease 1.2s both;
+    }
+
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 600px;
+      height: 600px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .cta-section h2 {
+      font-size: 3rem;
+      font-weight: 900;
+      margin-bottom: 1rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .cta-section p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      opacity: 0.95;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Footer */
+    .footer {
+      background: linear-gradient(135deg, var(--dark-bg) 0%, #1f2d3f 100%);
+      color: white;
+      padding: 4rem 2rem 2rem;
+      position: relative;
+      z-index: 10;
+      animation: fadeInUp 0.8s ease 1.3s both;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+
+    .footer-section h4 {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      color: var(--accent-color);
+    }
+
+    .footer-section p {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.95rem;
+    }
+
+    .footer-section ul {
+      list-style: none;
+    }
+
+    .footer-section ul li {
+      margin-bottom: 0.8rem;
+    }
+
+    .footer-section a {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .footer-section a:hover {
+      color: var(--accent-color);
+      transform: translateX(5px);
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .social-links a {
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      transition: var(--transition);
+    }
+
+    .social-links a:hover {
+      background: var(--accent-color);
+      transform: translateY(-3px);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 2rem;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.9rem;
+    }
+
+    .footer-bottom a {
+      color: var(--accent-color);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .footer-bottom a:hover {
+      text-decoration: underline;
+    }
+
+    .brand {
+      background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 700;
+    }
+
+    /* Scroll to Top Button */
+    #scrollToTop {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      font-size: 1.5rem;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+      box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+      z-index: 999;
+    }
+
+    #scrollToTop.show {
+      display: flex;
+      animation: slideUp 0.3s ease-out;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    #scrollToTop:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(16, 185, 129, 0.6);
+    }
+
+    #scrollToTop:active {
+      transform: scale(0.95);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+      .header {
+        grid-template-columns: 1fr;
+        padding: 4rem 2rem;
+        gap: 2rem;
+      }
+
+      .rank-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      }
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 1rem;
+      }
+
+      .logo {
+        font-size: 1.4rem;
+      }
+
+      .checkbtn {
+        display: block;
+      }
+
+      .nav-menu {
+        position: fixed;
+        left: -100%;
+        top: 70px;
+        flex-direction: column;
+        background-color: var(--primary-dark);
+        width: 100%;
+        text-align: center;
+        transition: 0.3s;
+        gap: 0;
+        padding: 2rem 0;
+        z-index: 999;
+      }
+
+      .nav-menu li {
+        padding: 1.2rem;
+      }
+
+      #check:checked ~ .nav-menu {
+        left: 0;
+      }
+
+      .header-content h1 {
+        font-size: 2.5rem;
+      }
+
+      .hero-subtitle {
+        font-size: 1rem;
+      }
+
+      .button-group {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .button {
+        padding: 0.9rem 2rem;
+        width: fit-content;
+      }
+
+      .player-stats {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .section-title {
+        font-size: 2rem;
+      }
+
+      .features h2,
+      .faq-section h2,
+      .testimonials h2 {
+        font-size: 2rem;
+      }
+
+      .rank-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .rank-card {
+        margin: 0 auto;
+        width: 100%;
+        max-width: 400px;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .faq-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .testimonials-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cta-section h2 {
+        font-size: 2rem;
+      }
+
+      .footer-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .pricing-toggle-container {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .stats-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .header-content h1 {
+        font-size: 2rem;
+      }
+
+      .section-title {
+        font-size: 1.5rem;
+      }
+
+      .features h2,
+      .faq-section h2,
+      .testimonials h2 {
+        font-size: 1.5rem;
+      }
+
+      .rank-badge {
+        font-size: 0.7rem;
+        padding: 0.4rem 0.8rem;
+      }
+
+      .rank-card > h3 {
+        font-size: 1.3rem;
+      }
+
+      .buy-btn {
+        font-size: 0.9rem;
+        padding: 0.8rem;
+        margin: 0 1rem 1.5rem;
+        width: calc(100% - 2rem);
+      }
+
+      .rank-price {
+        margin: 1rem;
+      }
+
+      .rank-price .discounted-price {
+        font-size: 1.8rem;
+      }
+
+      .rank-features {
+        padding: 0 1rem;
+      }
+
+      .hero-badge {
+        font-size: 0.8rem;
+      }
+
+      .cta-section h2 {
+        font-size: 1.5rem;
+      }
+
+      .cta-section p {
+        font-size: 1rem;
+      }
+
+      .button-large {
+        padding: 0.9rem 2rem;
+        font-size: 1rem;
+      }
+
+      .stats-container {
+        grid-template-columns: 1fr;
+      }
+
+      .stat-box h3 {
+        font-size: 2rem;
+      }
+
+      .stat-value {
+        font-size: 1.8rem;
+      }
+
+      #scrollToTop {
+        width: 45px;
+        height: 45px;
+        bottom: 20px;
+        right: 20px;
+        font-size: 1.2rem;
+      }
+    }
+
+    /* Glitch Effect */
+    .glitch {
+      position: relative;
+    }
+
+    .glitch:hover::before,
+    .glitch:hover::after {
+      content: attr(data-text);
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0.8;
+    }
+
+    .glitch:hover::before {
+      animation: glitch 0.3s ease;
+      color: var(--secondary-color);
+      z-index: -1;
+    }
+
+    .glitch:hover::after {
+      animation: glitch 0.3s ease reverse;
+      color: var(--primary-color);
+      z-index: -2;
+    }
+
+    @keyframes glitch {
+      0% { clip-path: inset(0 0 0 0); }
+      20% { clip-path: inset(60% 0 20% 0); }
+      40% { clip-path: inset(80% 0 10% 0); }
+      60% { clip-path: inset(20% 0 60% 0); }
+      80% { clip-path: inset(10% 0 80% 0); }
+      100% { clip-path: inset(0 0 0 0); }
+    }
+
+    /* Show Animation */
+    .rank-card.show {
+      animation: fadeInUp 0.6s ease;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Floating Background Elements -->
+  <div class="floating-bg"></div>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <input type="checkbox" id="check" />
+    <label for="check" class="checkbtn">
+      <i class="fas fa-bars"></i>
+    </label>
+    <label class="logo">
+      <i class="fas fa-crown"></i> Arvenia Network
+    </label>
+    <ul class="nav-menu">
+      <li><a class="active" href="#home">Home</a></li>
+      <li><a href="#ranks">Ranks</a></li>
+      <li><a href="#testimonials">Reviews</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="https://discord.gg/arvenianetwork" target="_blank"><i class="fab fa-discord"></i> Discord</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero Section -->
+  <div class="header" id="home">
+    <div class="header-content">
+      <div class="hero-badge">🎮 Welcome to Arvenia Network</div>
+      <h1 id="playerName" class="glitch" data-text="Welcome, Player">Welcome, Player</h1>
+      <p class="hero-subtitle">Purchase exclusive ranks and unlock premium features with LuckPerms permissions</p>
+      
+      <div class="button-group">
+        <button class="button button-primary" id="logout">
+          <i class="fas fa-exchange-alt"></i> Change Account
+        </button>
+        <button class="button button-secondary" onclick="document.getElementById('ranks').scrollIntoView({behavior: 'smooth'})">
+          <i class="fas fa-arrow-down"></i> View Ranks
+        </button>
+      </div>
+
+      <!-- Player Stats -->
+      <div class="player-stats">
+        <div class="stat" data-value="50K">
+          <i class="fas fa-users"></i>
+          <span><span class="stat-number">50</span>K+ Players</span>
+        </div>
+        <div class="stat" data-value="4.9">
+          <i class="fas fa-star"></i>
+          <span>⭐ <span class="stat-number">4.9</span> Rating</span>
+        </div>
+        <div class="stat" data-value="100">
+          <i class="fas fa-bolt"></i>
+          <span><span class="stat-number">100</span>% Uptime</span>
+        </div>
+      </div>
+    </div>
+    <div class="banner">
+      <div class="banner-content">
+        <div class="floating-cube"></div>
+        <div class="floating-cube"></div>
+        <div class="floating-cube"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Features Section -->
+  <section class="features" id="features">
+    <h2>Why Choose Arvenia?</h2>
+    <div class="features-grid">
+      <div class="feature-card" style="animation-delay: 0.1s">
+        <div class="feature-icon">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <h3>Secure Payments</h3>
+        <p>Multiple payment methods with SSL encryption and fraud protection</p>
+      </div>
+      <div class="feature-card" style="animation-delay: 0.2s">
+        <div class="feature-icon">
+          <i class="fas fa-clock"></i>
+        </div>
+        <h3>Instant Delivery</h3>
+        <p>Ranks delivered instantly after payment confirmation</p>
+      </div>
+      <div class="feature-card" style="animation-delay: 0.3s">
+        <div class="feature-icon">
+          <i class="fas fa-headset"></i>
+        </div>
+        <h3>24/7 Support</h3>
+        <p>Get help anytime from our dedicated support team</p>
+      </div>
+      <div class="feature-card" style="animation-delay: 0.4s">
+        <div class="feature-icon">
+          <i class="fas fa-gift"></i>
+        </div>
+        <h3>Bonus Rewards</h3>
+        <p>Earn loyalty points with every purchase</p>
+      </div>
+      <div class="feature-card" style="animation-delay: 0.5s">
+        <div class="feature-icon">
+          <i class="fas fa-lock"></i>
+        </div>
+        <h3>Lifetime Access</h3>
+        <p>Keep your rank forever, no expiration dates</p>
+      </div>
+      <div class="feature-card" style="animation-delay: 0.6s">
+        <div class="feature-icon">
+          <i class="fas fa-gamepad"></i>
+        </div>
+        <h3>LuckPerms Ready</h3>
+        <p>Full LuckPerms integration with advanced permissions</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Toggle Section -->
+  <section class="pricing-toggle-section">
+    <h2>Choose Your Payment Plan</h2>
+    <div class="pricing-toggle-container">
+      <span class="toggle-label">One-Time Purchase</span>
+      <label class="toggle-switch">
+        <input type="checkbox" id="billingToggle" />
+        <span class="slider"></span>
+      </label>
+      <span class="toggle-label">Subscription Plan</span>
+      <span class="savings-badge">Save 30%</span>
+    </div>
+    <p class="toggle-description" id="toggleDescription">Choose between one-time rank purchases or monthly subscriptions</p>
+  </section>
+
+  <!-- Ranks Section -->
+  <div class="container" id="ranks">
+    <div class="section-header">
+      <h2 class="section-title">Available Ranks</h2>
+      <p class="section-subtitle">Choose a rank and enhance your gameplay experience</p>
+      
+      <div class="filter-buttons">
+        <button class="filter-btn active" data-filter="all">All Ranks</button>
+        <button class="filter-btn" data-filter="popular">Popular</button>
+        <button class="filter-btn" data-filter="elite">Elite</button>
+      </div>
+    </div>
+    
+    <div class="rank-grid">
+      <!-- Bronze Rank -->
+      <div class="rank-card" data-price="5000" data-filter="all" data-sub-price="1500">
+        <div class="rank-corner"></div>
+        <div class="rank-header bronze">
+          <div class="rank-badge">Bronze</div>
+          <span class="rank-tier">Tier 1</span>
+        </div>
+        <h3>Starter Pack</h3>
+        <p class="rank-description">Perfect for new players</p>
+        
+        <ul class="rank-features">
+          <li><i class="fas fa-check"></i> Color codes in chat</li>
+          <li><i class="fas fa-check"></i> Increased pet limit (2x)</li>
+          <li><i class="fas fa-check"></i> Special prefix</li>
+          <li><i class="fas fa-check"></i> 1.2x rewards</li>
+        </ul>
+        
+        <div class="rank-price">
+          <span class="original-price" style="display:none;"></span>
+          <span class="discounted-price" style="display:none;"></span>
+          <p></p>
+        </div>
+        
+        <button class="buy-btn" onclick="purchaseRank('Bronze', 5000)">
+          <i class="fas fa-shopping-cart"></i> Purchase Now
+        </button>
+      </div>
+
+      <!-- Silver Rank -->
+      <div class="rank-card" data-price="10000" data-filter="all" data-sub-price="3000">
+        <div class="rank-corner"></div>
+        <div class="rank-header silver">
+          <div class="rank-badge">Silver</div>
+          <span class="rank-tier">Tier 2</span>
+        </div>
+        <h3>Silver Rank</h3>
+        <p class="rank-description">Great for casual players</p>
+        
+        <ul class="rank-features">
+          <li><i class="fas fa-check"></i> All Bronze features</li>
+          <li><i class="fas fa-check"></i> Ability to create warps</li>
+          <li><i class="fas fa-check"></i> Priority support</li>
+          <li><i class="fas fa-check"></i> 1.5x rewards</li>
+          <li><i class="fas fa-check"></i> /pet command access</li>
+        </ul>
+        
+        <div class="rank-price">
+          <span class="original-price" style="display:none;"></span>
+          <span class="discounted-price" style="display:none;"></span>
+          <p></p>
+        </div>
+        
+        <button class="buy-btn" onclick="purchaseRank('Silver', 10000)">
+          <i class="fas fa-shopping-cart"></i> Purchase Now
+        </button>
+      </div>
+
+      <!-- Gold Rank (Featured) -->
+      <div class="rank-card featured" data-price="25000" data-filter="all popular" data-sub-price="7500">
+        <div class="rank-corner"></div>
+        <div class="rank-header gold">
+          <div class="rank-badge featured-badge">Gold ★</div>
+          <span class="rank-tier">Tier 3 - Popular</span>
+        </div>
+        <h3>Gold Rank</h3>
+        <p class="popular-badge"><i class="fas fa-fire"></i> Most Popular</p>
+        <p class="rank-description">Our most popular choice</p>
+        
+        <ul class="rank-features">
+          <li><i class="fas fa-check"></i> All Silver features</li>
+          <li><i class="fas fa-check"></i> Particle effects</li>
+          <li><i class="fas fa-check"></i> Custom head items</li>
+          <li><i class="fas fa-check"></i> 2x rewards</li>
+          <li><i class="fas fa-check"></i> 32 player homes</li>
+          <li><i class="fas fa-check"></i> /hat command</li>
+        </ul>
+        
+        <div class="rank-price">
+          <span class="original-price" style="display:none;"></span>
+          <span class="discounted-price" style="display:none;"></span>
+          <p></p>
+        </div>
+        
+        <button class="buy-btn featured-btn" onclick="purchaseRank('Gold', 25000)">
+          <i class="fas fa-shopping-cart"></i> Get Gold Now
+        </button>
+      </div>
+
+      <!-- Emerald Rank -->
+      <div class="rank-card" data-price="50000" data-filter="all" data-sub-price="15000">
+        <div class="rank-corner"></div>
+        <div class="rank-header emerald">
+          <div class="rank-badge">Emerald</div>
+          <span class="rank-tier">Tier 4</span>
+        </div>
+        <h3>Emerald Rank</h3>
+        <p class="rank-description">For dedicated players</p>
+        
+        <ul class="rank-features">
+          <li><i class="fas fa-check"></i> All Gold features</li>
+          <li><i class="fas fa-check"></i> Custom effects & auras</li>
+          <li><i class="fas fa-check"></i> VIP lounge access</li>
+          <li><i class="fas fa-check"></i> 3x rewards</li>
+          <li><i class="fas fa-check"></i> 64 player homes</li>
+          <li><i class="fas fa-check"></i> Monthly crate key</li>
+        </ul>
+        
+        <div class="rank-price">
+          <span class="original-price" style="display:none;"></span>
+          <span class="discounted-price" style="display:none;"></span>
+          <p></p>
+        </div>
+        
+        <button class="buy-btn" onclick="purchaseRank('Emerald', 50000)">
+          <i class="fas fa-shopping-cart"></i> Purchase Now
+        </button>
+      </div>
+
+      <!-- Diamond Rank -->
+      <div class="rank-card" data-price="100000" data-filter="all" data-sub-price="30000">
+        <div class="rank-corner"></div>
+        <div class="rank-header diamond">
+          <div class="rank-badge">Diamond</div>
+          <span class="rank-tier">Tier 5</span>
+        </div>
+        <h3>Diamond Rank</h3>
+        <p class="rank-description">Elite gaming experience</p>
+        
+        <ul class="rank-features">
+          <li><i class="fas fa-check"></i> All Emerald features</li>
+          <li><i class="fas fa-check"></i> Custom enchant glows</li>
+          <li><i class="fas fa-check"></i> Exclusive cosmetics</li>
+          <li><i class="fas fa-check"></i> 5x rewards</li>
+          <li><i class="fas fa-check"></i> 128 player homes</li>
+          <li><i class="fas fa-check"></i> 2x monthly crate keys</li>
+        </ul>
+        
+        <div class="rank-price">
+          <span class="original-price" style="display:none;"></span>
+          <span class="discounted-price" style="display:none;"></span>
+          <p></p>
+        </div>
+        
+        <button class="buy-btn" onclick="purchaseRank('Diamond', 100000)">
+          <i class="fas fa-shopping-cart"></i> Purchase Now
+        </button>
+      </div>
+
+      <!-- Elite Rank -->
+      <div class="rank-card elite" data-price="150000" data-filter="all elite" data-sub-price="45000">
+        <div class="rank-corner"></div>
+        <div class="elite-crown">👑</div>
+        <div class="rank-header elite-header">
+          <div class="rank-badge elite-badge">Elite</div>
+          <span class="rank-tier">Tier 6 - Ultimate</span>
+        </div>
+        <h3>Elite Rank</h3>
+        <p class="vip-badge"><i class="fas fa-crown"></i> Ultimate VIP</p>
+        <p class="rank-description">The ultimate gaming experience</p>
+        
+        <ul class="rank-features">
+          <li><i class="fas fa-check"></i> All Diamond features</li>
+          <li><i class="fas fa-check"></i> Staff-only cosmetics</li>
+          <li><i class="fas fa-check"></i> Priority queue access</li>
+          <li><i class="fas fa-check"></i> 10x rewards multiplier</li>
+          <li><i class="fas fa-check"></i> Unlimited player homes</li>
+          <li><i class="fas fa-check"></i> Custom rank name & color</li>
+          <li><i class="fas fa-check"></i> 5x monthly crate keys</li>
+          <li><i class="fas fa-check"></i> VIP-only commands</li>
+        </ul>
+        
+        <div class="rank-price">
+          <span class="original-price" style="display:none;"></span>
+          <span class="discounted-price" style="display:none;"></span>
+          <p></p>
+        </div>
+        
+        <button class="buy-btn elite-btn" onclick="purchaseRank('Elite', 150000)">
+          <i class="fas fa-crown"></i> Become Elite
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Testimonials Section -->
+  <section class="testimonials" id="testimonials">
+    <h2>What Players Say</h2>
+    <p class="testimonials-subtitle">Join thousands of happy players enjoying Arvenia Network</p>
+    
+    <div class="testimonials-grid">
+      <div class="testimonial-card" style="animation-delay: 0.1s">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">
+            <i class="fas fa-user-circle"></i>
+          </div>
+          <div class="testimonial-info">
+            <h4>Alex_Pro</h4>
+            <p class="testimonial-role">Gold Rank Member</p>
+            <div class="rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+          </div>
+        </div>
+        <p class="testimonial-text">"Best server I've ever played on! The ranks are worth every penny and the support team is amazing. Highly recommend!"</p>
+      </div>
+
+      <div class="testimonial-card" style="animation-delay: 0.2s">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">
+            <i class="fas fa-user-circle"></i>
+          </div>
+          <div class="testimonial-info">
+            <h4>SkyBuilder_</h4>
+            <p class="testimonial-role">Diamond Rank Member</p>
+            <div class="rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+          </div>
+        </div>
+        <p class="testimonial-text">"Instant delivery, great features, and an awesome community. I've been playing for 6 months and never looked back!"</p>
+      </div>
+
+      <div class="testimonial-card" style="animation-delay: 0.3s">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">
+            <i class="fas fa-user-circle"></i>
+          </div>
+          <div class="testimonial-info">
+            <h4>CreeperSlayer</h4>
+            <p class="testimonial-role">Elite Rank Member</p>
+            <div class="rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+          </div>
+        </div>
+        <p class="testimonial-text">"The Elite rank is absolutely worth it! Custom rank name, premium perks, and VIP treatment. 10/10 would recommend!"</p>
+      </div>
+
+      <div class="testimonial-card" style="animation-delay: 0.4s">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">
+            <i class="fas fa-user-circle"></i>
+          </div>
+          <div class="testimonial-info">
+            <h4>NoobToNoob</h4>
+            <p class="testimonial-role">Bronze Rank Member</p>
+            <div class="rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+          </div>
+        </div>
+        <p class="testimonial-text">"Great starting point! Bronze rank gives me everything I need. The community is super friendly and helpful!"</p>
+      </div>
+
+      <div class="testimonial-card" style="animation-delay: 0.5s">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">
+            <i class="fas fa-user-circle"></i>
+          </div>
+          <div class="testimonial-info">
+            <h4>MineExplorer</h4>
+            <p class="testimonial-role">Silver Rank Member</p>
+            <div class="rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+          </div>
+        </div>
+        <p class="testimonial-text">"Perfect balance of features and price! Silver rank has been amazing. Love the warp system!"</p>
+      </div>
+
+      <div class="testimonial-card" style="animation-delay: 0.6s">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">
+            <i class="fas fa-user-circle"></i>
+          </div>
+          <div class="testimonial-info">
+            <h4>VillageHero</h4>
+            <p class="testimonial-role">Emerald Rank Member</p>
+            <div class="rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+          </div>
+        </div>
+        <p class="testimonial-text">"Emerald rank is incredible! The custom effects make me stand out, and the rewards are amazing. Total game changer!"</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="faq-section">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-grid">
+      <div class="faq-item">
+        <h4><i class="fas fa-question-circle"></i> How long do ranks last?</h4>
+        <p>All ranks are permanent and never expire. Once purchased, they're yours forever!</p>
+      </div>
+      <div class="faq-item">
+        <h4><i class="fas fa-question-circle"></i> Can I upgrade my rank?</h4>
+        <p>Yes! You can upgrade anytime. We'll apply the price difference to your new rank.</p>
+      </div>
+      <div class="faq-item">
+        <h4><i class="fas fa-question-circle"></i> What payment methods do you accept?</h4>
+        <p>We accept PayPal, credit/debit cards, and cryptocurrency for maximum flexibility.</p>
+      </div>
+      <div class="faq-item">
+        <h4><i class="fas fa-question-circle"></i> How quickly will I receive my rank?</h4>
+        <p>Instantly! Upon successful payment, your rank is applied to your account immediately.</p>
+      </div>
+      <div class="faq-item">
+        <h4><i class="fas fa-question-circle"></i> Is there a refund policy?</h4>
+        <p>We offer a 7-day money-back guarantee if you're not satisfied with your purchase.</p>
+      </div>
+      <div class="faq-item">
+        <h4><i class="fas fa-question-circle"></i> Can I stack multiple ranks?</h4>
+        <p>No, you can only have one active rank at a time. Upgrading will replace your current rank.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="stats-section">
+    <div class="stats-container">
+      <div class="stat-box" data-target="50000">
+        <h3><i class="fas fa-users"></i></h3>
+        <p class="stat-value">50,000</p>
+        <p class="stat-label">Active Players</p>
+      </div>
+      <div class="stat-box" data-target="500000">
+        <h3><i class="fas fa-crown"></i></h3>
+        <p class="stat-value">500K+</p>
+        <p class="stat-label">Ranks Sold</p>
+      </div>
+      <div class="stat-box" data-target="100">
+        <h3><i class="fas fa-percent"></i></h3>
+        <p class="stat-value">100%</p>
+        <p class="stat-label">Uptime Guarantee</p>
+      </div>
+      <div class="stat-box" data-target="49">
+        <h3><i class="fas fa-star"></i></h3>
+        <p class="stat-value">4.9</p>
+        <p class="stat-label">Stars Rating</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <h2>Ready to Level Up?</h2>
+    <p>Join thousands of players enjoying premium perks on Arvenia Network</p>
+    <button class="button button-primary button-large" onclick="document.getElementById('ranks').scrollIntoView({behavior: 'smooth'})">
+      <i class="fas fa-rocket"></i> Choose Your Rank
+    </button>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>Arvenia Network</h4>
+        <p>The ultimate Minecraft server experience with premium ranks and LuckPerms integration</p>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-discord"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+      <div class="footer-section">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#ranks">Ranks</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#testimonials">Reviews</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Community</h4>
+        <ul>
+          <li><a href="https://discord.gg/arvenianetwork" target="_blank"><i class="fab fa-discord"></i> Discord Server</a></li>
+          <li><a href="#" target="_blank"><i class="fab fa-twitter"></i> Twitter</a></li>
+          <li><a href="#" target="_blank"><i class="fab fa-youtube"></i> YouTube</a></li>
+          <li><a href="#" target="_blank"><i class="fab fa-instagram"></i> Instagram</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Refund Policy</a></li>
+          <li><a href="#">Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Arvenia Network. All rights reserved.</p>
+      <p>Powered by <span class="brand">Arvenia</span> | Made with <i class="fas fa-heart"></i> for gamers</p>
+    </div>
+  </footer>
+
+  <!-- Scroll to Top Button -->
+  <button class="scroll-to-top" id="scrollToTop">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <script>
+    // ========== PURCHASE FUNCTION WITH CLICK ANIMATION ==========
+    function purchaseRank(rankName, price) {
+      Swal.fire({
+        title: `Purchase ${rankName} Rank?`,
+        text: `Price: $${price.toFixed(2)}`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#10b981',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: 'Yes, Purchase!',
+        cancelButtonText: 'Cancel'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: 'Success!',
+            text: `You have successfully purchased the ${rankName} rank!`,
+            icon: 'success',
+            confirmButtonColor: '#10b981'
+          });
+        }
+      });
+    }
+
+    // ========== PRICING TOGGLE ==========
+    const billingToggle = document.getElementById('billingToggle');
+    
+    billingToggle.addEventListener('change', function() {
+      const isSubscription = this.checked;
+      
+      document.querySelectorAll('.rank-card').forEach(card => {
+        const standardPrice = parseFloat(card.dataset.price);
+        const subPrice = parseFloat(card.dataset.subPrice);
+        const newPrice = isSubscription ? subPrice : standardPrice;
+        
+        const priceDisplay = card.querySelector('.rank-price p');
+        if (priceDisplay) {
+          priceDisplay.innerHTML = `<span class="discounted-price" style="font-size: 2.2rem; color: #22c55e; font-weight: 800;">$${newPrice.toFixed(2)}</span><span style="display: block; color: #6b7280; font-size: 0.9rem;">${isSubscription ? '/month' : 'one-time'}</span>`;
+        }
+      });
+
+      const description = document.getElementById('toggleDescription');
+      description.textContent = isSubscription ? 
+        'Monthly subscription - Cancel anytime, save 30% compared to one-time purchases!' :
+        'One-time purchase - Keep your rank forever with no recurring charges!';
+    });
+
+    // ========== FILTER FUNCTIONALITY ==========
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const filter = this.dataset.filter;
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        
+        document.querySelectorAll('.rank-card').forEach(card => {
+          if (filter === 'all' || card.dataset.filter.includes(filter)) {
+            card.style.display = '';
+            setTimeout(() => card.classList.add('show'), 10);
+          } else {
+            card.classList.remove('show');
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // ========== SCROLL TO TOP BUTTON ==========
+    const scrollToTopBtn = document.getElementById('scrollToTop');
+    
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        scrollToTopBtn.classList.add('show');
+      } else {
+        scrollToTopBtn.classList.remove('show');
+      }
+    });
+    
+    scrollToTopBtn.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+
+    // ========== COUNTER ANIMATION ==========
+    function animateCounters() {
+      document.querySelectorAll('.stat-box').forEach(box => {
+        const target = parseInt(box.dataset.target);
+        const element = box.querySelector('.stat-value');
+        let current = 0;
+        const increment = target / 30;
+        
+        const timer = setInterval(() => {
+          current += increment;
+          if (current >= target) {
+            current = target;
+            clearInterval(timer);
+          }
+          if (target > 100) {
+            element.textContent = Math.floor(current).toLocaleString();
+          } else {
+            element.textContent = current.toFixed(1);
+          }
+        }, 30);
+      });
+    }
+
+    // Trigger counter animation when section is visible
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateCounters();
+          observer.unobserve(entry.target);
+        }
+      });
+    });
+
+    const statsSection = document.querySelector('.stats-section');
+    if (statsSection) observer.observe(statsSection);
+
+    // ========== SMOOTH SCROLL LINKS ==========
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        const href = this.getAttribute('href');
+        if (href !== '#') {
+          e.preventDefault();
+          const element = document.querySelector(href);
+          if (element) {
+            element.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+            document.getElementById('check').checked = false;
+          }
+        }
+      });
+    });
+
+    // ========== PARTICLE BACKGROUND ANIMATION ==========
+    const createParticle = () => {
+      const particle = document.createElement('div');
+      particle.style.position = 'fixed';
+      particle.style.width = Math.random() * 5 + 'px';
+      particle.style.height = particle.style.width;
+      particle.style.background = `rgba(16, 185, 129, ${Math.random() * 0.5})`;
+      particle.style.borderRadius = '50%';
+      particle.style.left = Math.random() * window.innerWidth + 'px';
+      particle.style.top = -10 + 'px';
+      particle.style.zIndex = '1';
+      particle.style.pointerEvents = 'none';
+      
+      document.body.appendChild(particle);
+      
+      let top = 0;
+      const animation = setInterval(() => {
+        top += Math.random() * 2;
+        particle.style.top = top + 'px';
+        particle.style.left = parseFloat(particle.style.left) + Math.random() * 2 - 1 + 'px';
+        
+        if (top > window.innerHeight) {
+          clearInterval(animation);
+          particle.remove();
+        }
+      }, 30);
+    };
+
+    setInterval(createParticle, 300);
+  </script>
+</body>
+</html>
