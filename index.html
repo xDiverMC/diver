@@ -33,6 +33,7 @@
     <ul class="nav-menu">
       <li><a class="active" href="#home">Home</a></li>
       <li><a href="#ranks">Ranks</a></li>
+      <li><a href="#testimonials">Reviews</a></li>
       <li><a href="#features">Features</a></li>
       <li><a href="https://discord.gg/arvenianetwork" target="_blank"><i class="fab fa-discord"></i> Discord</a></li>
     </ul>
@@ -42,7 +43,7 @@
   <div class="header" id="home">
     <div class="header-content">
       <div class="hero-badge">🎮 Welcome to Arvenia Network</div>
-      <h1 id="playerName" class="glitch">Welcome, Player</h1>
+      <h1 id="playerName" class="glitch" data-text="Welcome, Player">Welcome, Player</h1>
       <p class="hero-subtitle">Purchase exclusive ranks and unlock premium features with LuckPerms permissions</p>
       
       <div class="button-group">
@@ -54,19 +55,19 @@
         </button>
       </div>
 
-      <!-- Player Stats (Optional) -->
+      <!-- Player Stats -->
       <div class="player-stats">
-        <div class="stat">
+        <div class="stat" data-value="50K">
           <i class="fas fa-users"></i>
-          <span>50K+ Players</span>
+          <span><span class="stat-number">50</span>K+ Players</span>
         </div>
-        <div class="stat">
+        <div class="stat" data-value="4.9">
           <i class="fas fa-star"></i>
-          <span>⭐ 4.9 Rating</span>
+          <span>⭐ <span class="stat-number">4.9</span> Rating</span>
         </div>
-        <div class="stat">
+        <div class="stat" data-value="100">
           <i class="fas fa-bolt"></i>
-          <span>100% Uptime</span>
+          <span><span class="stat-number">100</span>% Uptime</span>
         </div>
       </div>
     </div>
@@ -83,49 +84,64 @@
   <section class="features" id="features">
     <h2>Why Choose Arvenia?</h2>
     <div class="features-grid">
-      <div class="feature-card">
+      <div class="feature-card" style="animation-delay: 0.1s">
         <div class="feature-icon">
           <i class="fas fa-shield-alt"></i>
         </div>
         <h3>Secure Payments</h3>
-        <p>Multiple payment methods with SSL encryption</p>
+        <p>Multiple payment methods with SSL encryption and fraud protection</p>
       </div>
-      <div class="feature-card">
+      <div class="feature-card" style="animation-delay: 0.2s">
         <div class="feature-icon">
           <i class="fas fa-clock"></i>
         </div>
         <h3>Instant Delivery</h3>
-        <p>Ranks delivered instantly after purchase</p>
+        <p>Ranks delivered instantly after payment confirmation</p>
       </div>
-      <div class="feature-card">
+      <div class="feature-card" style="animation-delay: 0.3s">
         <div class="feature-icon">
           <i class="fas fa-headset"></i>
         </div>
         <h3>24/7 Support</h3>
-        <p>Get help anytime from our support team</p>
+        <p>Get help anytime from our dedicated support team</p>
       </div>
-      <div class="feature-card">
+      <div class="feature-card" style="animation-delay: 0.4s">
         <div class="feature-icon">
           <i class="fas fa-gift"></i>
         </div>
         <h3>Bonus Rewards</h3>
-        <p>Earn points with every purchase</p>
+        <p>Earn loyalty points with every purchase</p>
       </div>
-      <div class="feature-card">
+      <div class="feature-card" style="animation-delay: 0.5s">
         <div class="feature-icon">
           <i class="fas fa-lock"></i>
         </div>
         <h3>Lifetime Access</h3>
-        <p>Keep your rank forever, no expiration</p>
+        <p>Keep your rank forever, no expiration dates</p>
       </div>
-      <div class="feature-card">
+      <div class="feature-card" style="animation-delay: 0.6s">
         <div class="feature-icon">
           <i class="fas fa-gamepad"></i>
         </div>
         <h3>LuckPerms Ready</h3>
-        <p>Full LuckPerms integration & permissions</p>
+        <p>Full LuckPerms integration with advanced permissions</p>
       </div>
     </div>
+  </section>
+
+  <!-- Pricing Toggle Section -->
+  <section class="pricing-toggle-section">
+    <h2>Choose Your Payment Plan</h2>
+    <div class="pricing-toggle-container">
+      <span class="toggle-label">One-Time Purchase</span>
+      <label class="toggle-switch">
+        <input type="checkbox" id="billingToggle" />
+        <span class="slider"></span>
+      </label>
+      <span class="toggle-label">Subscription Plan</span>
+      <span class="savings-badge">Save 30%</span>
+    </div>
+    <p class="toggle-description" id="toggleDescription">Choose between one-time rank purchases or monthly subscriptions</p>
   </section>
 
   <!-- Ranks Section -->
@@ -143,7 +159,7 @@
     
     <div class="rank-grid">
       <!-- Bronze Rank -->
-      <div class="rank-card" data-price="5000" data-filter="all">
+      <div class="rank-card" data-price="5000" data-filter="all" data-sub-price="1500">
         <div class="rank-corner"></div>
         <div class="rank-header bronze">
           <div class="rank-badge">Bronze</div>
@@ -171,7 +187,7 @@
       </div>
 
       <!-- Silver Rank -->
-      <div class="rank-card" data-price="10000" data-filter="all">
+      <div class="rank-card" data-price="10000" data-filter="all" data-sub-price="3000">
         <div class="rank-corner"></div>
         <div class="rank-header silver">
           <div class="rank-badge">Silver</div>
@@ -200,7 +216,7 @@
       </div>
 
       <!-- Gold Rank (Featured) -->
-      <div class="rank-card featured" data-price="25000" data-filter="all popular">
+      <div class="rank-card featured" data-price="25000" data-filter="all popular" data-sub-price="7500">
         <div class="rank-corner"></div>
         <div class="rank-header gold">
           <div class="rank-badge featured-badge">Gold ★</div>
@@ -231,7 +247,7 @@
       </div>
 
       <!-- Emerald Rank -->
-      <div class="rank-card" data-price="50000" data-filter="all">
+      <div class="rank-card" data-price="50000" data-filter="all" data-sub-price="15000">
         <div class="rank-corner"></div>
         <div class="rank-header emerald">
           <div class="rank-badge">Emerald</div>
@@ -261,7 +277,7 @@
       </div>
 
       <!-- Diamond Rank -->
-      <div class="rank-card" data-price="100000" data-filter="all">
+      <div class="rank-card" data-price="100000" data-filter="all" data-sub-price="30000">
         <div class="rank-corner"></div>
         <div class="rank-header diamond">
           <div class="rank-badge">Diamond</div>
@@ -291,7 +307,7 @@
       </div>
 
       <!-- Elite Rank -->
-      <div class="rank-card elite" data-price="150000" data-filter="all elite">
+      <div class="rank-card elite" data-price="150000" data-filter="all elite" data-sub-price="45000">
         <div class="rank-corner"></div>
         <div class="elite-crown">👑</div>
         <div class="rank-header elite-header">
@@ -326,6 +342,134 @@
     </div>
   </div>
 
+  <!-- Testimonials Section -->
+  <section class="testimonials" id="testimonials">
+    <h2>What Players Say</h2>
+    <p class="testimonials-subtitle">Join thousands of happy players enjoying Arvenia Network</p>
+    
+    <div class="testimonials-grid">
+      <div class="testimonial-card" style="animation-delay: 0.1s">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">
+            <i class="fas fa-user-circle"></i>
+          </div>
+          <div class="testimonial-info">
+            <h4>Alex_Pro</h4>
+            <p class="testimonial-role">Gold Rank Member</p>
+            <div class="rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+          </div>
+        </div>
+        <p class="testimonial-text">"Best server I've ever played on! The ranks are worth every penny and the support team is amazing. Highly recommend!"</p>
+      </div>
+
+      <div class="testimonial-card" style="animation-delay: 0.2s">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">
+            <i class="fas fa-user-circle"></i>
+          </div>
+          <div class="testimonial-info">
+            <h4>SkyBuilder_</h4>
+            <p class="testimonial-role">Diamond Rank Member</p>
+            <div class="rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+          </div>
+        </div>
+        <p class="testimonial-text">"Instant delivery, great features, and an awesome community. I've been playing for 6 months and never looked back!"</p>
+      </div>
+
+      <div class="testimonial-card" style="animation-delay: 0.3s">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">
+            <i class="fas fa-user-circle"></i>
+          </div>
+          <div class="testimonial-info">
+            <h4>CreeperSlayer</h4>
+            <p class="testimonial-role">Elite Rank Member</p>
+            <div class="rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+          </div>
+        </div>
+        <p class="testimonial-text">"The Elite rank is absolutely worth it! Custom rank name, premium perks, and VIP treatment. 10/10 would recommend!"</p>
+      </div>
+
+      <div class="testimonial-card" style="animation-delay: 0.4s">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">
+            <i class="fas fa-user-circle"></i>
+          </div>
+          <div class="testimonial-info">
+            <h4>NoobToNoob</h4>
+            <p class="testimonial-role">Bronze Rank Member</p>
+            <div class="rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+          </div>
+        </div>
+        <p class="testimonial-text">"Great starting point! Bronze rank gives me everything I need. The community is super friendly and helpful!"</p>
+      </div>
+
+      <div class="testimonial-card" style="animation-delay: 0.5s">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">
+            <i class="fas fa-user-circle"></i>
+          </div>
+          <div class="testimonial-info">
+            <h4>MineExplorer</h4>
+            <p class="testimonial-role">Silver Rank Member</p>
+            <div class="rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+          </div>
+        </div>
+        <p class="testimonial-text">"Perfect balance of features and price! Silver rank has been amazing. Love the warp system!"</p>
+      </div>
+
+      <div class="testimonial-card" style="animation-delay: 0.6s">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">
+            <i class="fas fa-user-circle"></i>
+          </div>
+          <div class="testimonial-info">
+            <h4>VillageHero</h4>
+            <p class="testimonial-role">Emerald Rank Member</p>
+            <div class="rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+          </div>
+        </div>
+        <p class="testimonial-text">"Emerald rank is incredible! The custom effects make me stand out, and the rewards are amazing. Total game changer!"</p>
+      </div>
+    </div>
+  </section>
+
   <!-- FAQ Section -->
   <section class="faq-section">
     <h2>Frequently Asked Questions</h2>
@@ -346,6 +490,40 @@
         <h4><i class="fas fa-question-circle"></i> How quickly will I receive my rank?</h4>
         <p>Instantly! Upon successful payment, your rank is applied to your account immediately.</p>
       </div>
+      <div class="faq-item">
+        <h4><i class="fas fa-question-circle"></i> Is there a refund policy?</h4>
+        <p>We offer a 7-day money-back guarantee if you're not satisfied with your purchase.</p>
+      </div>
+      <div class="faq-item">
+        <h4><i class="fas fa-question-circle"></i> Can I stack multiple ranks?</h4>
+        <p>No, you can only have one active rank at a time. Upgrading will replace your current rank.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Counter Section -->
+  <section class="stats-section">
+    <div class="stats-container">
+      <div class="stat-box" data-target="50000">
+        <h3><i class="fas fa-users"></i></h3>
+        <p class="stat-value">50,000</p>
+        <p class="stat-label">Active Players</p>
+      </div>
+      <div class="stat-box" data-target="500000">
+        <h3><i class="fas fa-crown"></i></h3>
+        <p class="stat-value">500K+</p>
+        <p class="stat-label">Ranks Sold</p>
+      </div>
+      <div class="stat-box" data-target="100">
+        <h3><i class="fas fa-percent"></i></h3>
+        <p class="stat-value">100%</p>
+        <p class="stat-label">Uptime Guarantee</p>
+      </div>
+      <div class="stat-box" data-target="49">
+        <h3><i class="fas fa-star"></i></h3>
+        <p class="stat-value">4.9</p>
+        <p class="stat-label">Stars Rating</p>
+      </div>
     </div>
   </section>
 
@@ -363,7 +541,13 @@
     <div class="footer-content">
       <div class="footer-section">
         <h4>Arvenia Network</h4>
-        <p>The ultimate Minecraft server experience</p>
+        <p>The ultimate Minecraft server experience with premium ranks and LuckPerms integration</p>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-discord"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+        </div>
       </div>
       <div class="footer-section">
         <h4>Quick Links</h4>
@@ -371,25 +555,66 @@
           <li><a href="#home">Home</a></li>
           <li><a href="#ranks">Ranks</a></li>
           <li><a href="#features">Features</a></li>
+          <li><a href="#testimonials">Reviews</a></li>
         </ul>
       </div>
       <div class="footer-section">
         <h4>Community</h4>
         <ul>
-          <li><a href="https://discord.gg/arvenianetwork" target="_blank"><i class="fab fa-discord"></i> Discord</a></li>
+          <li><a href="https://discord.gg/arvenianetwork" target="_blank"><i class="fab fa-discord"></i> Discord Server</a></li>
           <li><a href="#" target="_blank"><i class="fab fa-twitter"></i> Twitter</a></li>
           <li><a href="#" target="_blank"><i class="fab fa-youtube"></i> YouTube</a></li>
+          <li><a href="#" target="_blank"><i class="fab fa-instagram"></i> Instagram</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Refund Policy</a></li>
+          <li><a href="#">Contact Us</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; 2026 Arvenia Network. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+      <p>&copy; 2026 Arvenia Network. All rights reserved.</p>
+      <p>Powered by <span class="brand">Arvenia</span> | Made with <i class="fas fa-heart"></i> for gamers</p>
     </div>
   </footer>
 
+  <!-- Scroll to Top Button -->
+  <button class="scroll-to-top" id="scrollToTop">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
   <script src="./assets/js/home.js"></script>
   <script>
-    // Filter functionality
+    // ========== PRICING TOGGLE ==========
+    const billingToggle = document.getElementById('billingToggle');
+    
+    billingToggle.addEventListener('change', function() {
+      const isSubscription = this.checked;
+      
+      document.querySelectorAll('.rank-card').forEach(card => {
+        const priceElement = card.querySelector('.discounted-price') || card.querySelector('p');
+        const standardPrice = parseFloat(card.dataset.price);
+        const subPrice = parseFloat(card.dataset.subPrice);
+        const newPrice = isSubscription ? subPrice : standardPrice;
+        
+        const priceDisplay = card.querySelector('.rank-price p');
+        if (priceDisplay) {
+          priceDisplay.innerHTML = `<span class="discounted-price" style="font-size: 2.2rem; color: #10b981; font-weight: 800;">$${newPrice.toFixed(2)}</span><span style="display: block; color: #64748b; font-size: 0.9rem;">${isSubscription ? '/month' : 'one-time'}</span>`;
+        }
+      });
+
+      const description = document.getElementById('toggleDescription');
+      description.textContent = isSubscription ? 
+        'Monthly subscription - Cancel anytime, save 30% compared to one-time purchases!' :
+        'One-time purchase - Keep your rank forever with no recurring charges!';
+    });
+
+    // ========== FILTER FUNCTIONALITY ==========
     document.querySelectorAll('.filter-btn').forEach(btn => {
       btn.addEventListener('click', function() {
         const filter = this.dataset.filter;
@@ -402,10 +627,153 @@
             setTimeout(() => card.classList.add('show'), 10);
           } else {
             card.classList.remove('show');
+            card.style.display = 'none';
           }
         });
       });
     });
+
+    // ========== SCROLL TO TOP BUTTON ==========
+    const scrollToTopBtn = document.getElementById('scrollToTop');
+    
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        scrollToTopBtn.classList.add('show');
+      } else {
+        scrollToTopBtn.classList.remove('show');
+      }
+    });
+    
+    scrollToTopBtn.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+
+    // ========== COUNTER ANIMATION ==========
+    function animateCounters() {
+      document.querySelectorAll('.stat-box').forEach(box => {
+        const target = parseInt(box.dataset.target);
+        const element = box.querySelector('.stat-value');
+        let current = 0;
+        const increment = target / 30;
+        
+        const timer = setInterval(() => {
+          current += increment;
+          if (current >= target) {
+            current = target;
+            clearInterval(timer);
+          }
+          if (target > 100) {
+            element.textContent = Math.floor(current).toLocaleString();
+          } else {
+            element.textContent = current.toFixed(1);
+          }
+        }, 30);
+      });
+    }
+
+    // Trigger counter animation when section is visible
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateCounters();
+          observer.unobserve(entry.target);
+        }
+      });
+    });
+
+    const statsSection = document.querySelector('.stats-section');
+    if (statsSection) observer.observe(statsSection);
+
+    // ========== STAT NUMBER ANIMATION (Hero Section) ==========
+    const stats = document.querySelectorAll('.stat-number');
+    let animated = false;
+
+    window.addEventListener('scroll', () => {
+      if (!animated && window.scrollY > 100) {
+        stats.forEach(stat => {
+          const target = parseInt(stat.parentElement.parentElement.dataset.value);
+          let current = 0;
+          const increment = target / 30;
+          
+          const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+              current = target;
+              clearInterval(timer);
+            }
+            stat.textContent = Math.floor(current);
+          }, 30);
+        });
+        animated = true;
+      }
+    });
+
+    // ========== SMOOTH SCROLL LINKS ==========
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        const href = this.getAttribute('href');
+        if (href !== '#') {
+          e.preventDefault();
+          const element = document.querySelector(href);
+          if (element) {
+            element.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+            document.getElementById('check').checked = false;
+          }
+        }
+      });
+    });
+
+    // ========== TESTIMONIAL CAROUSEL (Optional) ==========
+    let currentTestimonial = 0;
+    const testimonials = document.querySelectorAll('.testimonial-card');
+    
+    function rotateTestimonials() {
+      if (window.innerWidth <= 768) {
+        testimonials.forEach((card, index) => {
+          card.style.display = index === currentTestimonial ? 'block' : 'none';
+        });
+        currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+      }
+    }
+
+    setInterval(rotateTestimonials, 5000);
+    rotateTestimonials();
+
+    // ========== PARTICLE BACKGROUND ANIMATION ==========
+    const createParticle = () => {
+      const particle = document.createElement('div');
+      particle.style.position = 'fixed';
+      particle.style.width = Math.random() * 5 + 'px';
+      particle.style.height = particle.style.width;
+      particle.style.background = `rgba(99, 102, 241, ${Math.random() * 0.5})`;
+      particle.style.borderRadius = '50%';
+      particle.style.left = Math.random() * window.innerWidth + 'px';
+      particle.style.top = -10 + 'px';
+      particle.style.zIndex = '1';
+      particle.style.pointerEvents = 'none';
+      
+      document.body.appendChild(particle);
+      
+      let top = 0;
+      const animation = setInterval(() => {
+        top += Math.random() * 2;
+        particle.style.top = top + 'px';
+        particle.style.left = parseFloat(particle.style.left) + Math.random() * 2 - 1 + 'px';
+        
+        if (top > window.innerHeight) {
+          clearInterval(animation);
+          particle.remove();
+        }
+      }, 30);
+    };
+
+    setInterval(createParticle, 300);
   </script>
 </body>
 </html>
