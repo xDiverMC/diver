@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Arvenia Network - Premium Minecraft Server</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="image.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta property="og:title" content="Arvenia Network - Premium Minecraft Server">
+  <meta property="og:description" content="Experience the ultimate Minecraft server with modern features, anti-lag performance, and premium ranks.">
+  <meta property="og:image" content="https://media.discordapp.net/attachments/1135145482797207622/1218410978610511872/image.png">
+  <meta property="og:url" content="https://arvenia.network/">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    :root {
+      --primary: #8b5cf6;
+      --secondary: #06b6d4;
+      --tertiary: #ec4899;
+      --accent: #14f195;
+      --dark-bg: #0a0e27;
+      --dark-secondary: #1a1f3a;
+      --dark-tertiary: #252d48;
+      --text-primary: #ffffff;
+      --text-secondary: #a0aec0;
+      --glow-primary: rgba(139, 92, 246, 0.5);
+      --glow-secondary: rgba(6, 182, 212, 0.5);
+      --glow-tertiary: rgba(236, 72, 153, 0.5);
+      --glow-accent: rgba(20, 241, 149, 0.5);
+    }
+
+    body {
+      font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
+      background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0f1533 100%);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* Animated Background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 50%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(6, 182, 212, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 40% 20%, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+      animation: gradientShift 15s ease infinite;
+    }
+
+    @keyframes gradientShift {
+      0%, 100% {
+        background: 
+          radial-gradient(circle at 20% 50%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+          radial-gradient(circle at 80% 80%, rgba(6, 182, 212, 0.15) 0%, transparent 50%),
+          radial-gradient(circle at 40% 20%, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
+      }
+      50% {
+        background: 
+          radial-gradient(circle at 30% 30%, rgba(139, 92, 246, 0.2) 0%, transparent 50%),
+          radial-gradient(circle at 70% 70%, rgba(6, 182, 212, 0.2) 0%, transparent 50%),
+          radial-gradient(circle at 50% 40%, rgba(236, 72, 153, 0.15) 0%, transparent 50%);
+      }
+    }
+
+    /* Floating Particles */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(2px 2px at 20px 30px, rgba(139, 92, 246, 0.5), transparent),
+        radial-gradient(2px 2px at 60px 70px, rgba(6, 182, 212, 0.5), transparent),
+        radial-gradient(1px 1px at 50px 50px, rgba(236, 72, 153, 0.3), transparent);
+      background-repeat: repeat;
+      background-size: 200px 200px;
+      pointer-events: none;
+      z-index: 0;
+      animation: particleFloat 20s linear infinite;
+      opacity: 0.5;
+    }
+
+    @keyframes particleFloat {
+      0% { transform: translateY(0px); }
+      100% { transform: translateY(-200px); }
+    }
+
+    /* Content Wrapper */
+    .content {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Navbar */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 1.5rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(10, 14, 39, 0.8);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+      z-index: 100;
+      animation: slideDown 0.6s ease-out;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 0 20px var(--glow-primary);
+      letter-spacing: 2px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo i {
+      font-size: 2rem;
+      filter: drop-shadow(0 0 10px var(--glow-primary));
+    }
+
+    .nav-menu {
+      display: flex;
+      list-style: none;
+      gap: 3rem;
+    }
+
+    .nav-menu a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .nav-menu a::before {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      transition: width 0.3s ease;
+      box-shadow: 0 0 10px var(--glow-primary);
+    }
+
+    .nav-menu a:hover {
+      color: var(--text-primary);
+      text-shadow: 0 0 10px var(--glow-primary);
+    }
+
+    .nav-menu a:hover::before {
+      width: 100%;
+    }
+
+    @media (max-width: 768px) {
+      .nav-menu {
+        gap: 1rem;
+        font-size: 0.9rem;
+      }
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      animation: fadeInUp 1s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.3), transparent);
+      border-radius: 50%;
+      animation: float 6s ease-in-out infinite;
+      z-index: 0;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -30%;
+      left: -10%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(6, 182, 212, 0.2), transparent);
+      border-radius: 50%;
+      animation: float 8s ease-in-out infinite reverse;
+      z-index: 0;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(30px); }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 900px;
+    }
+
+    .hero h1 {
+      font-size: 4.5rem;
+      font-weight: 900;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, 
+        var(--primary) 0%, 
+        var(--secondary) 50%, 
+        var(--tertiary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 0 30px var(--glow-primary), 0 0 60px var(--glow-secondary);
+      letter-spacing: 2px;
+      animation: glowPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes glowPulse {
+      0%, 100% {
+        text-shadow: 0 0 30px var(--glow-primary), 0 0 60px var(--glow-secondary);
+      }
+      50% {
+        text-shadow: 0 0 50px var(--glow-primary), 0 0 100px var(--glow-secondary), 0 0 150px var(--glow-tertiary);
+      }
+    }
+
+    .hero p {
+      font-size: 1.3rem;
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+      line-height: 1.8;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 1rem 2.5rem;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: inherit;
+      filter: brightness(1.3);
+      transition: left 0.5s ease;
+      z-index: -1;
+    }
+
+    .btn:hover::before {
+      left: 0;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      color: white;
+      box-shadow: 
+        0 0 20px var(--glow-primary),
+        0 0 40px var(--glow-secondary),
+        inset 0 0 20px rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 
+        0 0 40px var(--glow-primary),
+        0 0 80px var(--glow-secondary),
+        0 15px 35px rgba(0, 0, 0, 0.5),
+        inset 0 0 30px rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 2px solid var(--secondary);
+      color: var(--secondary);
+      box-shadow: 
+        0 0 15px rgba(6, 182, 212, 0.3),
+        inset 0 0 15px rgba(6, 182, 212, 0.1);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(6, 182, 212, 0.1);
+      box-shadow: 
+        0 0 30px var(--glow-secondary),
+        0 0 60px rgba(6, 182, 212, 0.5),
+        inset 0 0 20px rgba(6, 182, 212, 0.2);
+      transform: translateY(-3px);
+    }
+
+    /* About Section */
+    .about {
+      padding: 6rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+      animation: fadeInUp 1s ease-out 0.2s both;
+    }
+
+    .section-title {
+      font-size: 3rem;
+      font-weight: 900;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .about p {
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    /* Features Section */
+    .features {
+      padding: 6rem 2rem;
+      background: rgba(26, 31, 58, 0.3);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(139, 92, 246, 0.1);
+      margin: 4rem 0;
+    }
+
+    .features-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .features-title {
+      text-align: center;
+      margin-bottom: 4rem;
+      animation: fadeInUp 1s ease-out 0.3s both;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .feature-card {
+      padding: 2.5rem;
+      background: rgba(25, 30, 45, 0.5);
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+      animation: fadeInUp 1s ease-out 0.4s both;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.2), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .feature-card:hover::before {
+      left: 100%;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-15px);
+      background: rgba(25, 30, 45, 0.8);
+      border-color: var(--primary);
+      box-shadow: 
+        0 0 30px var(--glow-primary),
+        0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .feature-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      display: inline-block;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 15px var(--glow-primary));
+    }
+
+    .feature-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .feature-card p {
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* Ranks Section */
+    .ranks {
+      padding: 6rem 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .ranks-title {
+      text-align: center;
+      margin-bottom: 4rem;
+      animation: fadeInUp 1s ease-out 0.5s both;
+    }
+
+    .ranks-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .rank-card {
+      padding: 2rem;
+      border-radius: 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+      animation: fadeInUp 1s ease-out 0.6s both;
+    }
+
+    .rank-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transform: rotate(45deg);
+      animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+      100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+    }
+
+    .rank-card:hover {
+      transform: translateY(-20px) scale(1.05);
+    }
+
+    /* Rank Card Variants */
+    .rank-vip {
+      background: linear-gradient(135deg, rgba(218, 165, 32, 0.2), rgba(255, 215, 0, 0.1));
+      border: 2px solid rgba(218, 165, 32, 0.5);
+      box-shadow: 
+        0 0 20px rgba(218, 165, 32, 0.3),
+        inset 0 0 20px rgba(218, 165, 32, 0.1);
+    }
+
+    .rank-vip:hover {
+      box-shadow: 
+        0 0 50px rgba(218, 165, 32, 0.6),
+        0 20px 40px rgba(218, 165, 32, 0.3),
+        inset 0 0 30px rgba(218, 165, 32, 0.2);
+      border-color: rgba(218, 165, 32, 0.8);
+    }
+
+    .rank-vip-plus {
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 165, 0, 0.1));
+      border: 2px solid rgba(255, 215, 0, 0.5);
+      box-shadow: 
+        0 0 25px rgba(255, 215, 0, 0.4),
+        inset 0 0 20px rgba(255, 215, 0, 0.1);
+    }
+
+    .rank-vip-plus:hover {
+      box-shadow: 
+        0 0 60px rgba(255, 215, 0, 0.7),
+        0 20px 40px rgba(255, 215, 0, 0.4),
+        inset 0 0 30px rgba(255, 215, 0, 0.2);
+      border-color: rgba(255, 215, 0, 0.8);
+    }
+
+    .rank-mvp {
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(34, 211, 238, 0.1));
+      border: 2px solid rgba(6, 182, 212, 0.5);
+      box-shadow: 
+        0 0 25px rgba(6, 182, 212, 0.3),
+        inset 0 0 20px rgba(6, 182, 212, 0.1);
+    }
+
+    .rank-mvp:hover {
+      box-shadow: 
+        0 0 60px rgba(6, 182, 212, 0.6),
+        0 20px 40px rgba(6, 182, 212, 0.3),
+        inset 0 0 30px rgba(6, 182, 212, 0.2);
+      border-color: rgba(6, 182, 212, 0.8);
+    }
+
+    .rank-mvp-plus {
+      background: linear-gradient(135deg, rgba(34, 211, 238, 0.2), rgba(0, 188, 212, 0.1));
+      border: 2px solid rgba(34, 211, 238, 0.5);
+      box-shadow: 
+        0 0 30px rgba(34, 211, 238, 0.4),
+        inset 0 0 20px rgba(34, 211, 238, 0.1);
+    }
+
+    .rank-mvp-plus:hover {
+      box-shadow: 
+        0 0 70px rgba(34, 211, 238, 0.7),
+        0 20px 40px rgba(34, 211, 238, 0.4),
+        inset 0 0 30px rgba(34, 211, 238, 0.2);
+      border-color: rgba(34, 211, 238, 0.8);
+    }
+
+    .rank-mvp-plusplus {
+      background: linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(236, 72, 153, 0.1));
+      border: 2px solid rgba(236, 72, 153, 0.5);
+      box-shadow: 
+        0 0 30px rgba(236, 72, 153, 0.3),
+        inset 0 0 20px rgba(236, 72, 153, 0.1);
+    }
+
+    .rank-mvp-plusplus:hover {
+      box-shadow: 
+        0 0 70px rgba(236, 72, 153, 0.6),
+        0 20px 40px rgba(236, 72, 153, 0.3),
+        inset 0 0 30px rgba(236, 72, 153, 0.2);
+      border-color: rgba(236, 72, 153, 0.8);
+    }
+
+    .rank-premium-plus {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(168, 85, 247, 0.2));
+      border: 2px solid rgba(139, 92, 246, 0.6);
+      box-shadow: 
+        0 0 40px rgba(139, 92, 246, 0.5),
+        0 0 80px rgba(168, 85, 247, 0.3),
+        inset 0 0 20px rgba(139, 92, 246, 0.15);
+    }
+
+    .rank-premium-plus:hover {
+      box-shadow: 
+        0 0 80px rgba(139, 92, 246, 0.8),
+        0 0 120px rgba(168, 85, 247, 0.6),
+        0 20px 50px rgba(139, 92, 246, 0.4),
+        inset 0 0 30px rgba(139, 92, 246, 0.25);
+      border-color: rgba(139, 92, 246, 0.9);
+      transform: translateY(-20px) scale(1.1);
+    }
+
+    .rank-badge {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .rank-name {
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .rank-features {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-top: 1rem;
+      line-height: 1.6;
+    }
+
+    /* Footer */
+    footer {
+      background: rgba(10, 14, 39, 0.9);
+      border-top: 1px solid rgba(139, 92, 246, 0.2);
+      padding: 4rem 2rem;
+      margin-top: 6rem;
+      backdrop-filter: blur(10px);
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+
+    .footer-column h3 {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .footer-column p {
+      color: var(--text-secondary);
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+
+    .footer-links {
+      list-style: none;
+    }
+
+    .footer-links li {
+      margin-bottom: 0.8rem;
+    }
+
+    .footer-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .footer-links a:hover {
+      color: var(--primary);
+      transform: translateX(5px);
+      text-shadow: 0 0 10px var(--glow-primary);
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .social-links a {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(139, 92, 246, 0.2);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      transition: all 0.3s ease;
+    }
+
+    .social-links a:hover {
+      background: rgba(139, 92, 246, 0.5);
+      box-shadow: 0 0 20px var(--glow-primary);
+      transform: translateY(-3px);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(139, 92, 246, 0.2);
+      padding-top: 2rem;
+      text-align: center;
+      color: var(--text-secondary);
+    }
+
+    /* Scroll Reveal Animation */
+    .scroll-reveal {
+      opacity: 0;
+      transform: translateY(50px);
+      transition: all 0.8s ease;
+    }
+
+    .scroll-reveal.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+
+      .hero p {
+        font-size: 1rem;
+      }
+
+      .hero-buttons {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .btn {
+        padding: 0.8rem 2rem;
+        font-size: 1rem;
+      }
+
+      .section-title {
+        font-size: 2rem;
+      }
+
+      .nav-menu {
+        gap: 1rem;
+        font-size: 0.9rem;
+      }
+
+      .ranks-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .rank-card {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="content">
+    <!-- Navigation -->
+    <nav>
+      <div class="logo">
+        <i class="fas fa-crown"></i> Arvenia
+      </div>
+      <ul class="nav-menu">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#ranks">Ranks</a></li>
+        <li><a href="#footer">Contact</a></li>
+      </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+      <div class="hero-content">
+        <h1>ARVENIA NETWORK</h1>
+        <p>Premium Minecraft Server • Anti-Lag Performance • High-Powered Experience</p>
+        <div class="hero-buttons">
+          <button class="btn btn-primary" onclick="copyIP()">
+            <i class="fas fa-copy"></i> Copy IP
+          </button>
+          <button class="btn btn-secondary" onclick="scrollToFeatures()">
+            <i class="fas fa-gamepad"></i> Play Now
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+      <h2 class="section-title">About Arvenia</h2>
+      <p>
+        Welcome to Arvenia Network, the ultimate Minecraft server experience. We offer a modern survival world with complete game systems, 
+        anti-lag technology, stable infrastructure, and an active community. Whether you're into building, mining, or PvP, 
+        Arvenia delivers premium gameplay with professional-grade systems and support.
+      </p>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+      <div class="features-container">
+        <div class="features-title">
+          <h2 class="section-title">Premium Features</h2>
+        </div>
+        <div class="features-grid">
+          <div class="feature-card scroll-reveal">
+            <div class="feature-icon">
+              <i class="fas fa-coins"></i>
+            </div>
+            <h3>Economy System</h3>
+            <p>Advanced trading, banking, and wealth management. Build your empire with our sophisticated economy.</p>
+          </div>
+
+          <div class="feature-card scroll-reveal">
+            <div class="feature-icon">
+              <i class="fas fa-shop"></i>
+            </div>
+            <h3>Player Shops</h3>
+            <p>Create your own shops and sell items to the community. Become a merchant and build your business.</p>
+          </div>
+
+          <div class="feature-card scroll-reveal">
+            <div class="feature-icon">
+              <i class="fas fa-crown"></i>
+            </div>
+            <h3>Rank System</h3>
+            <p>Six premium ranks with unique perks, benefits, and exclusive features. Level up your experience.</p>
+          </div>
+
+          <div class="feature-card scroll-reveal">
+            <div class="feature-icon">
+              <i class="fas fa-pickaxe"></i>
+            </div>
+            <h3>Mine Area</h3>
+            <p>Unlimited mining in custom-designed mines with rare ores and exclusive rewards for all players.</p>
+          </div>
+
+          <div class="feature-card scroll-reveal">
+            <div class="feature-icon">
+              <i class="fas fa-crossed-swords"></i>
+            </div>
+            <h3>PvP Arena</h3>
+            <p>Competitive battle zones with balanced matchmaking, tournaments, and exclusive PvP rewards.</p>
+          </div>
+
+          <div class="feature-card scroll-reveal">
+            <div class="feature-icon">
+              <i class="fas fa-star"></i>
+            </div>
+            <h3>Gacha System</h3>
+            <p>Spin the gacha wheel for rare items, cosmetics, and exclusive rewards. Daily free spins available!</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ranks Section -->
+    <section class="ranks" id="ranks">
+      <h2 class="section-title" style="text-align: center; margin-bottom: 4rem;">Premium Ranks</h2>
+      <div class="ranks-grid">
+        <div class="rank-card rank-vip scroll-reveal">
+          <div class="rank-badge">👑</div>
+          <div class="rank-name">VIP</div>
+          <div class="rank-features">
+            ✓ 1.5x Rewards<br>
+            ✓ Custom Prefix<br>
+            ✓ 5 Player Homes<br>
+            ✓ Priority Support
+          </div>
+        </div>
+
+        <div class="rank-card rank-vip-plus scroll-reveal">
+          <div class="rank-badge">⭐</div>
+          <div class="rank-name">VIP+</div>
+          <div class="rank-features">
+            ✓ 2x Rewards<br>
+            ✓ Color Chat<br>
+            ✓ 10 Player Homes<br>
+            ✓ Auction Access
+          </div>
+        </div>
+
+        <div class="rank-card rank-mvp scroll-reveal">
+          <div class="rank-badge">💎</div>
+          <div class="rank-name">MVP</div>
+          <div class="rank-features">
+            ✓ 2.5x Rewards<br>
+            ✓ Custom Name<br>
+            ✓ 15 Player Homes<br>
+            ✓ Pet Cosmetics
+          </div>
+        </div>
+
+        <div class="rank-card rank-mvp-plus scroll-reveal">
+          <div class="rank-badge">🌟</div>
+          <div class="rank-name">MVP+</div>
+          <div class="rank-features">
+            ✓ 3x Rewards<br>
+            ✓ Glow Effects<br>
+            ✓ Unlimited Homes<br>
+            ✓ Custom Particle
+          </div>
+        </div>
+
+        <div class="rank-card rank-mvp-plusplus scroll-reveal">
+          <div class="rank-badge">✨</div>
+          <div class="rank-name">MVP++</div>
+          <div class="rank-features">
+            ✓ 4x Rewards<br>
+            ✓ Flying in Lobby<br>
+            ✓ Private Island<br>
+            ✓ Monthly Cosmetics
+          </div>
+        </div>
+
+        <div class="rank-card rank-premium-plus scroll-reveal">
+          <div class="rank-badge">👑✨</div>
+          <div class="rank-name">PREMIUM+</div>
+          <div class="rank-features">
+            ✓ 5x Rewards<br>
+            ✓ VIP Queue<br>
+            ✓ Custom Skin<br>
+            ✓ Lifetime Perks
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="footer">
+      <div class="footer-container">
+        <div class="footer-column">
+          <h3>Arvenia Network</h3>
+          <p>
+            The ultimate Minecraft server experience with premium ranks and LuckPerms integration. 
+            Join our thriving community and experience gaming at its finest.
+          </p>
+          <div class="social-links">
+            <a href="#" title="Discord"><i class="fab fa-discord"></i></a>
+            <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
+            <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-column">
+          <h3>Quick Links</h3>
+          <ul class="footer-links">
+            <li><a href="#home"><i class="fas fa-arrow-right"></i> Home</a></li>
+            <li><a href="#ranks"><i class="fas fa-arrow-right"></i> Ranks</a></li>
+            <li><a href="#features"><i class="fas fa-arrow-right"></i> Features</a></li>
+            <li><a href="#about"><i class="fas fa-arrow-right"></i> About</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h3>Community</h3>
+          <ul class="footer-links">
+            <li><a href="#"><i class="fab fa-discord"></i> Discord Server</a></li>
+            <li><a href="#"><i class="fab fa-twitter"></i> Twitter</a></li>
+            <li><a href="#"><i class="fab fa-youtube"></i> YouTube</a></li>
+            <li><a href="#"><i class="fab fa-instagram"></i> Instagram</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h3>Legal</h3>
+          <ul class="footer-links">
+            <li><a href="#"><i class="fas fa-lock"></i> Privacy Policy</a></li>
+            <li><a href="#"><i class="fas fa-file-contract"></i> Terms of Service</a></li>
+            <li><a href="#"><i class="fas fa-undo"></i> Refund Policy</a></li>
+            <li><a href="#"><i class="fas fa-envelope"></i> Contact Us</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2024 Arvenia Network. All rights reserved. | Crafted with <i class="fas fa-heart" style="color: #ec4899;"></i> for gamers</p>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Copy IP to Clipboard
+    function copyIP() {
+      const ip = "play.arvenia.net";
+      navigator.clipboard.writeText(ip).then(() => {
+        alert('Server IP copied: ' + ip);
+      });
+    }
+
+    // Scroll to Features
+    function scrollToFeatures() {
+      document.getElementById('features').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Scroll Reveal Animation
+    const revealElements = document.querySelectorAll('.scroll-reveal');
+
+    function reveal() {
+      for (let element of revealElements) {
+        const windowHeight = window.innerHeight;
+        const elementTop = element.getBoundingClientRect().top;
+        const elementVisible = 150;
+
+        if (elementTop < windowHeight - elementVisible) {
+          element.classList.add('revealed');
+        }
+      }
+    }
+
+    window.addEventListener('scroll', reveal);
+    reveal();
+
+    // Smooth Scrolling for Nav Links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    // Page Load Animation
+    window.addEventListener('load', () => {
+      document.body.style.opacity = '1';
+    });
+  </script>
+</body>
+
+</html>
