@@ -3,44 +3,20 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>Topup Credits Arvenia Network</title>
+  <title>Arvenia Network | Home</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="image.png">
   
   <link rel="stylesheet" href="template.css" />
   <link rel="stylesheet" href="home.css" />
   
-  <meta name="discount" content="0.40" />
-  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-  <meta property="og:title" content="Topup Credits Arvenia">
-  <meta property="og:description" content="Website untuk topup Credits di server Minecraft Arvenia.">
+  <meta property="og:title" content="Arvenia Network">
+  <meta property="og:description" content="Official Website Arvenia Network Minecraft Server.">
   <meta property="og:image" content="https://media.discordapp.net/attachments/1135145482797207622/1218410978610511872/image.png">
   <meta property="og:url" content="https://store.arvenia.xyz/">
-
-  <style>
-    .coin-price {
-      text-align: center;
-      margin-top: 5px;
-    }
-    .coin-price .original-price {
-      text-decoration: line-through;
-      color: #ff0101;
-      display: block;
-      font-size: 14px;
-    }
-    .coin-price .discounted-price {
-      font-weight: bold;
-      font-size: 22px;
-      color: #2ecc71; /* Warna hijau biar terlihat premium */
-    }
-    /* Sembunyikan iframe jika tidak diperlukan langsung */
-    #trIframe {
-      display: none;
-    }
-  </style>
 </head>
 
 <body>
@@ -49,50 +25,72 @@
     <label for="check" class="checkbtn">
       <img src="assets/img/button.svg" alt="menu" />
     </label>
-    <label class="logo">Arvenia Topup</label>
+    <label class="logo">Arvenia Network</label>
     <ul>
-      <li><a class="active" href="#">Home</a></li>
-      <li><a href="https://discord.gg/arvenia" target="_blank">Discord Server</a></li>
+      <li><a class="active" href="#">&fHome</a></li>
+      <li><a href="/ranks">&bRanks</a></li>
+      <li><a href="/keys">&6Keys</a></li>
+      <li><a href="https://discord.gg/arvenia" target="_blank">&dSupport</a></li>
     </ul>
   </nav>
 
   <div class="header">
     <div class="text">
-      <h1 id="playerName">Loading...</h1>
-      <p>Selamat datang di website Topup Arvenia. Klik tombol di bawah jika ingin mengganti akun.</p>
-      <div class="logout">
-        <button class="button" id="logoutBtn" style="cursor:pointer;">Log out</button>
+      <h1 id="playerName">&aArvenia Network</h1>
+      <p>&fSelamat datang di portal resmi Arvenia. Jelajahi fitur unggulan dan bergabunglah dengan komunitas kami!</p>
+      <div class="server-status" style="margin-top: 20px;">
+        <span style="background: #2ecc71; padding: 10px 20px; border-radius: 5px; font-weight: bold;">
+          &fIP: play.arvenia.xyz
+        </span>
       </div>
     </div>
     <div class="banner"></div>
   </div>
 
   <div class="container">
-    <div class="coin-list" id="coinList">
-      <div class="coin" data-price="5000">
-        <p><b>500</b><br>Credits</p>
-        <div class="coin-price"></div>
+    
+    <div class="announcement-section" style="margin-bottom: 40px;">
+      <h2 style="border-bottom: 2px solid #&e; padding-bottom: 10px;">&e📢 Announcement</h2>
+      <div class="info-card" style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; margin-top: 15px;">
+        <p>&fUpdate Season baru telah tiba! Nikmati map baru dan sistem ekonomi yang lebih seimbang. Jangan lupa cek &bRanks &fbaru di store!</p>
+        <small>&7Diposting pada: 15 April 2026</small>
       </div>
-      <div class="coin" data-price="10000">
-        <p><b>1K</b><br>Credits</p>
-        <div class="coin-price"></div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+      
+      <div class="features-section">
+        <h2>&b✨ Fitur Server</h2>
+        <ul style="list-style: none; padding: 0; margin-top: 15px;">
+          <li style="margin-bottom: 10px;">&a✔ &fCustom Items & Weapons</li>
+          <li style="margin-bottom: 10px;">&a✔ &fDungeons & Boss Fights</li>
+          <li style="margin-bottom: 10px;">&a✔ &fLand Claim & Grief Prevent</li>
+          <li style="margin-bottom: 10px;">&a✔ &fFriendly Community</li>
+        </ul>
       </div>
-      <div class="coin" data-price="25000">
-        <p><b>2.5K</b><br>Credits</p>
-        <div class="coin-price"></div>
+
+      <div class="donator-section">
+        <h2>&d🏆 Top Donators</h2>
+        <div class="donator-list" style="margin-top: 15px;">
+          <div style="display: flex; justify-content: space-between; padding: 10px; background: rgba(0,0,0,0.2); margin-bottom: 5px;">
+            <span>&e1. &fPlayer_Satu</span>
+            <span style="color: #2ecc71;">Rp 500.000</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 10px; background: rgba(0,0,0,0.2); margin-bottom: 5px;">
+            <span>&72. &fPlayer_Dua</span>
+            <span style="color: #2ecc71;">Rp 250.000</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 10px; background: rgba(0,0,0,0.2); margin-bottom: 5px;">
+            <span>&63. &fPlayer_Tiga</span>
+            <span style="color: #2ecc71;">Rp 100.000</span>
+          </div>
+        </div>
       </div>
-      <div class="coin" data-price="50000">
-        <p><b>5K</b><br>Credits</p>
-        <div class="coin-price"></div>
-      </div>
-      <div class="coin" data-price="100000">
-        <p><b>10K</b><br>Credits</p>
-        <div class="coin-price"></div>
-      </div>
+
     </div>
   </div>
 
-  <footer class="footer">
+  <footer class="footer" style="margin-top: 50px; text-align: center; padding: 20px;">
     <p>&copy; 2026 Arvenia Network. All rights reserved.</p>
   </footer>
 
