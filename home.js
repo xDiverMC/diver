@@ -15,16 +15,16 @@ document.addEventListener("DOMContentLoaded", function () {
   // Ubah title & nav label kalau ada diskon
   if (discount > 0) {
     const percent = Math.round(discount * 100);
-    document.title = `YezCraft Topup - ${percent}% OFF`;
+    document.title = `Arvenia Topup - ${percent}% OFF`;
 
     const navLabel = document.querySelector("nav .logo");
     if (navLabel) {
-      navLabel.textContent = `YezCraft Topup - ${percent}% OFF`;
+      navLabel.textContent = `Arvenia Topup - ${percent}% OFF`;
     }
 
     const ogTitle = document.querySelector('meta[property="og:title"]');
     if (ogTitle) {
-      ogTitle.setAttribute("content", `YezCraft Topup - ${percent}% OFF`);
+      ogTitle.setAttribute("content", `Arvenia Topup - ${percent}% OFF`);
     }
   }
 
