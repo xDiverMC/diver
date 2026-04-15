@@ -1,168 +1,187 @@
-/* home.css - Arvenia Network Modern Theme */
-
+/* ───── ARVENIA MODERN CORE ───── */
 :root {
-  --primary-gradient: linear-gradient(135deg, #2ecc71 0%, #f1c40f 100%);
-  --dark-bg: #121212;
-  --card-bg: rgba(255, 255, 255, 0.05);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --text-main: #ffffff;
-  --accent-yellow: #f1c40f;
-  --accent-green: #2ecc71;
+  --green-deep:    #0a2e1a;
+  --green-mid:     #0d4a25;
+  --green-bright:  #16a34a;
+  --green-glow:    #22c55e;
+  --green-light:   #4ade80;
+  --yellow-warm:   #fbbf24;
+  --yellow-glow:   #fde047;
+  --text-main:     #e8fef0;
+  --text-muted:    #86efac;
+  --card-bg:       rgba(10, 46, 26, 0.7);
+  --card-border:   rgba(34, 197, 94, 0.2);
+  --nav-bg:        rgba(6, 25, 14, 0.9);
+  --primary-grad:  linear-gradient(135deg, var(--green-glow), var(--yellow-warm));
 }
 
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  background-color: var(--dark-bg);
-  color: var(--text-main);
-  line-height: 1.6;
+/* ───── SCROLLBAR ───── */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--green-deep); }
+::-webkit-scrollbar-thumb { 
+  background: var(--green-mid); 
+  border-radius: 10px; 
+  border: 2px solid var(--green-deep);
 }
+::-webkit-scrollbar-thumb:hover { background: var(--green-bright); }
 
-/* Header & Banner Section */
-.header {
+/* ───── LAYOUT OPTIMIZATION ───── */
+main {
   position: relative;
-  padding: 100px 20px;
-  text-align: center;
-  background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('assets/img/banner-bg.jpg'); /* Ganti dengan path banner kamu */
-  background-size: cover;
-  background-position: center;
-  border-bottom: 3px solid transparent;
-  border-image: var(--primary-gradient);
-  border-image-slice: 1;
+  z-index: 5;
+  margin-top: 20px;
 }
 
-.header h1 {
-  font-size: 3rem;
-  margin-bottom: 10px;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  background: var(--primary-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+/* ───── DONATUR CARDS (PODIUM EFFECT) ───── */
+.donatur-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  perspective: 1000px;
 }
 
-.server-status span {
-  display: inline-block;
-  background: var(--primary-gradient) !important;
-  color: #000 !important;
-  padding: 12px 25px;
-  border-radius: 50px;
-  font-weight: 800;
-  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.4);
-  transition: transform 0.3s ease;
-}
-
-.server-status span:hover {
-  transform: scale(1.05);
-}
-
-/* Container & Grid */
-.container {
-  max-width: 1100px;
-  margin: 40px auto;
-  padding: 0 20px;
-}
-
-/* Card Styling (Glassmorphism) */
-.info-card, .features-section, .donator-section {
+.donatur-card {
   background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  padding: 30px 20px;
   backdrop-filter: blur(10px);
-  border: 1px solid var(--glass-border);
-  border-radius: 15px;
-  padding: 25px;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.info-card:hover {
-  border-color: var(--accent-green);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+.donatur-card:hover {
+  transform: translateY(-10px) rotateX(5deg);
+  border-color: var(--green-glow);
+  box-shadow: 0 15px 35px rgba(34, 197, 94, 0.2);
 }
 
-h2 {
-  font-size: 1.8rem;
-  margin-bottom: 20px;
+.donatur-card.rank-1 {
+  border: 1px solid var(--yellow-warm);
+  background: rgba(251, 191, 36, 0.05);
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.1);
+}
+
+.donatur-avatar {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 15px;
+  background: var(--primary-grad);
+  border-radius: 50%;
   display: flex;
   align-items: center;
-}
-
-/* Features List */
-.features-section ul li {
-  background: rgba(255, 255, 255, 0.03);
-  margin-bottom: 12px;
-  padding: 15px;
-  border-radius: 10px;
-  border-left: 4px solid var(--accent-green);
-  transition: transform 0.2s ease;
-}
-
-.features-section ul li:hover {
-  transform: translateX(10px);
-  background: rgba(46, 204, 113, 0.1);
-}
-
-/* Donator List */
-.donator-list div {
-  border-radius: 8px;
-  border: 1px solid var(--glass-border);
-  transition: all 0.2s ease;
-}
-
-.donator-list div:hover {
-  background: var(--primary-gradient) !important;
-}
-
-.donator-list div:hover span {
-  color: #000 !important;
-  font-weight: bold;
-}
-
-/* Navigation Styling (Simplified) */
-nav {
-  background: rgba(0, 0, 0, 0.9);
-  height: 80px;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  border-bottom: 1px solid var(--glass-border);
-}
-
-.logo {
+  justify-content: center;
   font-size: 24px;
+  color: var(--green-deep);
+  font-weight: 900;
+  box-shadow: 0 0 15px var(--green-glow);
+}
+
+/* ───── NEWS & FEATURES CARDS ───── */
+.news-card, .stat-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 15px;
+  transition: 0.3s ease;
+}
+
+.news-card:hover {
+  background: rgba(255, 255, 255, 0.03);
+  padding-left: 25px; /* Efek slide saat hover */
+}
+
+.news-tag {
+  font-size: 10px;
+  padding: 4px 12px;
+  border-radius: 50px;
   font-weight: bold;
-  background: var(--primary-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  margin-bottom: 10px;
+  display: inline-block;
 }
 
-nav ul {
+.tag-update { background: var(--green-mid); color: var(--green-light); }
+.tag-sale { background: #991b1b; color: #fca5a5; }
+
+/* ───── SERVER STATUS BAR ───── */
+.status-bar {
   display: flex;
-  list-style: none;
+  justify-content: space-around;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 25px;
+  border-radius: 15px;
+  border: 1px solid var(--card-border);
+  margin: 40px 0;
+  flex-wrap: wrap;
 }
 
-nav ul li a {
-  color: white;
-  text-decoration: none;
-  padding: 10px 20px;
-  margin: 0 5px;
+.status-value {
+  font-family: 'Orbitron', sans-serif;
+  color: var(--yellow-warm);
+  font-size: 1.2rem;
+}
+
+.copy-ip-btn {
+  background: var(--primary-grad);
+  border: none;
+  padding: 8px 15px;
   border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 10px;
   transition: 0.3s;
 }
 
-nav ul li a:hover {
-  background: var(--primary-gradient);
-  color: black !important;
+.copy-ip-btn:hover {
+  filter: brightness(1.2);
+  transform: scale(1.05);
 }
 
-/* Footer */
-.footer {
-  border-top: 1px solid var(--glass-border);
-  color: #777;
+/* ───── TOAST ANIMATION ───── */
+.toast {
+  position: fixed;
+  bottom: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--green-glow);
+  color: white;
+  padding: 12px 30px;
+  border-radius: 50px;
+  font-weight: bold;
+  transition: 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  z-index: 1000;
 }
 
-/* Responsive */
+.toast.show {
+  bottom: 30px;
+}
+
+/* ───── FOOTER ───── */
+footer {
+  margin-top: 60px;
+  padding: 40px;
+  text-align: center;
+  border-top: 1px solid var(--card-border);
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+/* ───── RESPONSIVE ───── */
 @media (max-width: 768px) {
-  .header h1 { font-size: 2rem; }
-  nav ul { display: none; } /* Sesuaikan dengan logic checkbox menu anda */
+  .status-bar {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+  
+  .status-divider {
+    width: 80%;
+    height: 1px;
+    background: var(--card-border);
+  }
+  
+  .hero h1 {
+    font-size: 2.5rem;
+  }
 }
