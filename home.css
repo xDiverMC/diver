@@ -1,191 +1,168 @@
-@import url("https://fonts.googleapis.com/css2?family=Lato&family=Montserrat:wght@500;700&family=Plus+Jakarta+Sans:wght@500;800&display=swap");
+/* home.css - Arvenia Network Modern Theme */
 
-/* --- ROOT VARIABLES --- */
 :root {
-  /* Gradient Hijau ke Kuning */
   --primary-gradient: linear-gradient(135deg, #2ecc71 0%, #f1c40f 100%);
-  --hover-gradient: linear-gradient(135deg, #27ae60 0%, #f39c12 100%);
-  --accent-color: #2ecc71;
-  --bg-dark: #1e1e29;
-}
-
-* {
-  padding: 0;
-  margin: 0;
-  list-style: none;
-  box-sizing: border-box;
+  --dark-bg: #121212;
+  --card-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --text-main: #ffffff;
+  --accent-yellow: #f1c40f;
+  --accent-green: #2ecc71;
 }
 
 body {
   margin: 0;
   padding: 0;
-  background-color: var(--bg-dark);
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  font-family: "Montserrat", sans-serif;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--dark-bg);
+  color: var(--text-main);
+  line-height: 1.6;
 }
 
-/* --- NAVBAR --- */
-nav {
-  background: rgba(49, 49, 60, 0.7);
-  backdrop-filter: blur(20px);
-  position: fixed;
-  top: 0;
-  right: 0;
-  left: 0;
-  height: 80px;
-  border-bottom: 2px solid #2ecc71; /* Garis bawah hijau tipis */
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
-  z-index: 1000;
+/* Header & Banner Section */
+.header {
+  position: relative;
+  padding: 100px 20px;
+  text-align: center;
+  background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('assets/img/banner-bg.jpg'); /* Ganti dengan path banner kamu */
+  background-size: cover;
+  background-position: center;
+  border-bottom: 3px solid transparent;
+  border-image: var(--primary-gradient);
+  border-image-slice: 1;
 }
 
-label.logo {
-  color: #fff;
-  font-size: 30px;
+.header h1 {
+  font-size: 3rem;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.server-status span {
+  display: inline-block;
+  background: var(--primary-gradient) !important;
+  color: #000 !important;
+  padding: 12px 25px;
+  border-radius: 50px;
   font-weight: 800;
-  font-family: "Plus Jakarta Sans", sans-serif;
-  line-height: 80px;
-  padding: 0 5%;
-  /* Efek text gradient pada logo */
+  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.4);
+  transition: transform 0.3s ease;
+}
+
+.server-status span:hover {
+  transform: scale(1.05);
+}
+
+/* Container & Grid */
+.container {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+/* Card Styling (Glassmorphism) */
+.info-card, .features-section, .donator-section {
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-radius: 15px;
+  padding: 25px;
+  transition: all 0.3s ease;
+}
+
+.info-card:hover {
+  border-color: var(--accent-green);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+}
+
+h2 {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+}
+
+/* Features List */
+.features-section ul li {
+  background: rgba(255, 255, 255, 0.03);
+  margin-bottom: 12px;
+  padding: 15px;
+  border-radius: 10px;
+  border-left: 4px solid var(--accent-green);
+  transition: transform 0.2s ease;
+}
+
+.features-section ul li:hover {
+  transform: translateX(10px);
+  background: rgba(46, 204, 113, 0.1);
+}
+
+/* Donator List */
+.donator-list div {
+  border-radius: 8px;
+  border: 1px solid var(--glass-border);
+  transition: all 0.2s ease;
+}
+
+.donator-list div:hover {
+  background: var(--primary-gradient) !important;
+}
+
+.donator-list div:hover span {
+  color: #000 !important;
+  font-weight: bold;
+}
+
+/* Navigation Styling (Simplified) */
+nav {
+  background: rgba(0, 0, 0, 0.9);
+  height: 80px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
   background: var(--primary-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 nav ul {
-  float: right;
-  margin-right: 5%;
-}
-
-nav ul li {
-  display: inline-block;
-  line-height: 80px;
-  margin: 0 15px;
+  display: flex;
+  list-style: none;
 }
 
 nav ul li a {
   color: white;
-  font-size: 16px;
-  font-family: "Montserrat", sans-serif;
-  padding: 7px 13px;
-  transition: 0.3s;
-}
-
-nav a::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: 15px;
-  transform: translateX(-50%);
-  width: 0%;
-  height: 3px;
-  background: var(--primary-gradient);
-  transition: 0.3s ease-in-out;
-  border-radius: 50px;
-  visibility: hidden;
-}
-
-nav a.active::after,
-nav a:hover::after {
-  width: 70%;
-  visibility: visible;
-}
-
-/* --- BUTTONS --- */
-.button {
-  display: inline-block;
-  text-align: center;
-  background: var(--primary-gradient);
-  font-size: 0.95rem;
-  font-weight: 700;
-  padding: 12px 35px;
-  color: #000 !important;
-  cursor: pointer;
-  border-radius: 50px;
   text-decoration: none;
-  transition: transform 0.2s, box-shadow 0.2s;
-  border: none;
-}
-
-.button:hover {
-  background: var(--hover-gradient);
-  transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(46, 204, 113, 0.3);
-}
-
-/* --- HEADER --- */
-.header h1 {
-  font-family: "Plus Jakarta Sans", sans-serif;
-  margin: 150px 0 0 5%;
-  color: #fff;
-  font-weight: 800;
-  font-size: 3rem;
-}
-
-.header p {
-  color: #dcd9d9;
-  margin: 20px 5% 40px 5%;
-  max-width: 600px;
-  line-height: 1.6;
-}
-
-/* --- COIN CARD (TAMBAHAN) --- */
-/* Agar list coin kamu juga senada */
-.coin {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(46, 204, 113, 0.2);
-  border-radius: 20px;
-  padding: 20px;
+  padding: 10px 20px;
+  margin: 0 5px;
+  border-radius: 5px;
   transition: 0.3s;
-  cursor: pointer;
-  text-align: center;
 }
 
-.coin:hover {
-  border-color: #f1c40f;
-  background: rgba(46, 204, 113, 0.1);
-  transform: scale(1.05);
-}
-
-.discounted-price {
-    color: #f1c40f !important; /* Warna kuning untuk harga diskon */
-}
-
-/* --- SCROLLBAR --- */
-::-webkit-scrollbar {
-  width: 8px;
-  background-color: #1e1e29;
-}
-
-::-webkit-scrollbar-thumb {
+nav ul li a:hover {
   background: var(--primary-gradient);
-  border-radius: 50px;
+  color: black !important;
 }
 
-/* --- MOBILE RESPONSIVE --- */
-@media (max-width: 860px) {
-  .checkbtn {
-    display: block;
-    color: #2ecc71;
-    float: right;
-    margin-right: 30px;
-    line-height: 80px;
-  }
+/* Footer */
+.footer {
+  border-top: 1px solid var(--glass-border);
+  color: #777;
+}
 
-  nav ul {
-    background: rgba(30, 30, 41, 0.98);
-    position: fixed;
-    width: 100%;
-    height: 100vh;
-    top: 80px;
-    left: -100%;
-    text-align: center;
-    transition: all 0.5s;
-    float: none;
-  }
-
-  #check:checked ~ ul {
-    left: 0;
-  }
+/* Responsive */
+@media (max-width: 768px) {
+  .header h1 { font-size: 2rem; }
+  nav ul { display: none; } /* Sesuaikan dengan logic checkbox menu anda */
 }
