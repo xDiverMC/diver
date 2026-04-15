@@ -1,156 +1,146 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en" dir="ltr">
+
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="utf-8" />
+  <title>Arvenia Network - Ranks & Permissions Store</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Arvenia Network | Home</title>
-  
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  
-  <link rel="stylesheet" href="template.css" />
-  <link rel="stylesheet" href="home.css" />
-
-  <meta property="og:title" content="Arvenia Network">
-  <meta property="og:description" content="Official Website Arvenia Network Minecraft Server.">
+  <link rel="icon" href="./assets/img/image.png">
+  <link rel="stylesheet" href="./assets/style/style.css" />
+  <meta name="discount" content="0.40" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <meta property="og:title" content="Arvenia Network - Ranks Store">
+  <meta property="og:description" content="Purchase exclusive ranks and permissions on Arvenia Network. Unlock VIP features and enhance your gameplay experience.">
+  <meta property="og:image" content="https://media.discordapp.net/attachments/1135145482797207622/1218410978610511872/image.png">
+  <meta property="og:url" content="https://store.arvenianetwork.com/">
 </head>
+
 <body>
-
-  <div class="bg-layer">
-    <div class="bg-grid"></div>
-    <div id="particles"></div>
-  </div>
-
-  <nav>
-    <a href="index.html" class="nav-logo">
-      <span class="logo-icon">⛏️</span>
-      &aArvenia Network
-    </a>
-
-    <input type="checkbox" id="check">
-    <label for="check" class="hamburger" id="hamburgerBtn">
-      <span></span><span></span><span></span>
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <input type="checkbox" id="check" />
+    <label for="check" class="checkbtn">
+      <img src="./assets/img/button.svg" alt="Menu" />
     </label>
-
-    <ul class="nav-links">
-      <li><a href="index.html" class="active">&fHome</a></li>
-      <li><a href="ranks.html">&bRanks</a></li>
-      <li><a href="keys.html">&6Keys</a></li>
-      <li><a href="support.html">&dSupport</a></li>
+    <label class="logo">Arvenia Network Store</label>
+    <ul class="nav-menu">
+      <li><a class="active" href="#">Home</a></li>
+      <li><a href="#ranks">Ranks</a></li>
+      <li><a href="https://discord.gg/arvenianetwork">Discord Server</a></li>
     </ul>
   </nav>
 
-  <main class="container">
+  <!-- Hero Section -->
+  <div class="header">
+    <div class="header-content">
+      <h1 id="playerName">Welcome, Player</h1>
+      <p>Purchase exclusive ranks and unlock premium features on Arvenia Network with LuckPerms permissions</p>
+      <div class="button-group">
+        <button class="button button-primary" id="logout">Change Account</button>
+      </div>
+    </div>
+    <div class="banner"></div>
+  </div>
+
+  <!-- Ranks Section -->
+  <div class="container">
+    <h2 class="section-title">Available Ranks</h2>
+    <p class="section-subtitle">Choose a rank and enhance your gameplay experience</p>
     
-    <section class="hero">
-      <div class="hero-badge"><span class="dot"></span>&aServer Online</div>
-      <h1>&fArvenia Network</h1>
-      <p>&7Jelajahi petualangan medieval yang majestic. Bergabunglah dengan ribuan pemain lainnya di dunia Arvenia!</p>
-      <div class="hero-actions">
-        <a href="ranks.html" class="btn-primary">🛒 Beli Ranks</a>
-        <a href="#server-status" class="btn-secondary">📡 Info Server</a>
-      </div>
-    </section>
-
-    <section class="status-bar" id="server-status">
-      <div class="status-item">
-        <div class="status-icon green">📡</div>
-        <div>
-          <div class="status-label">&7Server Address</div>
-          <div class="status-value" id="serverIP">&fplay.arvenia.xyz</div>
-        </div>
-        <button class="copy-ip-btn" onclick="copyIP()">Salin</button>
-      </div>
-      
-      <div class="status-divider"></div>
-
-      <div class="status-item">
-        <div class="status-icon yellow">👥</div>
-        <div>
-          <div class="status-label">&7Pemain Online</div>
-          <div class="status-value">
-            <span class="online-dot"></span>
-            <span class="player-count">&e124</span> &f/ 500
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <div class="section-header">
-      <h2 class="section-title">&e📢 Announcement</h2>
-    </div>
-    <div class="info-card">
-      <p>&fUpdate Season baru telah tiba! Nikmati map baru dan sistem ekonomi yang lebih seimbang. Jangan lupa cek &bRanks &fbaru di store!</p>
-      <small style="color: var(--text-muted);">&7Diposting pada: 15 April 2026</small>
-    </div>
-
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 40px;">
-      
-      <div class="features-section">
-        <h2 class="section-title">&b✨ Fitur Server</h2>
-        <ul style="margin-top: 15px;">
-          <li class="stat-card">
-            <span class="stat-card-icon">⚔️</span>
-            <strong>&aCustom Items & Weapons</strong>
-            <p style="font-size: 0.8rem; color: var(--text-muted);">Senjata unik dengan skill spesial.</p>
-          </li>
-          <li class="stat-card">
-            <span class="stat-card-icon">🏰</span>
-            <strong>&aKingdom System</strong>
-            <p style="font-size: 0.8rem; color: var(--text-muted);">Bangun kerajaanmu dan kuasai wilayah.</p>
-          </li>
+    <div class="rank-grid">
+      <!-- Rank Cards -->
+      <div class="rank-card" data-price="5000">
+        <div class="rank-badge">Bronze</div>
+        <h3>Starter Pack</h3>
+        <ul class="rank-features">
+          <li>✓ Color codes in chat</li>
+          <li>✓ Increased pet limit</li>
+          <li>✓ Special prefix</li>
         </ul>
+        <div class="rank-price"><p></p></div>
+        <button class="buy-btn">Purchase Now</button>
       </div>
 
-      <div class="donator-section">
-        <h2 class="section-title">&d🏆 Top Donators</h2>
-        <div class="donator-grid" style="grid-template-columns: 1fr; margin-top: 15px;">
-          <div class="donatur-card rank-1">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <span>&e1. &fPlayer_Sultan</span>
-              <span style="color: var(--yellow-warm); font-weight: bold;">Rp 500.000</span>
-            </div>
-          </div>
-          <div class="donatur-card">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <span>&72. &fRaja_Mining</span>
-              <span style="color: var(--green-glow);">Rp 250.000</span>
-            </div>
-          </div>
-          <div class="donatur-card">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <span>&63. &fKsatria_Arvenia</span>
-              <span style="color: var(--green-glow);">Rp 100.000</span>
-            </div>
-          </div>
-        </div>
+      <div class="rank-card" data-price="10000">
+        <div class="rank-badge">Silver</div>
+        <h3>Silver Rank</h3>
+        <ul class="rank-features">
+          <li>✓ All Bronze features</li>
+          <li>✓ Ability to create warps</li>
+          <li>✓ Priority support</li>
+          <li>✓ 1.5x rewards</li>
+        </ul>
+        <div class="rank-price"><p></p></div>
+        <button class="buy-btn">Purchase Now</button>
       </div>
 
+      <div class="rank-card featured" data-price="25000">
+        <div class="rank-badge featured-badge">Gold ★</div>
+        <h3>Gold Rank</h3>
+        <p class="popular-badge">Most Popular</p>
+        <ul class="rank-features">
+          <li>✓ All Silver features</li>
+          <li>✓ Particle effects</li>
+          <li>✓ Custom head items</li>
+          <li>✓ 2x rewards</li>
+          <li>✓ 32 player homes</li>
+        </ul>
+        <div class="rank-price"><p></p></div>
+        <button class="buy-btn">Purchase Now</button>
+      </div>
+
+      <div class="rank-card" data-price="50000">
+        <div class="rank-badge">Emerald</div>
+        <h3>Emerald Rank</h3>
+        <ul class="rank-features">
+          <li>✓ All Gold features</li>
+          <li>✓ Custom effects</li>
+          <li>✓ VIP lounge access</li>
+          <li>✓ 3x rewards</li>
+          <li>✓ 64 player homes</li>
+        </ul>
+        <div class="rank-price"><p></p></div>
+        <button class="buy-btn">Purchase Now</button>
+      </div>
+
+      <div class="rank-card" data-price="100000">
+        <div class="rank-badge">Diamond</div>
+        <h3>Diamond Rank</h3>
+        <ul class="rank-features">
+          <li>✓ All Emerald features</li>
+          <li>✓ Custom enchant glow</li>
+          <li>✓ Exclusive cosmetics</li>
+          <li>✓ 5x rewards</li>
+          <li>✓ 128 player homes</li>
+        </ul>
+        <div class="rank-price"><p></p></div>
+        <button class="buy-btn">Purchase Now</button>
+      </div>
+
+      <div class="rank-card elite" data-price="150000">
+        <div class="rank-badge elite-badge">Elite</div>
+        <h3>Elite Rank</h3>
+        <p class="vip-badge">Ultimate VIP</p>
+        <ul class="rank-features">
+          <li>✓ All Diamond features</li>
+          <li>✓ Staff-only cosmetics</li>
+          <li>✓ Priority queue</li>
+          <li>✓ 10x rewards</li>
+          <li>✓ Unlimited homes</li>
+          <li>✓ Custom rank name</li>
+        </ul>
+        <div class="rank-price"><p></p></div>
+        <button class="buy-btn">Purchase Now</button>
+      </div>
     </div>
+  </div>
 
-  </main>
-
+  <!-- Footer -->
   <footer class="footer">
-    <p>&copy; 2026 <strong>Arvenia Network</strong>. All rights reserved.</p>
+    <p>&copy; 2026 Arvenia Network. All rights reserved. | <a href="https://discord.gg/arvenianetwork">Join our Discord</a></p>
   </footer>
 
-  <div class="toast" id="copyToast">IP Berhasil disalin!</div>
-
-  <script>
-    function copyIP() {
-      const ip = "play.arvenia.xyz";
-      navigator.clipboard.writeText(ip);
-      
-      const toast = document.getElementById('copyToast');
-      toast.classList.add('show');
-      
-      const btn = document.querySelector('.copy-ip-btn');
-      btn.innerText = 'Tersalin!';
-
-      setTimeout(() => {
-        toast.classList.remove('show');
-        btn.innerText = 'Salin';
-      }, 2000);
-    }
-  </script>
+  <script src="./assets/js/home.js"></script>
 </body>
 </html>
