@@ -6,15 +6,20 @@
   <title>Topup Credits Arvenia Network</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="image.png">
-  <link rel="stylesheet" href="home.css" />
+  
   <link rel="stylesheet" href="template.css" />
+  <link rel="stylesheet" href="home.css" />
+  
   <meta name="discount" content="0.40" />
+  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <meta property="og:title" content="Topup Credits Arvenia">
   <meta property="og:description" content="Website untuk topup Credits di server Minecraft Arvenia.">
   <meta property="og:image" content="https://media.discordapp.net/attachments/1135145482797207622/1218410978610511872/image.png">
   <meta property="og:url" content="https://store.arvenia.xyz/">
+
   <style>
     .coin-price {
       text-align: center;
@@ -24,12 +29,16 @@
       text-decoration: line-through;
       color: #ff0101;
       display: block;
-      font-size: 16px;
+      font-size: 14px;
     }
     .coin-price .discounted-price {
       font-weight: bold;
-      font-size: 25px;
-      color: #000;
+      font-size: 22px;
+      color: #2ecc71; /* Warna hijau biar terlihat premium */
+    }
+    /* Sembunyikan iframe jika tidak diperlukan langsung */
+    #trIframe {
+      display: none;
     }
   </style>
 </head>
@@ -38,47 +47,55 @@
   <nav>
     <input type="checkbox" id="check" />
     <label for="check" class="checkbtn">
-      <img src="./assets/img/button.svg" />
+      <img src="assets/img/button.svg" alt="menu" />
     </label>
-    <label class="logo">Yez Craft Topup</label>
+    <label class="logo">Arvenia Topup</label>
     <ul>
       <li><a class="active" href="#">Home</a></li>
-      <li><a href="https://discord.gg/arvenia">Discord Server</a></li>
+      <li><a href="https://discord.gg/arvenia" target="_blank">Discord Server</a></li>
     </ul>
   </nav>
 
   <div class="header">
     <div class="text">
-      <h1 id="playerName">No Account.</h1>
-      <p>Selamat datang di website Topup arvenia. Klik tombol di bawah jika ingin mengganti akun</p>
+      <h1 id="playerName">Loading...</h1>
+      <p>Selamat datang di website Topup Arvenia. Klik tombol di bawah jika ingin mengganti akun.</p>
       <div class="logout">
-        <a class="button" id="logout">Log out</a>
+        <button class="button" id="logoutBtn" style="cursor:pointer;">Log out</button>
       </div>
     </div>
     <div class="banner"></div>
   </div>
 
-  <iframe id="trIframe" src="https://trakteer.id/arvenia/tip"></iframe>
-
   <div class="container">
-    <div class="coin-list">
-      <div class="coin" data-price="5000"><p><b>500</b><br>Credits in game</p><div class="coin-price"><p></p></div></div>
-      <div class="coin" data-price="10000"><p><b>1K</b><br>Credits in game</p><div class="coin-price"><p></p></div></div>
-      <div class="coin" data-price="25000"><p><b>2.50K</b><br>Credits in game</p><div class="coin-price"><p></p></div></div>
-      <div class="coin" data-price="50000"><p><b>5K</b><br>Credits in game</p><div class="coin-price"><p></p></div></div>
-      <div class="coin" data-price="100000"><p><b>10K</b><br>Credits in game</p><div class="coin-price"><p></p></div></div>
-      <div class="coin" data-price="150000"><p><b>15K</b><br>Credits in game</p><div class="coin-price"><p></p></div></div>
-      <div class="coin" data-price="200000"><p><b>20K</b><br>Credits in game</p><div class="coin-price"><p></p></div></div>
-      <div class="coin" data-price="500000"><p><b>50K</b><br>Credits in game</p><div class="coin-price"><p></p></div></div>
-      <div class="coin" data-price="1000000"><p><b>100K</b><br>Credits in game</p><div class="coin-price"><p></p></div></div>
+    <div class="coin-list" id="coinList">
+      <div class="coin" data-price="5000">
+        <p><b>500</b><br>Credits</p>
+        <div class="coin-price"></div>
+      </div>
+      <div class="coin" data-price="10000">
+        <p><b>1K</b><br>Credits</p>
+        <div class="coin-price"></div>
+      </div>
+      <div class="coin" data-price="25000">
+        <p><b>2.5K</b><br>Credits</p>
+        <div class="coin-price"></div>
+      </div>
+      <div class="coin" data-price="50000">
+        <p><b>5K</b><br>Credits</p>
+        <div class="coin-price"></div>
+      </div>
+      <div class="coin" data-price="100000">
+        <p><b>10K</b><br>Credits</p>
+        <div class="coin-price"></div>
+      </div>
     </div>
   </div>
 
   <footer class="footer">
-    <p id="cntl">&copy; <a href="https://discord.arvenia.xyz">2023 YezCraft Studio. All rights reserved.</a></p>
+    <p>&copy; 2026 Arvenia Network. All rights reserved.</p>
   </footer>
 
-  <!-- semua logika dipindah ke home.js -->
   <script src="home.js"></script>
 </body>
 </html>
