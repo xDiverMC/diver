@@ -1,0 +1,1896 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arvenia - Crate Keys Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #8B5CF6;
+            --primary-dark: #7C3AED;
+            --primary-light: #A78BFA;
+            --secondary: #10B981;
+            --accent: #F59E0B;
+            --dark: #0F0A1A;
+            --dark-2: #1A1128;
+            --dark-3: #251A3A;
+            --text: #E2E8F0;
+            --text-muted: #94A3B8;
+            --glow-purple: rgba(139, 92, 246, 0.4);
+            --glow-green: rgba(16, 185, 129, 0.4);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        /* ===== PARTICLES BACKGROUND ===== */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: var(--primary-light);
+            border-radius: 50%;
+            animation: floatParticle linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes floatParticle {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 15px 0;
+            transition: all 0.4s ease;
+            background: transparent;
+        }
+
+        .navbar.scrolled {
+            background: rgba(15, 10, 26, 0.95);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 4px 30px rgba(139, 92, 246, 0.15);
+            padding: 10px 0;
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .nav-logo-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            transform: rotate(-5deg);
+            box-shadow: 0 4px 15px var(--glow-purple);
+        }
+
+        .nav-logo-icon img {
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+            object-fit: cover;
+        }
+
+        .nav-logo-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 14px;
+            padding: 8px 18px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #fff;
+            background: rgba(139, 92, 246, 0.15);
+        }
+
+        .nav-links a.active {
+            color: #fff;
+            background: rgba(139, 92, 246, 0.2);
+        }
+
+        .nav-store-links {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .nav-store-links a {
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .store-link-ranks {
+            color: var(--accent);
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+        .store-link-ranks:hover {
+            background: rgba(245, 158, 11, 0.2);
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.2);
+        }
+
+        .store-link-keys {
+            color: #38BDF8;
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+        }
+        .store-link-keys:hover {
+            background: rgba(56, 189, 248, 0.2);
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+        }
+
+        .store-link-bundle {
+            color: var(--secondary);
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+        .store-link-bundle:hover {
+            background: rgba(16, 185, 129, 0.2);
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
+        }
+
+        .store-link-support {
+            color: #F472B6;
+            background: rgba(244, 114, 182, 0.1);
+            border: 1px solid rgba(244, 114, 182, 0.2);
+        }
+        .store-link-support:hover {
+            background: rgba(244, 114, 182, 0.2);
+            box-shadow: 0 0 20px rgba(244, 114, 182, 0.2);
+        }
+
+        /* Mobile Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 5px;
+        }
+
+        .hamburger span {
+            width: 28px;
+            height: 3px;
+            background: var(--text);
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(15, 10, 26, 0.98);
+            backdrop-filter: blur(20px);
+            z-index: 999;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            text-decoration: none;
+            color: var(--text);
+            font-size: 20px;
+            font-weight: 600;
+            padding: 12px 30px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu a:hover {
+            background: rgba(139, 92, 246, 0.2);
+            color: var(--primary-light);
+        }
+
+        .mobile-close {
+            position: absolute;
+            top: 25px;
+            right: 30px;
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 32px;
+            cursor: pointer;
+        }
+
+        /* ===== SECTION STYLES ===== */
+        .section {
+            padding: 100px 30px;
+            position: relative;
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary-light);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(28px, 4vw, 42px);
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+
+        .section-subtitle {
+            font-size: 16px;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        /* ===== HERO PAGE HEADER ===== */
+        .page-hero {
+            min-height: 45vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 140px 30px 60px;
+            overflow: hidden;
+        }
+
+        .page-hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 30% 50%, rgba(56, 189, 248, 0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 50%, rgba(139, 92, 246, 0.1) 0%, transparent 60%),
+                radial-gradient(ellipse at 50% 0%, rgba(56, 189, 248, 0.08) 0%, transparent 50%);
+        }
+
+        .page-hero-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(56, 189, 248, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(56, 189, 248, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+        .page-hero-content {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            max-width: 700px;
+        }
+
+        .page-hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(56, 189, 248, 0.15);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #38BDF8;
+            margin-bottom: 20px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .page-hero-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(36px, 6vw, 60px);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 16px;
+            animation: fadeInUp 1s ease;
+        }
+
+        .page-hero-title .gradient-text-keys {
+            background: linear-gradient(135deg, #38BDF8, #fff, var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-hero-subtitle {
+            font-size: 17px;
+            color: var(--text-muted);
+            max-width: 520px;
+            margin: 0 auto 25px;
+            line-height: 1.7;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 14px;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+
+        .breadcrumb a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .breadcrumb a:hover {
+            color: #38BDF8;
+        }
+
+        .breadcrumb .separator {
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        .breadcrumb .current {
+            color: #38BDF8;
+            font-weight: 600;
+        }
+
+        /* ===== KEYS PRICELIST SECTION ===== */
+        .keys-section {
+            background: linear-gradient(180deg, transparent, rgba(56, 189, 248, 0.03), transparent);
+        }
+
+        .keys-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .key-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 28px;
+            padding: 40px 35px;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .key-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            border-radius: 28px 28px 0 0;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .key-card:hover::before {
+            opacity: 1;
+        }
+
+        .key-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Legendary Card Styles */
+        .key-card.legendary {
+            border-color: rgba(245, 158, 11, 0.2);
+        }
+
+        .key-card.legendary:hover {
+            border-color: rgba(245, 158, 11, 0.4);
+            box-shadow: 0 25px 60px rgba(245, 158, 11, 0.1);
+        }
+
+        .key-card.legendary::before {
+            background: linear-gradient(90deg, var(--accent), #F97316, var(--accent));
+        }
+
+        /* Premium+ Card Styles */
+        .key-card.premium-plus {
+            border-color: rgba(139, 92, 246, 0.3);
+        }
+
+        .key-card.premium-plus:hover {
+            border-color: rgba(139, 92, 246, 0.5);
+            box-shadow: 0 25px 60px rgba(139, 92, 246, 0.15);
+        }
+
+        .key-card.premium-plus::before {
+            background: linear-gradient(90deg, var(--primary-light), #EC4899, var(--primary-light));
+        }
+
+        .key-card-badge {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            padding: 5px 14px;
+            border-radius: 50px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .key-card-badge.legendary-badge {
+            background: linear-gradient(135deg, var(--accent), #F97316);
+        }
+
+        .key-card-badge.premium-badge {
+            background: linear-gradient(135deg, var(--primary), #EC4899);
+        }
+
+        .key-icon {
+            width: 90px;
+            height: 90px;
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 42px;
+            margin: 0 auto 24px;
+            position: relative;
+        }
+
+        .key-icon.legendary-icon {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(245, 158, 11, 0.05));
+            box-shadow: 0 8px 30px rgba(245, 158, 11, 0.15);
+        }
+
+        .key-icon.premium-icon {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(236, 72, 153, 0.1));
+            box-shadow: 0 8px 30px rgba(139, 92, 246, 0.15);
+        }
+
+        .key-icon .icon-glow {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 24px;
+            animation: iconPulse 3s ease-in-out infinite;
+        }
+
+        .key-icon.legendary-icon .icon-glow {
+            box-shadow: 0 0 40px rgba(245, 158, 11, 0.2);
+        }
+
+        .key-icon.premium-icon .icon-glow {
+            box-shadow: 0 0 40px rgba(139, 92, 246, 0.2);
+        }
+
+        @keyframes iconPulse {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+
+        .key-card h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .key-card h3.legendary-title {
+            background: linear-gradient(135deg, var(--accent), #FCD34D);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .key-card h3.premium-title {
+            background: linear-gradient(135deg, var(--primary-light), #F472B6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .key-card .key-desc {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        /* Pricelist Table */
+        .pricelist {
+            width: 100%;
+            margin: 20px 0;
+            border-collapse: separate;
+            border-spacing: 0 6px;
+        }
+
+        .pricelist-header {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .pricelist-header th {
+            padding: 12px 16px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+            text-align: left;
+        }
+
+        .pricelist-header th:first-child {
+            border-radius: 10px 0 0 10px;
+        }
+
+        .pricelist-header th:last-child {
+            border-radius: 0 10px 10px 0;
+            text-align: right;
+        }
+
+        .pricelist-row {
+            background: rgba(255, 255, 255, 0.02);
+            transition: all 0.3s ease;
+        }
+
+        .pricelist-row:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .pricelist-row td {
+            padding: 14px 16px;
+            font-size: 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .pricelist-row td:first-child {
+            border-radius: 10px 0 0 10px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pricelist-row td:last-child {
+            border-radius: 0 10px 10px 0;
+            text-align: right;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .pricelist-row td:last-child.legendary-price {
+            color: var(--accent);
+        }
+
+        .pricelist-row td:last-child.premium-price {
+            color: var(--primary-light);
+        }
+
+        .qty-badge {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .best-value {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.05));
+            border: 1px solid rgba(16, 185, 129, 0.2) !important;
+        }
+
+        .best-value td:first-child::after {
+            content: 'BEST VALUE';
+            margin-left: 8px;
+            background: linear-gradient(135deg, var(--secondary), #059669);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 9px;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: 0.5px;
+        }
+
+        /* Key Features List */
+        .key-features {
+            list-style: none;
+            text-align: left;
+            margin: 25px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .key-features-title {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .key-features li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            font-size: 14px;
+            color: var(--text-muted);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .key-features li:last-child {
+            border-bottom: none;
+        }
+
+        .key-features li i {
+            font-size: 12px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .key-features li i.legendary-check {
+            color: var(--accent);
+        }
+
+        .key-features li i.premium-check {
+            color: var(--primary-light);
+        }
+
+        .btn-buy-key {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-buy-legendary {
+            background: linear-gradient(135deg, var(--accent), #F97316);
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.25);
+        }
+
+        .btn-buy-legendary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(245, 158, 11, 0.35);
+        }
+
+        .btn-buy-premium {
+            background: linear-gradient(135deg, var(--primary), #EC4899);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.25);
+        }
+
+        .btn-buy-premium:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(139, 92, 246, 0.35);
+        }
+
+        /* ===== HOW TO BUY SECTION ===== */
+        .how-to-buy {
+            background: linear-gradient(180deg, transparent, rgba(139, 92, 246, 0.03), transparent);
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 24px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .step-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 20px;
+            padding: 30px 25px;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .step-card:hover {
+            border-color: rgba(56, 189, 248, 0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(56, 189, 248, 0.05));
+            border: 2px solid rgba(56, 189, 248, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 18px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 800;
+            font-size: 20px;
+            color: #38BDF8;
+        }
+
+        .step-card h3 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .step-card p {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* ===== LOOT TABLE PREVIEW ===== */
+        .loot-section {
+            background: linear-gradient(180deg, transparent, rgba(245, 158, 11, 0.02), transparent);
+        }
+
+        .loot-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .loot-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.4s ease;
+        }
+
+        .loot-card:hover {
+            border-color: rgba(255, 255, 255, 0.12);
+            transform: translateY(-5px);
+        }
+
+        .loot-card-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .loot-card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .loot-card-icon.legendary-loot {
+            background: rgba(245, 158, 11, 0.15);
+        }
+
+        .loot-card-icon.premium-loot {
+            background: rgba(139, 92, 246, 0.15);
+        }
+
+        .loot-card-header h3 {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .loot-card-header p {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .loot-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .loot-item:last-child {
+            border-bottom: none;
+        }
+
+        .loot-item-name {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+        }
+
+        .loot-item-name .loot-emoji {
+            font-size: 18px;
+        }
+
+        .loot-item-chance {
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        .chance-common {
+            background: rgba(148, 163, 184, 0.15);
+            color: #94A3B8;
+        }
+
+        .chance-rare {
+            background: rgba(56, 189, 248, 0.15);
+            color: #38BDF8;
+        }
+
+        .chance-epic {
+            background: rgba(139, 92, 246, 0.15);
+            color: var(--primary-light);
+        }
+
+        .chance-legendary {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--accent);
+        }
+
+        .chance-mythic {
+            background: rgba(236, 72, 153, 0.15);
+            color: #F472B6;
+        }
+
+        /* ===== FAQ SECTION ===== */
+        .faq {
+            background: linear-gradient(180deg, transparent, rgba(139, 92, 246, 0.03), transparent);
+        }
+
+        .faq-grid {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .faq-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            border-color: rgba(139, 92, 246, 0.2);
+        }
+
+        .faq-item.active {
+            border-color: rgba(139, 92, 246, 0.3);
+            box-shadow: 0 8px 30px rgba(139, 92, 246, 0.1);
+        }
+
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 22px 28px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .faq-question:hover {
+            color: var(--primary-light);
+        }
+
+        .faq-question i {
+            transition: transform 0.3s ease;
+            color: var(--primary-light);
+            font-size: 14px;
+        }
+
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 300px;
+        }
+
+        .faq-answer-content {
+            padding: 0 28px 22px;
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+
+        /* ===== CTA SECTION ===== */
+        .cta-section {
+            padding: 80px 30px;
+        }
+
+        .cta-box {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.12), rgba(139, 92, 246, 0.1));
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 30px;
+            padding: 60px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.04) 0%, transparent 70%);
+            animation: rotateBg 20s linear infinite;
+        }
+
+        @keyframes rotateBg {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .cta-box h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(26px, 4vw, 36px);
+            font-weight: 800;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .cta-box p {
+            font-size: 16px;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            position: relative;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 36px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #fff;
+            text-decoration: none;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 30px var(--glow-purple);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px var(--glow-purple);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 36px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary-light);
+            transform: translateY(-3px);
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 50px 30px 30px;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-brand .nav-logo {
+            margin-bottom: 15px;
+        }
+
+        .footer-brand p {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .footer-socials {
+            display: flex;
+            gap: 10px;
+        }
+
+        .footer-socials a {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-socials a:hover {
+            background: rgba(139, 92, 246, 0.2);
+            border-color: var(--primary);
+            color: var(--primary-light);
+            transform: translateY(-3px);
+        }
+
+        .footer-col h4 {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 18px;
+            color: #fff;
+        }
+
+        .footer-col a {
+            display: block;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            padding: 5px 0;
+            transition: all 0.3s ease;
+        }
+
+        .footer-col a:hover {
+            color: var(--primary-light);
+            padding-left: 5px;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .footer-bottom p {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .footer-bottom p span {
+            color: var(--primary-light);
+            font-weight: 600;
+        }
+
+        /* ===== SCROLL TO TOP ===== */
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+            border-radius: 14px;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 100;
+            box-shadow: 0 8px 25px var(--glow-purple);
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-top:hover {
+            transform: translateY(-3px);
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .nav-links, .nav-store-links {
+                display: none;
+            }
+            .hamburger {
+                display: flex;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .keys-grid {
+                grid-template-columns: 1fr;
+                max-width: 450px;
+            }
+            .steps-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .loot-grid {
+                grid-template-columns: 1fr;
+                max-width: 450px;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+            .pricelist-row td {
+                padding: 10px 10px;
+                font-size: 13px;
+            }
+            .pricelist-row td:last-child {
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== PARTICLES ===== -->
+    <div class="particles" id="particles"></div>
+
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <div class="nav-logo-icon">
+                    <img src="logo.png" alt="Logo Arvenia">
+                </div>
+                <span class="nav-logo-text">ARVENIA NETWORK</span>
+            </a>
+
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#features">Features</a></li>
+                <li><a href="index.html#store">Store</a></li>
+                <li><a href="index.html#faq">FAQ</a></li>
+            </ul>
+
+            <div class="nav-store-links">
+                <a href="ranks.html" class="store-link-ranks"><i class="fas fa-crown"></i> Ranks</a>
+                <a href="keys.html" class="store-link-keys" style="background:rgba(56,189,248,0.2);border-color:rgba(56,189,248,0.4);"><i class="fas fa-key"></i> Keys</a>
+                <a href="bundle.html" class="store-link-bundle"><i class="fas fa-box-open"></i> Bundle</a>
+                <a href="support.html" class="store-link-support"><i class="fas fa-heart"></i> Support</a>
+            </div>
+
+            <button class="hamburger" id="hamburger" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ===== MOBILE MENU ===== -->
+    <div class="mobile-menu" id="mobileMenu">
+        <button class="mobile-close" id="mobileClose">&times;</button>
+        <a href="index.html" onclick="closeMobile()">🏠 Home</a>
+        <a href="index.html#features" onclick="closeMobile()">⚡ Features</a>
+        <a href="index.html#store" onclick="closeMobile()">🛒 Store</a>
+        <a href="index.html#faq" onclick="closeMobile()">❓ FAQ</a>
+        <hr style="width:60%;border-color:rgba(255,255,255,0.1)">
+        <a href="ranks.html" onclick="closeMobile()">👑 Ranks</a>
+        <a href="keys.html" onclick="closeMobile()" style="color:#38BDF8;">🔑 Keys</a>
+        <a href="bundle.html" onclick="closeMobile()">📦 Bundle</a>
+        <a href="support.html" onclick="closeMobile()">💖 Support</a>
+    </div>
+
+    <!-- ===== PAGE HERO ===== -->
+    <section class="page-hero">
+        <div class="page-hero-bg"></div>
+        <div class="page-hero-grid"></div>
+        <div class="page-hero-content">
+            <div class="page-hero-badge">
+                <i class="fas fa-key"></i> Crate Keys Store
+            </div>
+            <h1 class="page-hero-title">
+                <span class="gradient-text-keys">CRATE KEYS</span>
+            </h1>
+            <p class="page-hero-subtitle">
+                Buka crate dan dapatkan item rare hingga mythical! Pilih key yang sesuai dengan kebutuhan dan budgetmu.
+            </p>
+            <div class="breadcrumb">
+                <a href="index.html"><i class="fas fa-home"></i> Home</a>
+                <span class="separator">/</span>
+                <a href="index.html#store">Store</a>
+                <span class="separator">/</span>
+                <span class="current">Crate Keys</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== KEYS PRICELIST ===== -->
+    <section class="section keys-section" id="keys">
+        <div class="section-container">
+            <div class="section-header fade-in">
+                <div class="section-tag"><i class="fas fa-key"></i> Pricelist</div>
+                <h2 class="section-title">Pilih Key Kamu</h2>
+                <p class="section-subtitle">Tersedia dalam berbagai jumlah dengan harga spesial. Semakin banyak beli, semakin hemat!</p>
+            </div>
+
+            <div class="keys-grid">
+                <!-- ===== LEGENDARY KEY ===== -->
+                <div class="key-card legendary fade-in">
+                    <div class="key-card-badge legendary-badge">⚡ LEGENDARY</div>
+                    <div class="key-icon legendary-icon">
+                        <div class="icon-glow"></div>
+                        🔑
+                    </div>
+                    <h3 class="legendary-title">LEGENDARY KEY</h3>
+                    <p class="key-desc">Buka Legendary Crate untuk item epic & legendary!</p>
+
+                    <table class="pricelist">
+                        <thead>
+                            <tr class="pricelist-header">
+                                <th>Jumlah</th>
+                                <th>Harga</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="pricelist-row">
+                                <td><span class="qty-badge">x1</span> 1 Key</td>
+                                <td class="legendary-price">Rp 5.000</td>
+                            </tr>
+                            <tr class="pricelist-row">
+                                <td><span class="qty-badge">x3</span> 3 Keys</td>
+                                <td class="legendary-price">Rp 13.000</td>
+                            </tr>
+                            <tr class="pricelist-row">
+                                <td><span class="qty-badge">x5</span> 5 Keys</td>
+                                <td class="legendary-price">Rp 20.000</td>
+                            </tr>
+                            <tr class="pricelist-row best-value">
+                                <td><span class="qty-badge">x10</span> 10 Keys</td>
+                                <td class="legendary-price">Rp 35.000</td>
+                            </tr>
+                            <tr class="pricelist-row">
+                                <td><span class="qty-badge">x25</span> 25 Keys</td>
+                                <td class="legendary-price">Rp 75.000</td>
+                            </tr>
+                            <tr class="pricelist-row">
+                                <td><span class="qty-badge">x50</span> 50 Keys</td>
+                                <td class="legendary-price">Rp 125.000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="key-features">
+                        <div class="key-features-title"><i class="fas fa-gift"></i> Possible Rewards</div>
+                        <li><i class="fas fa-check legendary-check"></i> Enchanted Diamond Gear Set</li>
+                        <li><i class="fas fa-check legendary-check"></i> Custom Enchant Books (Legendary)</li>
+                        <li><i class="fas fa-check legendary-check"></i> In-game Money (50K - 500K)</li>
+                        <li><i class="fas fa-check legendary-check"></i> Rare Cosmetic Items</li>
+                        <li><i class="fas fa-check legendary-check"></i> Spawner Eggs (Rare Types)</li>
+                        <li><i class="fas fa-check legendary-check"></i> Gacha Token Bundle</li>
+                    </div>
+
+                    <a href="https://wa.me/6281234567890?text=Halo%20admin!%20Saya%20ingin%20beli%20Legendary%20Key.%20IGN:%20" class="btn-buy-key btn-buy-legendary" target="_blank">
+                        <i class="fas fa-shopping-cart"></i> Beli Legendary Key
+                    </a>
+                </div>
+
+                <!-- ===== PREMIUM+ KEY ===== -->
+                <div class="key-card premium-plus fade-in">
+                    <div class="key-card-badge premium-badge">💎 PREMIUM+</div>
+                    <div class="key-icon premium-icon">
+                        <div class="icon-glow"></div>
+                        🗝️
+                    </div>
+                    <h3 class="premium-title">PREMIUM+ KEY</h3>
+                    <p class="key-desc">Key terbaik! Drop rate mythical & item exclusive terjamin.</p>
+
+                    <table class="pricelist">
+                        <thead>
+                            <tr class="pricelist-header">
+                                <th>Jumlah</th>
+                                <th>Harga</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="pricelist-row">
+                                <td><span class="qty-badge">x1</span> 1 Key</td>
+                                <td class="premium-price">Rp 10.000</td>
+                            </tr>
+                            <tr class="pricelist-row">
+                                <td><span class="qty-badge">x3</span> 3 Keys</td>
+                                <td class="premium-price">Rp 27.000</td>
+                            </tr>
+                            <tr class="pricelist-row">
+                                <td><span class="qty-badge">x5</span> 5 Keys</td>
+                                <td class="premium-price">Rp 42.000</td>
+                            </tr>
+                            <tr class="pricelist-row best-value">
+                                <td><span class="qty-badge">x10</span> 10 Keys</td>
+                                <td class="premium-price">Rp 75.000</td>
+                            </tr>
+                            <tr class="pricelist-row">
+                                <td><span class="qty-badge">x25</span> 25 Keys</td>
+                                <td class="premium-price">Rp 165.000</td>
+                            </tr>
+                            <tr class="pricelist-row">
+                                <td><span class="qty-badge">x50</span> 50 Keys</td>
+                                <td class="premium-price">Rp 280.000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="key-features">
+                        <div class="key-features-title"><i class="fas fa-gem"></i> Possible Rewards</div>
+                        <li><i class="fas fa-check premium-check"></i> Netherite Gear Set (Max Enchant)</li>
+                        <li><i class="fas fa-check premium-check"></i> Mythical Custom Enchant Books</li>
+                        <li><i class="fas fa-check premium-check"></i> In-game Money (200K - 2M)</li>
+                        <li><i class="fas fa-check premium-check"></i> Exclusive Cosmetic & Particle</li>
+                        <li><i class="fas fa-check premium-check"></i> Spawner Eggs (All Types)</li>
+                        <li><i class="fas fa-check premium-check"></i> Premium Gacha Token + Bonus Spin</li>
+                        <li><i class="fas fa-check premium-check"></i> Chance: Rank Upgrade Voucher!</li>
+                    </div>
+
+                    <a href="https://wa.me/6281234567890?text=Halo%20admin!%20Saya%20ingin%20beli%20Premium+%20Key.%20IGN:%20" class="btn-buy-key btn-buy-premium" target="_blank">
+                        <i class="fas fa-shopping-cart"></i> Beli Premium+ Key
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== LOOT TABLE PREVIEW ===== -->
+    <section class="section loot-section" id="loot">
+        <div class="section-container">
+            <div class="section-header fade-in">
+                <div class="section-tag"><i class="fas fa-dice-d20"></i> Loot Table</div>
+                <h2 class="section-title">Preview Drop Items</h2>
+                <p class="section-subtitle">Lihat kemungkinan item yang bisa kamu dapatkan dari setiap crate!</p>
+            </div>
+
+            <div class="loot-grid">
+                <!-- Legendary Loot -->
+                <div class="loot-card fade-in">
+                    <div class="loot-card-header">
+                        <div class="loot-card-icon legendary-loot">🔑</div>
+                        <div>
+                            <h3>Legendary Crate</h3>
+                            <p>Drop rate & possible rewards</p>
+                        </div>
+                    </div>
+                    <div class="loot-item">
+                        <div class="loot-item-name"><span class="loot-emoji">💰</span> In-game Money</div>
+                        <span class="loot-item-chance chance-common">30%</span>
+                    </div>
+                    <div class="loot-item">
+                        <div class="loot-item-name"><span class="loot-emoji">⚔️</span> Diamond Gear</div>
+                        <span class="loot-item-chance chance-rare">25%</span>
+                    </div>
+                    <div class="loot-item">
+                        <div class="loot-item-name"><span class="loot-emoji">📖</span> Custom Enchant Book</div>
+                        <span class="loot-item-chance chance-rare">20%</span>
+                    </div>
+                    <div class="loot-item">
+                        <div class="loot-item-name"><span class="loot-emoji">🥚</span> Rare Spawner Egg</div>
+                        <span class="loot-item-chance chance-epic">12%</span>
+                    </div>
+                    <div class="loot-item">
+                        <div class="loot-item-name"><span class="loot-emoji">✨</span> Rare Cosmetics</div>
+                        <span class="loot-item-chance chance-epic">8%</span>
+                    </div>
+                    <div class="loot-item">
+                        <div class="loot-item-name"><span class="loot-emoji">🎰</span> Gacha Token Bundle</div>
+                        <span class="loot-item-chance chance-legendary">5%</span>
+                    </div>
+                </div>
+
+                <!-- Premium+ Loot -->
+                <div class="loot-card fade-in">
+                    <div class="loot-card-header">
+                        <div class="loot-card-icon premium-loot">🗝️</div>
+                        <div>
+                            <h3>Premium+ Crate</h3>
+                            <p>Drop rate & possible rewards</p>
+                        </div>
+                    </div>
+                    <div class="loot-item">
+                        <div class="loot-item-name"><span class="loot-emoji">💎</span> Netherite Gear (Max)</div>
+                        <span class="loot-item-chance chance-rare">22%</span>
+                    </div>
+                    <div class="loot-item">
+                        <div class="loot-item-name"><span class="loot-emoji">📖</span> Mythical Enchant Book</div>
+                        <span class="loot-item-chance chance-epic">18%</span>
+                    </div>
+                    <div class="loot-item">
+                        <div class="loot-item-name"><span class="loot-emoji">💰</span> Mega Money Drop</div>
+                        <span class="loot-item-chance chance-common">20%</span>
+                    </div>
+                    <div class="loot-item">
+                        <div class="loot-item-name"><span class="loot-emoji">🥚</span> All Spawner Eggs</div>
+                        <span class="loot-item-chance chance-epic">15%</span>
+                    </div>
+                    <div class="loot-item">
+                        <div class="loot-item-name"><span class="loot-emoji">🌟</span> Exclusive Cosmetic & Particle</div>
+                        <span class="loot-item-chance chance-legendary">12%</span>
+                    </div>
+                    <div class="loot-item">
+                        <div class="loot-item-name"><span class="loot-emoji">🎰</span> Premium Gacha + Bonus Spin</div>
+                        <span class="loot-item-chance chance-legendary">8%</span>
+                    </div>
+                    <div class="loot-item">
+                        <div class="loot-item-name"><span class="loot-emoji">👑</span> Rank Upgrade Voucher</div>
+                        <span class="loot-item-chance chance-mythic">5%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== HOW TO BUY ===== -->
+    <section class="section how-to-buy" id="how">
+        <div class="section-container">
+            <div class="section-header fade-in">
+                <div class="section-tag"><i class="fas fa-cart-shopping"></i> How To Buy</div>
+                <h2 class="section-title">Cara Pembelian</h2>
+                <p class="section-subtitle">Proses pembelian mudah dan cepat! Ikuti langkah berikut ini.</p>
+            </div>
+
+            <div class="steps-grid">
+                <div class="step-card fade-in">
+                    <div class="step-number">1</div>
+                    <h3>Pilih Key</h3>
+                    <p>Pilih jenis key dan jumlah yang ingin kamu beli dari pricelist di atas.</p>
+                </div>
+                <div class="step-card fade-in">
+                    <div class="step-number">2</div>
+                    <h3>Hubungi Admin</h3>
+                    <p>Klik tombol beli dan kamu akan diarahkan ke WhatsApp admin. Kirimkan IGN kamu.</p>
+                </div>
+                <div class="step-card fade-in">
+                    <div class="step-number">3</div>
+                    <h3>Pembayaran</h3>
+                    <p>Lakukan pembayaran via QRIS, Dana, GoPay, atau transfer bank yang tersedia.</p>
+                </div>
+                <div class="step-card fade-in">
+                    <div class="step-number">4</div>
+                    <h3>Terima Key! 🎉</h3>
+                    <p>Setelah konfirmasi, key langsung dikirim ke akun in-game kamu. Siap buka crate!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FAQ KEYS ===== -->
+    <section class="section faq" id="faq-keys">
+        <div class="section-container">
+            <div class="section-header fade-in">
+                <div class="section-tag"><i class="fas fa-circle-question"></i> FAQ</div>
+                <h2 class="section-title">Pertanyaan Seputar Keys</h2>
+                <p class="section-subtitle">Jawaban untuk pertanyaan yang sering ditanyakan tentang crate keys</p>
+            </div>
+            <div class="faq-grid">
+                <div class="faq-item fade-in">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>🔑 Apa perbedaan Legendary Key dan Premium+ Key?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <strong>Legendary Key</strong> membuka Legendary Crate yang berisi item epic & legendary seperti diamond gear, custom enchant books, dan spawner eggs. <strong>Premium+ Key</strong> membuka Premium+ Crate yang punya drop rate lebih tinggi untuk item mythical, netherite gear max enchant, dan bahkan chance untuk dapat rank upgrade voucher!
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item fade-in">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>📦 Dimana lokasi crate di server?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Crate terletak di <strong>Spawn Area</strong>! Ketik <code>/spawn</code> lalu cari area "Crate Zone" yang ada di dekat spawn point. Kamu tinggal klik kanan crate menggunakan key yang sesuai untuk membukanya.
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item fade-in">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>⏰ Berapa lama proses pengiriman key?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Setelah pembayaran dikonfirmasi, key akan langsung dikirim ke akun in-game kamu dalam <strong>waktu 1-15 menit</strong>. Pastikan kamu <strong>sedang online</strong> di server saat pembelian agar key bisa langsung diterima. Jika sedang offline, key akan masuk saat kamu login.
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item fade-in">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>💳 Metode pembayaran apa saja yang tersedia?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Kami menerima pembayaran melalui <strong>QRIS (semua e-wallet)</strong>, <strong>Dana</strong>, <strong>GoPay</strong>, <strong>OVO</strong>, <strong>ShopeePay</strong>, dan <strong>Transfer Bank (BCA, BRI, Mandiri, BNI)</strong>. Hubungi admin untuk informasi rekening dan pembayaran.
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item fade-in">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>🔄 Apakah bisa refund setelah membeli key?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Key yang sudah dibeli <strong>tidak dapat di-refund</strong> karena merupakan item digital. Namun jika terjadi masalah teknis dimana key tidak masuk ke akun kamu, silakan hubungi admin dan kami akan membantu menyelesaikannya. Kami menjamin setiap transaksi yang valid akan dilayani dengan baik.
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item fade-in">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>🎁 Apakah ada promo atau diskon untuk pembelian key?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Tentu! Semakin banyak key yang kamu beli, semakin murah harga per key-nya (lihat pricelist "BEST VALUE"). Selain itu, kami sering mengadakan <strong>promo spesial</strong> di Discord dan event tertentu. Follow Discord server kami untuk mendapatkan info promo terbaru!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CTA SECTION ===== -->
+    <section class="cta-section">
+        <div class="cta-box fade-in">
+            <h2>Siap Coba Keberuntunganmu? 🎰</h2>
+            <p>Beli key sekarang dan buka crate untuk mendapatkan item legendaris! Jangan sampai kehabisan.</p>
+            <div class="cta-buttons">
+                <a href="https://wa.me/6281234567890?text=Halo%20admin!%20Saya%20ingin%20beli%20Crate%20Key.%20IGN:%20" target="_blank" class="btn-primary">
+                    <i class="fas fa-shopping-cart"></i> Beli Key Sekarang
+                </a>
+                <a href="index.html" class="btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Kembali ke Home
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="nav-logo">
+                        <div class="nav-logo-icon">
+                            <img src="logo.png" alt="Logo Arvenia">
+                        </div>
+                        <span class="nav-logo-text">ARVENIA NETWORK</span>
+                    </a>
+                    <p>Server Minecraft Indonesia terbaik dengan fitur lengkap dan komunitas yang friendly. Join sekarang dan mulai petualanganmu!</p>
+                    <div class="footer-socials">
+                        <a href="#" aria-label="Discord"><i class="fab fa-discord"></i></a>
+                        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <a href="index.html">Home</a>
+                    <a href="index.html#features">Features</a>
+                    <a href="index.html#store">Store</a>
+                    <a href="index.html#faq">FAQ</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Store</h4>
+                    <a href="ranks.html">Ranks</a>
+                    <a href="keys.html" style="color:#38BDF8;">Crate Keys</a>
+                    <a href="bundle.html">Bundle Pack</a>
+                    <a href="support.html">Support Us</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <a href="#">Discord Server</a>
+                    <a href="#">Rules & Guidelines</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Refund Policy</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 <span>Arvenia</span>. All rights reserved.</p>
+                <p>Not affiliated with Mojang Studios.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ===== SCROLL TO TOP ===== -->
+    <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- ===== JAVASCRIPT ===== -->
+    <script>
+        // ===== PARTICLES =====
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 50; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDuration = (Math.random() * 15 + 10) + 's';
+            particle.style.animationDelay = (Math.random() * 15) + 's';
+            particle.style.width = (Math.random() * 3 + 1) + 'px';
+            particle.style.height = particle.style.width;
+            particlesContainer.appendChild(particle);
+        }
+
+        // ===== NAVBAR SCROLL =====
+        const navbar = document.getElementById('navbar');
+        const scrollTopBtn = document.getElementById('scrollTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+
+            if (window.scrollY > 500) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        });
+
+        // ===== MOBILE MENU =====
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileClose = document.getElementById('mobileClose');
+
+        hamburger.addEventListener('click', () => {
+            mobileMenu.classList.add('active');
+        });
+
+        mobileClose.addEventListener('click', () => {
+            mobileMenu.classList.remove('active');
+        });
+
+        function closeMobile() {
+            mobileMenu.classList.remove('active');
+        }
+
+        // ===== FAQ TOGGLE =====
+        function toggleFAQ(element) {
+            const item = element.parentElement;
+            const wasActive = item.classList.contains('active');
+
+            document.querySelectorAll('.faq-item').forEach(faq => {
+                faq.classList.remove('active');
+            });
+
+            if (!wasActive) {
+                item.classList.add('active');
+            }
+        }
+
+        // ===== SCROLL ANIMATIONS =====
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 80);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>

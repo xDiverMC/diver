@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arvenia Network - Ranks</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="ranks.css">
+</head>
+
+<body>
+
+  <!-- PARTICLES -->
+  <div class="particles" id="particles"></div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast">
+    <i class="fas fa-check-circle"></i>
+    <span>IP berhasil disalin!</span>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-icon">
+          <img src="logo.png" alt="Logo Arvenia" style="width:100%;height:100%;object-fit:contain;">
+        </div>
+        <span class="nav-logo-text">ARVENIA NETWORK</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html#home">Home</a></li>
+        <li><a href="index.html#features">Features</a></li>
+        <li><a href="index.html#store" class="active">Store</a></li>
+        <li><a href="index.html#faq">FAQ</a></li>
+      </ul>
+      <div class="nav-store-links">
+        <a href="ranks.html" class="store-link-ranks"><i class="fas fa-crown"></i> Ranks</a>
+        <a href="keys.html" class="store-link-keys"><i class="fas fa-key"></i> Keys</a>
+        <a href="bundle.html" class="store-link-bundle"><i class="fas fa-box-open"></i> Bundle</a>
+        <a href="support.html" class="store-link-support"><i class="fas fa-heart"></i> Support</a>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-close" id="mobileClose">&times;</button>
+    <a href="index.html#home" onclick="closeMobile()">🏠 Home</a>
+    <a href="index.html#features" onclick="closeMobile()">⚡ Features</a>
+    <a href="index.html#store" onclick="closeMobile()">🛒 Store</a>
+    <a href="index.html#faq" onclick="closeMobile()">❓ FAQ</a>
+    <hr style="width:60%;border-color:rgba(255,255,255,0.1)">
+    <a href="ranks.html" onclick="closeMobile()">👑 Ranks</a>
+    <a href="keys.html" onclick="closeMobile()">🔑 Keys</a>
+    <a href="bundle.html" onclick="closeMobile()">📦 Bundle</a>
+    <a href="support.html" onclick="closeMobile()">💖 Support</a>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero" id="top">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <div class="pulse-dot"></div>
+        SERVER ONLINE &mdash; play.arvenia.xyz
+      </div>
+      <h1 class="hero-title">
+        <span class="gradient-text">PILIH RANK</span><br>
+        <span class="outline-text">KAMU</span>
+      </h1>
+      <p class="hero-subtitle">
+        Tingkatkan pengalaman bermain dengan rank premium. Nikmati fitur spesial yang tidak tersedia untuk pemain biasa.
+      </p>
+      <div class="hero-ip-box">
+        <div class="ip-display" onclick="copyIP()">
+          <div>
+            <div class="ip-label">Server Address</div>
+            <div class="ip-address">play.arvenia.xyz</div>
+          </div>
+          <button class="ip-copy">
+            <i class="fas fa-copy"></i> Copy
+          </button>
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-number">2.4K+</div>
+          <div class="stat-label">Total Pemain</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">850+</div>
+          <div class="stat-label">Rank Terjual</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">6</div>
+          <div class="stat-label">Tier Rank</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">99.9%</div>
+          <div class="stat-label">Uptime</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RANKS SECTION -->
+  <section class="section ranks-section" id="ranks">
+    <div class="section-container">
+      <div class="section-header fade-in">
+        <div class="section-tag"><i class="fas fa-crown"></i> Ranks</div>
+        <h2 class="section-title">Pilih Rank Favoritmu</h2>
+        <p class="section-subtitle">Dapatkan akses eksklusif, command spesial, dan keuntungan premium di server Arvenia!</p>
+      </div>
+      <div class="ranks-grid">
+
+        <!-- VIP -->
+        <div class="rank-card fade-in" style="--card-accent: #3B82F6; --card-icon-bg: rgba(59,130,246,0.15); --card-glow: rgba(59,130,246,0.08);">
+          <div class="rank-icon"><i class="fas fa-bolt"></i></div>
+          <div class="rank-name">VIP</div>
+          <div class="rank-tagline">Mulai petualanganmu</div>
+          <div class="rank-price"><span class="currency">Rp</span> 50K <span class="currency">/ permanen</span></div>
+          <div class="rank-divider"></div>
+          <ul class="rank-features">
+            <li><i class="fas fa-check"></i> Akses /fly di semua dunia</li>
+            <li><i class="fas fa-check"></i> +5 set lokasi /home</li>
+            <li><i class="fas fa-check"></i> Prefix [VIP] warna biru</li>
+            <li><i class="fas fa-check"></i> Akses kit VIP mingguan</li>
+          </ul>
+          <button class="btn-rank" onclick="buyRank('VIP','50000')">
+            <i class="fas fa-shopping-cart"></i> Beli Sekarang
+          </button>
+        </div>
+
+        <!-- VIP+ -->
+        <div class="rank-card fade-in" style="--card-accent: #06B6D4; --card-icon-bg: rgba(6,182,212,0.15); --card-glow: rgba(6,182,212,0.08);">
+          <div class="rank-icon"><i class="fas fa-water"></i></div>
+          <div class="rank-name">VIP+</div>
+          <div class="rank-tagline">Upgrade dari VIP</div>
+          <div class="rank-price"><span class="currency">Rp</span> 75K <span class="currency">/ permanen</span></div>
+          <div class="rank-divider"></div>
+          <ul class="rank-features">
+            <li><i class="fas fa-check"></i> /fly + /heal kapan saja</li>
+            <li><i class="fas fa-check"></i> +8 set lokasi /home</li>
+            <li><i class="fas fa-check"></i> Prefix [VIP+] warna cyan</li>
+            <li><i class="fas fa-check"></i> Kit VIP+ eksklusif</li>
+            <li><i class="fas fa-check"></i> Akses kanal VIP+ di Discord</li>
+          </ul>
+          <button class="btn-rank" onclick="buyRank('VIP+','75000')">
+            <i class="fas fa-shopping-cart"></i> Beli Sekarang
+          </button>
+        </div>
+
+        <!-- MVP (POPULAR) -->
+        <div class="rank-card popular fade-in" style="--card-accent: #8B5CF6; --card-icon-bg: rgba(139,92,246,0.15); --card-glow: rgba(139,92,246,0.1);">
+          <div class="popular-badge">🔥 Terpopuler</div>
+          <div class="rank-icon"><i class="fas fa-hat-wizard"></i></div>
+          <div class="rank-name">MVP</div>
+          <div class="rank-tagline">Pilihan paling populer</div>
+          <div class="rank-price"><span class="currency">Rp</span> 100K <span class="currency">/ permanen</span></div>
+          <div class="rank-divider"></div>
+          <ul class="rank-features">
+            <li><i class="fas fa-check"></i> Semua fitur VIP+</li>
+            <li><i class="fas fa-check"></i> Bonus in-game money 500K</li>
+            <li><i class="fas fa-check"></i> Prefix [MVP] warna ungu</li>
+            <li><i class="fas fa-check"></i> Akses /workbench & /enderchest</li>
+            <li><i class="fas fa-check"></i> Slot ekstra di /ah (auction)</li>
+          </ul>
+          <button class="btn-rank" onclick="buyRank('MVP','100000')">
+            <i class="fas fa-shopping-cart"></i> Beli Sekarang
+          </button>
+        </div>
+
+        <!-- MVP+ -->
+        <div class="rank-card fade-in" style="--card-accent: #F59E0B; --card-icon-bg: rgba(245,158,11,0.15); --card-glow: rgba(245,158,11,0.08);">
+          <div class="rank-icon"><i class="fas fa-trophy"></i></div>
+          <div class="rank-name">MVP+</div>
+          <div class="rank-tagline">Level lebih tinggi</div>
+          <div class="rank-price"><span class="currency">Rp</span> 150K <span class="currency">/ permanen</span></div>
+          <div class="rank-divider"></div>
+          <ul class="rank-features">
+            <li><i class="fas fa-check"></i> Semua fitur MVP</li>
+            <li><i class="fas fa-check"></i> Bonus money 1 Juta</li>
+            <li><i class="fas fa-check"></i> Prefix [MVP+] warna gold</li>
+            <li><i class="fas fa-check"></i> /nick ganti nama sementara</li>
+            <li><i class="fas fa-check"></i> Priority join saat server penuh</li>
+          </ul>
+          <button class="btn-rank" onclick="buyRank('MVP+','150000')">
+            <i class="fas fa-shopping-cart"></i> Beli Sekarang
+          </button>
+        </div>
+
+        <!-- MVP++ -->
+        <div class="rank-card fade-in" style="--card-accent: #EF4444; --card-icon-bg: rgba(239,68,68,0.15); --card-glow: rgba(239,68,68,0.08);">
+          <div class="rank-icon"><i class="fas fa-gem"></i></div>
+          <div class="rank-name">MVP++</div>
+          <div class="rank-tagline">Hampir yang terbaik</div>
+          <div class="rank-price"><span class="currency">Rp</span> 200K <span class="currency">/ permanen</span></div>
+          <div class="rank-divider"></div>
+          <ul class="rank-features">
+            <li><i class="fas fa-check"></i> Semua fitur MVP+</li>
+            <li><i class="fas fa-check"></i> Bonus money 2.5 Juta</li>
+            <li><i class="fas fa-check"></i> Akses gamemode Spectator</li>
+            <li><i class="fas fa-check"></i> Custom join/leave message</li>
+            <li><i class="fas fa-check"></i> Akses command /speed fly</li>
+          </ul>
+          <button class="btn-rank" onclick="buyRank('MVP++','200000')">
+            <i class="fas fa-shopping-cart"></i> Beli Sekarang
+          </button>
+        </div>
+
+        <!-- PREMIUM+ -->
+        <div class="rank-card premium-card fade-in" style="--card-accent: linear-gradient(135deg,#F59E0B,#EC4899); --card-icon-bg: linear-gradient(135deg,rgba(245,158,11,0.15),rgba(236,72,153,0.15)); --card-glow: rgba(236,72,153,0.08);">
+          <div class="rank-icon"><i class="fas fa-crown"></i></div>
+          <div class="rank-name">PREMIUM+</div>
+          <div class="rank-tagline">Rank tertinggi di server</div>
+          <div class="rank-price"><span class="currency">Rp</span> 300K <span class="currency">/ permanen</span></div>
+          <div class="rank-divider"></div>
+          <ul class="rank-features">
+            <li><i class="fas fa-check"></i> ALL ACCESS — semua fitur</li>
+            <li><i class="fas fa-check"></i> Bonus money 5 Juta</li>
+            <li><i class="fas fa-check"></i> Tag [PREMIUM+] animasi warna</li>
+            <li><i class="fas fa-check"></i> Akses semua kit & command</li>
+            <li><i class="fas fa-check"></i> Badge eksklusif di website</li>
+            <li><i class="fas fa-check"></i> Prioritas support dari Admin</li>
+          </ul>
+          <button class="btn-rank btn-premium" onclick="buyRank('PREMIUM+','300000')">
+            <i class="fas fa-crown"></i> Beli Sekarang
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="cta-box fade-in">
+      <h2>Masih Bingung Pilih <span style="color:var(--primary-light)">Rank</span>?</h2>
+      <p>Hubungi admin kami via WhatsApp untuk konsultasi gratis. Kami bantu pilihkan rank yang sesuai kebutuhanmu!</p>
+      <button class="btn-primary" onclick="hubungiAdmin()">
+        <i class="fab fa-whatsapp"></i> Chat Admin Sekarang
+      </button>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="nav-logo">
+            <div class="nav-logo-icon">
+              <img src="logo.png" alt="Logo Arvenia" style="width:100%;height:100%;object-fit:contain;">
+            </div>
+            <span class="nav-logo-text">ARVENIA NETWORK</span>
+          </a>
+          <p>Server Minecraft Indonesia terbaik dengan fitur lengkap dan komunitas yang friendly. Join sekarang dan mulai petualanganmu!</p>
+          <div class="footer-socials">
+            <a href="#" aria-label="Discord"><i class="fab fa-discord"></i></a>
+            <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <a href="index.html#home">Home</a>
+          <a href="index.html#features">Features</a>
+          <a href="index.html#store">Store</a>
+          <a href="index.html#faq">FAQ</a>
+        </div>
+        <div class="footer-col">
+          <h4>Store</h4>
+          <a href="ranks.html">Ranks</a>
+          <a href="keys.html">Crate Keys</a>
+          <a href="bundle.html">Bundle Pack</a>
+          <a href="support.html">Support Us</a>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <a href="#">Discord Server</a>
+          <a href="#">Rules & Guidelines</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Refund Policy</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 <span>Arvenia</span>. All rights reserved.</p>
+        <p>Not affiliated with Mojang Studios.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCROLL TO TOP -->
+  <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <script>
+    // ===== PARTICLES =====
+    const particlesContainer = document.getElementById('particles');
+    for (let i = 0; i < 50; i++) {
+      const particle = document.createElement('div');
+      particle.classList.add('particle');
+      particle.style.left = Math.random() * 100 + '%';
+      particle.style.animationDuration = (Math.random() * 15 + 10) + 's';
+      particle.style.animationDelay = (Math.random() * 15) + 's';
+      particle.style.width = (Math.random() * 3 + 1) + 'px';
+      particle.style.height = particle.style.width;
+      particlesContainer.appendChild(particle);
+    }
+
+    // ===== NOMOR ADMIN =====
+    const NOMOR_ADMIN = "6287820870752";
+
+    function buyRank(rank, price) {
+      const pesan = `Halo admin, saya ingin membeli rank ${rank} seharga Rp ${parseInt(price).toLocaleString('id-ID')}`;
+      window.open(`https://wa.me/${NOMOR_ADMIN}?text=${encodeURIComponent(pesan)}`, "_blank");
+    }
+
+    function hubungiAdmin() {
+      const pesan = `Halo admin Arvenia Network, saya ingin bertanya tentang rank.`;
+      window.open(`https://wa.me/${NOMOR_ADMIN}?text=${encodeURIComponent(pesan)}`, "_blank");
+    }
+
+    // ===== COPY IP =====
+    function copyIP() {
+      navigator.clipboard.writeText('play.arvenia.xyz').then(() => {
+        const toast = document.getElementById('toast');
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2500);
+      });
+    }
+
+    // ===== NAVBAR SCROLL =====
+    const navbar = document.getElementById('navbar');
+    const scrollTopBtn = document.getElementById('scrollTop');
+
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 50);
+      scrollTopBtn.classList.toggle('visible', window.scrollY > 500);
+    });
+
+    // ===== MOBILE MENU =====
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const mobileClose = document.getElementById('mobileClose');
+
+    hamburger.addEventListener('click', () => mobileMenu.classList.add('active'));
+    mobileClose.addEventListener('click', () => mobileMenu.classList.remove('active'));
+    function closeMobile() { mobileMenu.classList.remove('active'); }
+
+    // ===== SCROLL ANIMATIONS =====
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), index * 80);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
