@@ -195,7 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const note = document.getElementById('note').value;
 
         const message = `Halo Diver! Saya ingin booking jasa via website.\n\nDetail Booking:\nNama: ${name}\nKontak: ${contact}\nPaket: ${pkg}\nTanggal: ${date}\nCatatan: ${note}`;
-        const whatsappUrl = `https://wa.me/6281234567890?text=${encodeURIComponent(message)}`;
+        const whatsappUrl = `https://wa.me/6287820870752?text=${encodeURIComponent(message)}`;
 
         window.open(whatsappUrl, '_blank');
     });
