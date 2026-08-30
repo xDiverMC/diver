@@ -1,0 +1,20 @@
+{
+  "name": "realmcraft-homepage",
+  "version": "1.0.0",
+  "description": "RealmCraft - homepage, server info, and rules",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "nodemon backend/server.js"
+  },
+  "dependencies": {
+    "express": "^4.22.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "license": "MIT"
+}
