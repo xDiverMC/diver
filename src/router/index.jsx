@@ -13,6 +13,8 @@ import AdminLayout from "../layouts/AdminLayout";
 import AdminLogin from "../pages/admin/AdminLogin";
 import AdminNewsList from "../pages/admin/AdminNewsList";
 import AdminNewsForm from "../pages/admin/AdminNewsForm";
+import AdminStaffList from "../pages/admin/AdminStaffList";
+import AdminStore from "../pages/admin/AdminStore";
 import ProtectedRoute from "../components/admin/ProtectedRoute";
 
 export const router = createBrowserRouter([
@@ -43,6 +45,8 @@ export const router = createBrowserRouter([
       { path: "news", element: <AdminNewsList /> },
       { path: "news/new", element: <AdminNewsForm /> },
       { path: "news/:id/edit", element: <AdminNewsForm /> },
+      { path: "staff", element: <AdminStaffList /> },
+      { path: "store", element: <AdminStore /> },
     ],
   },
 ]);

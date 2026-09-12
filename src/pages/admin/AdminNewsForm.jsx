@@ -1,7 +1,9 @@
 // src/pages/admin/AdminNewsForm.jsx
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
+import { ArrowLeft, Save } from "lucide-react";
 import { supabase } from "../../lib/supabase";
+import { Card, PageHeader, Button, Field, Input, Textarea, Spinner } from "../../components/admin/ui";
 
 const emptyPost = {
   slug: "",
@@ -77,122 +79,106 @@ export default function AdminNewsForm() {
     navigate("/admin/news");
   }
 
-  if (loading) return <p className="text-neutral-400">Loading...</p>;
-
-  const inputClass =
-    "w-full rounded bg-neutral-800 border border-neutral-700 px-3 py-2 text-white outline-none focus:border-emerald-500";
-  const labelClass = "block text-sm text-neutral-400 mb-1";
+  if (loading) return <Spinner />;
 
   return (
-    <div className="max-w-2xl">
-      <h1 className="text-xl font-bold mb-4">
-        {isEdit ? "Edit Post" : "Tambah Post"}
-      </h1>
+    <div>
+      <Link
+        to="/admin/news"
+        className="inline-flex items-center gap-1.5 text-sm text-neutral-400 hover:text-white mb-4"
+      >
+        <ArrowLeft size={15} /> Kembali ke News
+      </Link>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className={labelClass}>Slug (buat URL, contoh: season-19-recap)</label>
-          <input
-            required
-            value={form.slug}
-            onChange={(e) => update("slug", e.target.value)}
-            className={inputClass}
-          />
-        </div>
+      <PageHeader title={isEdit ? "Edit Post" : "Tambah Post"} />
 
-        <div>
-          <label className={labelClass}>Judul</label>
-          <input
-            required
-            value={form.title}
-            onChange={(e) => update("title", e.target.value)}
-            className={inputClass}
-          />
-        </div>
-
-        <div>
-          <label className={labelClass}>Excerpt (ringkasan singkat)</label>
-          <textarea
-            value={form.excerpt}
-            onChange={(e) => update("excerpt", e.target.value)}
-            className={inputClass}
-            rows={2}
-          />
-        </div>
-
-        <div>
-          <label className={labelClass}>URL Gambar</label>
-          <input
-            value={form.image}
-            onChange={(e) => update("image", e.target.value)}
-            className={inputClass}
-          />
-        </div>
-
-        <div className="grid grid-cols-2 gap-3">
-          <div>
-            <label className={labelClass}>Kategori</label>
-            <input
-              value={form.category}
-              onChange={(e) => update("category", e.target.value)}
-              className={inputClass}
+      <Card className="p-5">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <Field label="Slug" hint="Dipakai di URL, contoh: season-19-recap">
+            <Input
+              required
+              value={form.slug}
+              onChange={(e) => update("slug", e.target.value)}
             />
-          </div>
-          <div>
-            <label className={labelClass}>Tanggal (teks bebas)</label>
-            <input
-              placeholder="Jan 20, 2026"
-              value={form.post_date}
-              onChange={(e) => update("post_date", e.target.value)}
-              className={inputClass}
+          </Field>
+
+          <Field label="Judul">
+            <Input
+              required
+              value={form.title}
+              onChange={(e) => update("title", e.target.value)}
             />
+          </Field>
+
+          <Field label="Excerpt" hint="Ringkasan singkat yang tampil di kartu">
+            <Textarea
+              rows={2}
+              value={form.excerpt}
+              onChange={(e) => update("excerpt", e.target.value)}
+            />
+          </Field>
+
+          <Field label="URL Gambar">
+            <Input
+              value={form.image}
+              onChange={(e) => update("image", e.target.value)}
+            />
+          </Field>
+
+          <div className="grid grid-cols-2 gap-4">
+            <Field label="Kategori">
+              <Input
+                value={form.category}
+                onChange={(e) => update("category", e.target.value)}
+              />
+            </Field>
+            <Field label="Tanggal" hint="Teks bebas, contoh: Jan 20, 2026">
+              <Input
+                value={form.post_date}
+                onChange={(e) => update("post_date", e.target.value)}
+              />
+            </Field>
           </div>
-        </div>
 
-        <div>
-          <label className={labelClass}>Author</label>
-          <input
-            value={form.author}
-            onChange={(e) => update("author", e.target.value)}
-            className={inputClass}
-          />
-        </div>
+          <Field label="Author">
+            <Input
+              value={form.author}
+              onChange={(e) => update("author", e.target.value)}
+            />
+          </Field>
 
-        <div>
-          <label className={labelClass}>
-            Content (JSON) — isi berita lengkap
-          </label>
-          <textarea
-            value={contentText}
-            onChange={(e) => setContentText(e.target.value)}
-            className={`${inputClass} font-mono text-xs`}
-            rows={10}
-          />
-          <p className="text-xs text-neutral-500 mt-1">
-            Format: array block, contoh:{" "}
-            {`[{"type":"p","text":"..."}, {"type":"h2","text":"..."}, {"type":"list","items":["a","b"]}]`}
-          </p>
-        </div>
-
-        {error && <p className="text-red-400 text-sm">{error}</p>}
-
-        <div className="flex gap-2">
-          <button
-            type="submit"
-            disabled={saving}
-            className="bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white px-4 py-2 rounded"
+          <Field
+            label="Content (JSON)"
+            hint={`Array block, contoh: [{"type":"p","text":"..."}, {"type":"h2","text":"..."}, {"type":"list","items":["a","b"]}]`}
           >
-            {saving ? "Menyimpan..." : "Simpan"}
-          </button>
-          <button
-            type="button"
-            onClick={() => navigate("/admin/news")}
-            className="bg-neutral-800 hover:bg-neutral-700 text-white px-4 py-2 rounded"
-          >
-            Batal
-          </button>
-        </div>
-      </form>
+            <Textarea
+              rows={10}
+              className="font-mono text-xs"
+              value={contentText}
+              onChange={(e) => setContentText(e.target.value)}
+            />
+          </Field>
+
+          {error && (
+            <p className="text-red-400 text-sm bg-red-950/40 border border-red-900 rounded-lg px-3 py-2">
+              {error}
+            </p>
+          )}
+
+          <div className="flex gap-2 pt-1">
+            <Button type="submit" disabled={saving}>
+              <Save size={16} /> {saving ? "Menyimpan..." : "Simpan"}
+            </Button>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => navigate("/admin/news")}
+            >
+              Batal
+            </Button>
+          </div>
+        </form>
+      </Card>
     </div>
   );
 }
