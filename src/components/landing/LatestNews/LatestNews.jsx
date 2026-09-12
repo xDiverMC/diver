@@ -1,13 +1,17 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Calendar } from "lucide-react";
 import PixelBox from "../../ui/PixelBox";
 import PixelButton from "../../ui/PixelButton";
-import { newsPosts } from "../../../data/news";
-
-// Homepage teaser only shows the 3 most recent posts.
-const POSTS = newsPosts.slice(0, 3);
+import { fetchNewsPosts } from "../../../data/news";
 
 export default function LatestNews() {
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    fetchNewsPosts().then((all) => setPosts(all.slice(0, 3)));
+  }, []);
+
   return (
     <section className="mx-auto max-w-7xl px-4 pt-25 sm:px-6">
       <div>
@@ -33,7 +37,7 @@ export default function LatestNews() {
       </div>
 
       <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {POSTS.map(({ slug, image, category, tone, date, title, excerpt }) => (
+        {posts.map(({ slug, image, category, tone, date, title, excerpt }) => (
           <PixelBox
             key={slug}
             tone="info"
@@ -57,7 +61,7 @@ export default function LatestNews() {
                     color: tone,
                   }}
                 >
-                  {category.toUpperCase()}
+                  {category?.toUpperCase()}
                 </span>
                 <span className="flex items-center gap-1 text-[10.5px] gradient-text">
                   <Calendar

@@ -9,6 +9,12 @@ import NewsDetails from "../pages/NewsDetails";
 import Cart from "../pages/Cart";
 import Login from "../pages/Login";
 
+import AdminLayout from "../layouts/AdminLayout";
+import AdminLogin from "../pages/admin/AdminLogin";
+import AdminNewsList from "../pages/admin/AdminNewsList";
+import AdminNewsForm from "../pages/admin/AdminNewsForm";
+import ProtectedRoute from "../components/admin/ProtectedRoute";
+
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -22,6 +28,21 @@ export const router = createBrowserRouter([
       { path: "staff", element: <Staff /> },
       { path: "cart", element: <Cart /> },
       { path: "login", element: <Login /> },
+    ],
+  },
+  { path: "/admin/login", element: <AdminLogin /> },
+  {
+    path: "/admin",
+    element: (
+      <ProtectedRoute>
+        <AdminLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      { index: true, element: <AdminNewsList /> },
+      { path: "news", element: <AdminNewsList /> },
+      { path: "news/new", element: <AdminNewsForm /> },
+      { path: "news/:id/edit", element: <AdminNewsForm /> },
     ],
   },
 ]);

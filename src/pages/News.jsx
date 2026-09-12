@@ -1,11 +1,22 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Calendar, ArrowRight } from "lucide-react";
 import PixelBox from "../components/ui/PixelBox";
 import PixelButton from "../components/ui/PixelButton";
-import { newsPosts } from "../data/news";
+import { fetchNewsPosts } from "../data/news";
 import { useSeo } from "../hooks/useSeo";
 
 export default function News() {
+  const [newsPosts, setNewsPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchNewsPosts().then((posts) => {
+      setNewsPosts(posts);
+      setLoading(false);
+    });
+  }, []);
+
   useSeo({
     title: "News",
     description:
@@ -18,6 +29,8 @@ export default function News() {
       <p className="p">
         Events, season recaps, and everything happening around the server.
       </p>
+
+      {loading && <p className="p mt-8">Loading...</p>}
 
       <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {newsPosts.map(
@@ -45,7 +58,7 @@ export default function News() {
                       color: tone,
                     }}
                   >
-                    {category.toUpperCase()}
+                    {category?.toUpperCase()}
                   </span>
                   <span className="flex items-center gap-1 text-[10.5px] gradient-text">
                     <Calendar

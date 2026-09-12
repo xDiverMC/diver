@@ -1,8 +1,9 @@
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Calendar, ArrowLeft, User } from "lucide-react";
 import PixelBox from "../components/ui/PixelBox";
 import PixelButton from "../components/ui/PixelButton";
-import { newsPosts, getPostBySlug } from "../data/news";
+import { fetchNewsPosts, fetchPostBySlug } from "../data/news";
 import { useSeo } from "../hooks/useSeo";
 
 function ContentBlock({ block }) {
@@ -42,7 +43,16 @@ function ContentBlock({ block }) {
 
 export default function NewsDetails() {
   const { slug } = useParams();
-  const post = getPostBySlug(slug);
+  const [post, setPost] = useState(undefined); // undefined = loading, null = not found
+  const [related, setRelated] = useState([]);
+
+  useEffect(() => {
+    setPost(undefined);
+    fetchPostBySlug(slug).then((p) => setPost(p ?? null));
+    fetchNewsPosts().then((all) =>
+      setRelated(all.filter((p) => p.slug !== slug).slice(0, 3)),
+    );
+  }, [slug]);
 
   useSeo(
     post
@@ -54,6 +64,14 @@ export default function NewsDetails() {
         }
       : { title: "Post Not Found", path: `/news/${slug}`, noindex: true },
   );
+
+  if (post === undefined) {
+    return (
+      <section className="mx-auto max-w-3xl px-4 flex h-screen flex-col items-center justify-center text-center sm:px-6">
+        <p className="p">Loading...</p>
+      </section>
+    );
+  }
 
   if (!post) {
     return (
@@ -74,8 +92,6 @@ export default function NewsDetails() {
       </section>
     );
   }
-
-  const related = newsPosts.filter((p) => p.slug !== post.slug).slice(0, 3);
 
   return (
     <section className="mx-auto max-w-7xl px-4 py-6 sm:px-6 ">
@@ -104,7 +120,7 @@ export default function NewsDetails() {
             color: post.tone,
           }}
         >
-          {post.category.toUpperCase()}
+          {post.category?.toUpperCase()}
         </span>
         <span className="flex items-center gap-1 text-[13px] gradient-text">
           <Calendar size={14} strokeWidth={2} color="#e9e9e9"/>
@@ -123,7 +139,7 @@ export default function NewsDetails() {
       </h1>
 
       <div className="mt-8 border-t border-white/10 pt-8">
-        {post.content.map((block, i) => (
+        {(post.content ?? []).map((block, i) => (
           <ContentBlock key={i} block={block} />
         ))}
       </div>
