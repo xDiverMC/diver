@@ -16,10 +16,26 @@
 //   GET /api/store/top-donators?period=monthly|allTime
 // ─────────────────────────────────────────────────────────────
 
+import { supabase } from "../lib/supabase";
+
 const SIMULATED_DELAY = 250; // ms — mimics a network round-trip
 
 function resolve(data) {
   return new Promise((res) => setTimeout(() => res(data), SIMULATED_DELAY));
+}
+
+// Ranks / Crate Keys / Currency Packs are managed via /admin/store and
+// live in the `store_content` table (one row per category, `data` is the
+// full JSON array). Falls back to the local static array if the row
+// doesn't exist yet or the request fails, so the page never breaks.
+async function fetchStoreContent(key, fallback) {
+  const { data, error } = await supabase
+    .from("store_content")
+    .select("data")
+    .eq("key", key)
+    .maybeSingle();
+  if (error || !data) return fallback;
+  return data.data;
 }
 
 // Next 1st-of-month at local midnight — used as the monthly goal reset.
@@ -166,7 +182,7 @@ export const RANKS = [
 ];
 
 export function fetchRanks() {
-  return resolve(RANKS);
+  return fetchStoreContent("ranks", RANKS);
 }
 
 // ── Crates & Keys ─────────────────────────────────────────────
@@ -203,7 +219,7 @@ export const CRATE_KEYS = [
 ];
 
 export function fetchCrateKeys() {
-  return resolve(CRATE_KEYS);
+  return fetchStoreContent("crate_keys", CRATE_KEYS);
 }
 
 // ── Currency packs ─────────────────────────────────────────────
@@ -230,7 +246,7 @@ export const CURRENCY_PACKS = [
 ];
 
 export function fetchCurrencyPacks() {
-  return resolve(CURRENCY_PACKS);
+  return fetchStoreContent("currency_packs", CURRENCY_PACKS);
 }
 
 // ── Top donators ─────────────────────────────────────────────

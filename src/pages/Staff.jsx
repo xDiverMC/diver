@@ -1,7 +1,8 @@
+import { useEffect, useState } from "react";
 import { Crown, ShieldCheck, Gavel, Hammer, MessageCircle, Sparkles } from "lucide-react";
 import PixelBox from "../components/ui/PixelBox";
 import PixelButton from "../components/ui/PixelButton";
-import { STAFF, STAFF_TIERS } from "../data/staff";
+import { fetchStaff, STAFF_TIERS } from "../data/staff";
 import { avatarUrl } from "../data/votes";
 import { useSeo } from "../hooks/useSeo";
 
@@ -115,10 +116,10 @@ function MemberCard({ member, style }) {
   );
 }
 
-function TierSection({ tier, isFirst }) {
+function TierSection({ tier, isFirst, staff }) {
   const style = TIER_STYLE[tier.key];
   const Icon = style.icon;
-  const members = STAFF.filter((m) => m.tier === tier.key);
+  const members = staff.filter((m) => m.tier === tier.key);
   if (members.length === 0) return null;
 
   return (
@@ -152,7 +153,13 @@ export default function Staff() {
     path: "/staff",
   });
 
-  const onlineCount = STAFF.filter((m) => m.online).length;
+  const [staff, setStaff] = useState([]);
+
+  useEffect(() => {
+    fetchStaff().then(setStaff);
+  }, []);
+
+  const onlineCount = staff.filter((m) => m.online).length;
 
   return (
     <section className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
@@ -163,11 +170,11 @@ export default function Staff() {
       </p>
       <p className="mt-1 text-center text-[11px] text-(--color-text-dim)">
         <span className="text-(--color-success)">●</span> {onlineCount} of{" "}
-        {STAFF.length} team members online right now
+        {staff.length} team members online right now
       </p>
 
       {STAFF_TIERS.map((tier, i) => (
-        <TierSection key={tier.key} tier={tier} isFirst={i === 0} />
+        <TierSection key={tier.key} tier={tier} isFirst={i === 0} staff={staff} />
       ))}
 
       <PixelBox
