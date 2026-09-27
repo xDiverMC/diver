@@ -1,12 +1,11 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   ShoppingCart,
   Minus,
   Plus,
   Trash2,
   CheckCircle2,
-  PartyPopper,
 } from "lucide-react";
 import PixelBox from "../components/ui/PixelBox";
 import PixelButton from "../components/ui/PixelButton";
@@ -134,37 +133,13 @@ function EmptyCart() {
   );
 }
 
-function OrderPlaced({ onContinue }) {
-  return (
-    <PixelBox
-      tone="success"
-      filled
-      className="mt-10"
-      contentClassName="flex flex-col items-center gap-3 py-14 text-center"
-    >
-      <PartyPopper size={30} color="#fff" />
-      <h2 className="text-[16px] green-gradient-text">Order placed!</h2>
-      <p className="max-w-sm text-[11.5px] leading-relaxed text-white/80">
-        Thanks for supporting BDZONE — your rewards will be waiting in-game
-        the next time you log in.
-      </p>
-      <Link to="/store" className="mt-2" onClick={onContinue}>
-        <PixelButton tone="neutral" size="sm" className="px-5! py-4!">
-          Continue Shopping
-        </PixelButton>
-      </Link>
-    </PixelBox>
-  );
-}
-
 export default function Cart() {
   useSeo({ title: "Your Cart", path: "/cart", noindex: true });
-  const { items, count, subtotal, clearCart } = useCart();
-  const [placed, setPlaced] = useState(false);
+  const { items, count, subtotal } = useCart();
+  const navigate = useNavigate();
 
   const handleCheckout = () => {
-    setPlaced(true);
-    clearCart();
+    navigate("/checkout");
   };
 
   return (
@@ -176,11 +151,9 @@ export default function Cart() {
           : "Nothing here yet"}
       </p>
 
-      {placed && <OrderPlaced onContinue={() => setPlaced(false)} />}
+      {items.length === 0 && <EmptyCart />}
 
-      {!placed && items.length === 0 && <EmptyCart />}
-
-      {!placed && items.length > 0 && (
+      {items.length > 0 && (
         <div className="mt-8 grid gap-6 lg:grid-cols-3">
           <PixelBox
             tone="neutral"
@@ -224,8 +197,8 @@ export default function Cart() {
             </PixelButton>
 
             <p className="text-center text-[10.5px] leading-relaxed text-(--color-text-dim)">
-              Instant in-game delivery after checkout — no real payment is
-              processed on this preview store.
+              You'll pick a payment method on the next step. Rewards are
+              delivered to your Minecraft account after payment is confirmed.
             </p>
           </PixelBox>
         </div>

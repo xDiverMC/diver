@@ -1,7 +1,4 @@
 // src/pages/admin/AdminStore.jsx
-// Ranks/Crate Keys/Currency Packs punya struktur cukup kompleks (nested
-// perks, contents dll), jadi tiap kategori diedit sebagai satu blok JSON
-// -- sama polanya dengan Content di News.
 import { useEffect, useState } from "react";
 import { Save, ShoppingBag } from "lucide-react";
 import { supabase } from "../../lib/supabase";

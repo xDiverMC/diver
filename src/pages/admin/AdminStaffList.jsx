@@ -35,7 +35,7 @@ const emptyMember = {
 export default function AdminStaffList() {
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [editing, setEditing] = useState(null); // member object | "new" | null
+  const [editing, setEditing] = useState(null);
   const [form, setForm] = useState(emptyMember);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");

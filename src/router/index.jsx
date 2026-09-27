@@ -7,6 +7,8 @@ import Store from "../pages/Store";
 import Staff from "../pages/Staff";
 import NewsDetails from "../pages/NewsDetails";
 import Cart from "../pages/Cart";
+import Checkout from "../pages/Checkout";
+import OrderStatus from "../pages/OrderStatus";
 import Login from "../pages/Login";
 
 import AdminLayout from "../layouts/AdminLayout";
@@ -15,6 +17,7 @@ import AdminNewsList from "../pages/admin/AdminNewsList";
 import AdminNewsForm from "../pages/admin/AdminNewsForm";
 import AdminStaffList from "../pages/admin/AdminStaffList";
 import AdminStore from "../pages/admin/AdminStore";
+import AdminOrders from "../pages/admin/AdminOrders";
 import ProtectedRoute from "../components/admin/ProtectedRoute";
 
 export const router = createBrowserRouter([
@@ -29,6 +32,8 @@ export const router = createBrowserRouter([
       { path: "store", element: <Store /> },
       { path: "staff", element: <Staff /> },
       { path: "cart", element: <Cart /> },
+      { path: "checkout", element: <Checkout /> },
+      { path: "order/:ref", element: <OrderStatus /> },
       { path: "login", element: <Login /> },
     ],
   },
@@ -47,6 +52,7 @@ export const router = createBrowserRouter([
       { path: "news/:id/edit", element: <AdminNewsForm /> },
       { path: "staff", element: <AdminStaffList /> },
       { path: "store", element: <AdminStore /> },
+      { path: "orders", element: <AdminOrders /> },
     ],
   },
 ]);
