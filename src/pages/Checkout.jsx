@@ -1,11 +1,14 @@
 // src/pages/Checkout.jsx
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CreditCard, Loader2 } from "lucide-react";
+import { CreditCard, Loader2, Ticket } from "lucide-react";
 import PixelBox from "../components/ui/PixelBox";
 import PixelButton from "../components/ui/PixelButton";
 import { useCart } from "../context/useCart";
 import { useSeo } from "../hooks/useSeo";
+
+const MC_USERNAME_RE = /^\.?[A-Za-z0-9_]{3,16}$/;
+const idr = (n) => "Rp" + Number(n || 0).toLocaleString("id-ID");
 
 export default function Checkout() {
   useSeo({ title: "Checkout", path: "/checkout", noindex: true });
@@ -18,6 +21,10 @@ export default function Checkout() {
   const [form, setForm] = useState({ name: "", email: "", mcUsername: "" });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [couponInput, setCouponInput] = useState("");
+  const [coupon, setCoupon] = useState(null); // { code, label, subtotal_idr, discount_idr, total_idr }
+  const [couponMsg, setCouponMsg] = useState({ ok: true, text: "" });
+  const [checkingCoupon, setCheckingCoupon] = useState(false);
 
   useEffect(() => {
     if (items.length === 0) navigate("/cart");
@@ -33,9 +40,49 @@ export default function Checkout() {
       .catch(() => setLoadingChannels(false));
   }, []);
 
+  async function applyCoupon() {
+    const code = couponInput.trim();
+    if (!code) return;
+    setCheckingCoupon(true);
+    setCouponMsg({ ok: true, text: "" });
+    try {
+      const res = await fetch("/api/validate-coupon", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          code,
+          items: items.map((i) => ({ id: i.id, qty: i.qty })),
+          customer_mc_username: form.mcUsername.trim(),
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setCoupon(null);
+        setCouponMsg({ ok: false, text: data.error || "Kupon tidak valid." });
+      } else {
+        setCoupon(data);
+        setCouponMsg({ ok: true, text: data.message });
+      }
+    } catch {
+      setCouponMsg({ ok: false, text: "Gagal cek kupon. Coba lagi." });
+    }
+    setCheckingCoupon(false);
+  }
+
+  function removeCoupon() {
+    setCoupon(null);
+    setCouponInput("");
+    setCouponMsg({ ok: true, text: "" });
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
     setError("");
+
+    if (!MC_USERNAME_RE.test(form.mcUsername.trim())) {
+      setError("Username Minecraft tidak valid (3–16 karakter: huruf, angka, underscore; Bedrock diawali titik).");
+      return;
+    }
 
     if (!method) {
       setError("Pilih metode pembayaran dulu.");
@@ -51,7 +98,8 @@ export default function Checkout() {
           items: items.map((i) => ({ id: i.id, qty: i.qty })),
           customer_name: form.name,
           customer_email: form.email,
-          customer_mc_username: form.mcUsername,
+          customer_mc_username: form.mcUsername.trim(),
+          coupon_code: coupon?.code,
           method,
         }),
       });
@@ -88,9 +136,23 @@ export default function Checkout() {
             <span>${(item.qty * Number(String(item.price).replace(/[^0-9.]/g, ""))).toFixed(2)}</span>
           </div>
         ))}
+        {coupon && (
+          <>
+            <div className="flex justify-between text-[12px] text-(--color-text-muted)">
+              <span>Subtotal</span>
+              <span>{idr(coupon.subtotal_idr)}</span>
+            </div>
+            <div className="flex justify-between text-[12px] text-emerald-400">
+              <span>Diskon ({coupon.code})</span>
+              <span>-{idr(coupon.discount_idr)}</span>
+            </div>
+          </>
+        )}
         <div className="flex justify-between border-t border-white/10 pt-3 text-[14px]">
           <span className="gradient-text">Total</span>
-          <span className="gold-gradient-text">${subtotal.toFixed(2)}</span>
+          <span className="gold-gradient-text">
+            {coupon ? idr(coupon.total_idr) : `$${subtotal.toFixed(2)}`}
+          </span>
         </div>
       </PixelBox>
 
@@ -111,7 +173,11 @@ export default function Checkout() {
               onChange={(e) => setForm((f) => ({ ...f, mcUsername: e.target.value }))}
               className="w-full rounded-sm bg-black/30 border border-white/10 px-3 py-2 text-[13px] text-white outline-none focus:border-(--color-primary)"
               placeholder="Steve123"
+              maxLength={17}
             />
+            <p className="mt-1 text-[10.5px] text-(--color-text-dim)">
+              Pemain Bedrock: awali dengan titik, contoh <b>.Steve123</b>
+            </p>
           </div>
           <div>
             <label className="mb-1 block text-[11px] text-(--color-text-dim)">
@@ -136,6 +202,45 @@ export default function Checkout() {
               className="w-full rounded-sm bg-black/30 border border-white/10 px-3 py-2 text-[13px] text-white outline-none focus:border-(--color-primary)"
             />
           </div>
+        </PixelBox>
+
+        <PixelBox
+          tone="neutral"
+          className="mt-6"
+          contentClassName="flex flex-col gap-2"
+          header={<span className="gradient-text uppercase">Kode Kupon</span>}
+        >
+          <div className="flex gap-2">
+            <input
+              value={couponInput}
+              onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
+              disabled={!!coupon}
+              maxLength={32}
+              placeholder="Punya kode kupon?"
+              className="min-w-0 flex-1 rounded-sm bg-black/30 border border-white/10 px-3 py-2 text-[13px] text-white outline-none focus:border-(--color-primary) disabled:opacity-60"
+            />
+            {coupon ? (
+              <PixelButton type="button" tone="danger" size="sm" onClick={removeCoupon}>
+                Hapus
+              </PixelButton>
+            ) : (
+              <PixelButton
+                type="button"
+                tone="primary"
+                size="sm"
+                icon={checkingCoupon ? Loader2 : Ticket}
+                disabled={checkingCoupon || !couponInput.trim()}
+                onClick={applyCoupon}
+              >
+                Pakai
+              </PixelButton>
+            )}
+          </div>
+          {couponMsg.text && (
+            <p className={`text-[11.5px] ${couponMsg.ok ? "text-emerald-400" : "text-red-400"}`}>
+              {couponMsg.text}
+            </p>
+          )}
         </PixelBox>
 
         <PixelBox

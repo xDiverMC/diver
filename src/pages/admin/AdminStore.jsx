@@ -96,6 +96,17 @@ export default function AdminStore() {
               Edit sebagai JSON. Struktur ikut format yang sudah ada — hati-hati jaga
               tanda kurung <code className="text-neutral-300">[ ] {"{ }"}</code> dan koma.
             </div>
+            <details className="mb-3 text-xs text-neutral-500">
+              <summary className="cursor-pointer hover:text-neutral-300">
+                Field opsional: auto-delivery &amp; batas pembelian
+              </summary>
+              <pre className="mt-2 whitespace-pre-wrap text-neutral-400">{`"commands": ["lp user {player} parent add vip"],  // dijalankan lewat RCON; {player} {qty} {ref}
+"repeat_per_qty": false,   // true = commands diulang sebanyak qty
+"max_qty": 5,              // maks per pesanan
+"once_per_player": true,   // hanya boleh dibeli 1x seumur hidup
+"limit_total": 10,         // batas total per player
+"limit_per_day": 3         // batas per player per hari`}</pre>
+            </details>
             <Textarea
               rows={20}
               className="font-mono text-xs"

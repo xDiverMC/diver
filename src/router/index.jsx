@@ -9,6 +9,7 @@ import NewsDetails from "../pages/NewsDetails";
 import Cart from "../pages/Cart";
 import Checkout from "../pages/Checkout";
 import OrderStatus from "../pages/OrderStatus";
+import CekPesanan from "../pages/CekPesanan";
 import Login from "../pages/Login";
 
 import AdminLayout from "../layouts/AdminLayout";
@@ -18,6 +19,7 @@ import AdminNewsForm from "../pages/admin/AdminNewsForm";
 import AdminStaffList from "../pages/admin/AdminStaffList";
 import AdminStore from "../pages/admin/AdminStore";
 import AdminOrders from "../pages/admin/AdminOrders";
+import AdminCoupons from "../pages/admin/AdminCoupons";
 import ProtectedRoute from "../components/admin/ProtectedRoute";
 
 export const router = createBrowserRouter([
@@ -34,6 +36,7 @@ export const router = createBrowserRouter([
       { path: "cart", element: <Cart /> },
       { path: "checkout", element: <Checkout /> },
       { path: "order/:ref", element: <OrderStatus /> },
+      { path: "orders", element: <CekPesanan /> },
       { path: "login", element: <Login /> },
     ],
   },
@@ -53,6 +56,7 @@ export const router = createBrowserRouter([
       { path: "staff", element: <AdminStaffList /> },
       { path: "store", element: <AdminStore /> },
       { path: "orders", element: <AdminOrders /> },
+      { path: "coupons", element: <AdminCoupons /> },
     ],
   },
 ]);

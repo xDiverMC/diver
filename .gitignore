@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?v3.zip
+
+# Env & deploy
+.env
+.env.*
+!.env.example
+.vercel

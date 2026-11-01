@@ -1,0 +1,16 @@
+# Memanggil /api/cron-maintenance tiap 15 menit (order expired + retry pengiriman).
+# Butuh secret repo: SITE_URL (mis. https://www.bdzone.net) dan CRON_SECRET.
+name: maintenance
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call maintenance endpoint
+        run: |
+          curl --fail --silent --show-error --max-time 60 \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            "${{ secrets.SITE_URL }}/api/cron-maintenance"

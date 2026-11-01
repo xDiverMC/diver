@@ -117,7 +117,7 @@ export default function TopDonatorsTab() {
 
             <span className="shrink-0 rounded-sm bg-black/25 px-2 py-1 text-[10.5px] tracking-[0.02em] text-(--color-text-muted)">
               <span className="gold-gradient-text font-semibold">
-                ৳{d.amount.toLocaleString()}
+                Rp{d.amount.toLocaleString("id-ID")}
               </span>
             </span>
           </div>

@@ -250,31 +250,15 @@ export function fetchCurrencyPacks() {
 }
 
 // ── Top donators ─────────────────────────────────────────────
-// `tier` mirrors the rank a donator's total spend has unlocked on /ranks,
-// so this list doubles as social proof for the store categories below it.
-const topDonators = {
-  monthly: [
-    { rank: 1, username: "OpEfath", amount: 1450, tier: "LEGEND" },
-    { rank: 2, username: "MahirPro7", amount: 990, tier: "MVP" },
-    { rank: 3, username: "tasneem", amount: 720, tier: "MVP" },
-    { rank: 4, username: "RoyPlays28", amount: 480, tier: "VIP" },
-    { rank: 5, username: "niloy3334444", amount: 350, tier: "VIP" },
-    { rank: 6, username: "BigFred30", amount: 300, tier: "VIP" },
-    { rank: 7, username: "JJ_ZERO", amount: 250, tier: "VIP" },
-    { rank: 8, username: "Sayham", amount: 200, tier: "VIP" },
-  ],
-  allTime: [
-    { rank: 1, username: "OpEfath", amount: 18650, tier: "LEGEND" },
-    { rank: 2, username: "MahinIsBest", amount: 15200, tier: "LEGEND" },
-    { rank: 3, username: "MahirPro7", amount: 12980, tier: "LEGEND" },
-    { rank: 4, username: "tasneem", amount: 9640, tier: "MVP" },
-    { rank: 5, username: "RoyPlays28", amount: 8100, tier: "MVP" },
-    { rank: 6, username: "Arman_Mahim", amount: 6450, tier: "MVP" },
-    { rank: 7, username: "parbon50", amount: 5300, tier: "MVP" },
-    { rank: 8, username: "iori", amount: 4120, tier: "VIP" },
-  ],
-};
-
-export function fetchTopDonators(period = "monthly") {
-  return resolve(topDonators[period] ?? []);
+// Dihitung server dari order PAID (lihat api/top-donators.js).
+// `amount` dalam Rupiah; `tier` = rank termahal yang pernah dibeli player.
+export async function fetchTopDonators(period = "monthly") {
+  try {
+    const res = await fetch(`/api/top-donators?period=${period === "allTime" ? "allTime" : "monthly"}`);
+    if (!res.ok) return [];
+    const data = await res.json();
+    return data.donators ?? [];
+  } catch {
+    return [];
+  }
 }

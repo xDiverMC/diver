@@ -1,5 +1,13 @@
 {
   "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+    { "source": "/((?!api/).*)", "destination": "/index.html" }
+  ],
+  "functions": {
+    "api/tripay-callback.js": { "maxDuration": 30 },
+    "api/admin-retry-delivery.js": { "maxDuration": 30 },
+    "api/cron-maintenance.js": { "maxDuration": 60 }
+  },
+  "crons": [
+    { "path": "/api/cron-maintenance", "schedule": "0 3 * * *" }
   ]
 }
