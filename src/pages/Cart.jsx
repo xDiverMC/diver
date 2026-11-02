@@ -7,11 +7,12 @@ import {
   Trash2,
   CheckCircle2,
   Star,
+  Crown,
 } from "lucide-react";
 import PixelBox from "../components/ui/PixelBox";
 import PixelButton from "../components/ui/PixelButton";
 import { useCart } from "../context/useCart";
-import { parsePrice } from "../context/cart-utils";
+import { parsePrice, isValidIcon } from "../context/cart-utils";
 import { useSeo } from "../hooks/useSeo";
 
 // Category -> accent color + label. Keeps every row's badge tied to the
@@ -37,7 +38,7 @@ function ItemIcon({ item }) {
       />
     );
   }
-  const Icon = item.icon ?? Star;
+  const Icon = isValidIcon(item.icon) ? item.icon : item.category === "rank" ? Crown : Star;
   return (
     <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-sm bg-black/25">
       {Icon && <Icon size={18} color="#fff" strokeWidth={2.25} />}

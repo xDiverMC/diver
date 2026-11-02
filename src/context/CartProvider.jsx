@@ -1,18 +1,15 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
 import { CartContext } from "./cart-context";
-import { parsePrice } from "./cart-utils";
+import { parsePrice, parseStoredCart, serializeCart } from "./cart-utils";
 
 const STORAGE_KEY = "bdzone_cart_v1";
 
 // Keranjang disimpan di localStorage supaya tidak hilang saat refresh,
 // pindah halaman penuh (mis. ke Tripay lalu Back), atau tab ditutup.
-// `icon` (komponen React) tidak bisa disimpan; Cart.jsx punya ikon cadangan.
+// `icon` (komponen React) sengaja tidak disimpan; Cart.jsx punya ikon cadangan.
 function loadCart() {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    const parsed = raw ? JSON.parse(raw) : [];
-    if (!Array.isArray(parsed)) return [];
-    return parsed.filter((i) => i && typeof i.id === "string" && i.qty > 0);
+    return parseStoredCart(localStorage.getItem(STORAGE_KEY));
   } catch {
     return [];
   }
@@ -24,7 +21,7 @@ export function CartProvider({ children }) {
 
   useEffect(() => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+      localStorage.setItem(STORAGE_KEY, serializeCart(items));
     } catch {
       // storage penuh / diblokir — keranjang tetap jalan di memori
     }

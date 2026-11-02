@@ -22,11 +22,13 @@ import AdminOrders from "../pages/admin/AdminOrders";
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import AdminCoupons from "../pages/admin/AdminCoupons";
 import ProtectedRoute from "../components/admin/ProtectedRoute";
+import RouteError from "../components/RouteError";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <RootLayout />,
+    errorElement: <RouteError />,
     children: [
       { index: true, element: <Home /> },
       { path: "news", element: <News /> },
@@ -44,6 +46,7 @@ export const router = createBrowserRouter([
   { path: "/admin/login", element: <AdminLogin /> },
   {
     path: "/admin",
+    errorElement: <RouteError />,
     element: (
       <ProtectedRoute>
         <AdminLayout />
