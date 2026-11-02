@@ -36,14 +36,18 @@ const posInt = (v) => {
   return Number.isFinite(n) && n > 0 ? n : undefined;
 };
 
-// Produk baru. Untuk rank, salin kerangka `values` dari rank pertama (semua dinolkan)
-// supaya tabel perk di halaman store tidak error.
-export function newProduct(category, existing = []) {
+// Produk baru. Untuk rank, `values` diisi nol/false dari daftar baris perk resmi
+// (perkRows) supaya tabel perk di halaman store tidak error.
+export function newProduct(category, existing = [], perkRows = []) {
   const base = { _new: true, key: "", name: "", price: "$0.00", tone: "" };
   if (category === "ranks") {
-    const tpl = existing.find((r) => r.values)?.values ?? {};
     const values = {};
-    for (const [k, v] of Object.entries(tpl)) values[k] = typeof v === "boolean" ? false : 0;
+    if (perkRows.length) {
+      for (const row of perkRows) values[row.key] = row.type === "check" ? false : 0;
+    } else {
+      const tpl = existing.find((r) => r.values)?.values ?? {};
+      for (const [k, v] of Object.entries(tpl)) values[k] = typeof v === "boolean" ? false : 0;
+    }
     return { ...base, usernameColor: "", perks: [], values };
   }
   if (category === "crate_keys") return { ...base, contents: [] };

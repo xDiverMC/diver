@@ -12,3 +12,13 @@
 .admin-root ::selection {
   background: rgb(16 185 129 / 0.35);
 }
+
+/* Bar Simpan menempel di atas menu bawah (HP); di desktop menempel di dasar layar. */
+.admin-savebar {
+  bottom: calc(3.9rem + env(safe-area-inset-bottom));
+}
+@media (min-width: 768px) {
+  .admin-savebar {
+    bottom: 1rem;
+  }
+}

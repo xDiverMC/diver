@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { ChevronDown, ChevronUp, Code, Plus, Save, Trash2 } from "lucide-react";
 import { supabase } from "../../lib/supabase";
-import { RANKS, CRATE_KEYS, CURRENCY_PACKS } from "../../data/store";
+import { RANKS, CRATE_KEYS, CURRENCY_PACKS, RANK_PERK_ROWS } from "../../data/store";
 import { Card, PageHeader, Button, Field, Input, Textarea, Select, Spinner, Badge, EmptyState } from "../../components/admin/ui";
 import { CATEGORIES, TONES, newProduct, slugify, validateProducts } from "../../lib/storeEditor";
 
@@ -155,9 +155,38 @@ function ProductCard({ p, category, open, onToggle, onChange, onMove, onDelete, 
           </div>
 
           {category === "ranks" && (
-            <p className="text-xs text-neutral-500 sm:col-span-2">
-              Tabel perbandingan perk (chat icon, bonus homes, dst.) diatur lewat <b>Mode JSON</b> di bawah.
-            </p>
+            <div className="space-y-3 rounded-lg border border-neutral-800 bg-neutral-950/50 p-4 sm:col-span-2">
+              <div className="text-sm font-medium text-white">Tabel perbandingan perk</div>
+              <div className="grid gap-x-6 gap-y-3 sm:grid-cols-2">
+                {RANK_PERK_ROWS.map((row) =>
+                  row.type === "check" ? (
+                    <Check
+                      key={row.key}
+                      checked={p.values?.[row.key]}
+                      onChange={(v) => set({ values: { ...(p.values ?? {}), [row.key]: v } })}
+                    >
+                      {row.label}
+                    </Check>
+                  ) : (
+                    <label key={row.key} className="flex items-center justify-between gap-3 text-sm text-neutral-300">
+                      <span>{row.label}</span>
+                      <span className="flex items-center gap-1">
+                        <input
+                          type="number"
+                          min="0"
+                          value={p.values?.[row.key] ?? 0}
+                          onChange={(e) =>
+                            set({ values: { ...(p.values ?? {}), [row.key]: e.target.value === "" ? 0 : Number(e.target.value) } })
+                          }
+                          className="w-20 rounded-lg border border-white/10 bg-neutral-900 px-2 py-1.5 text-right text-sm text-white outline-none focus:border-emerald-500/70"
+                        />
+                        {row.suffix && <span className="text-neutral-500">{row.suffix}</span>}
+                      </span>
+                    </label>
+                  )
+                )}
+              </div>
+            </div>
           )}
         </div>
       )}
@@ -229,7 +258,7 @@ export default function AdminStore() {
     setOpen(null);
   }
   function add() {
-    setProducts([...products, newProduct(tab, products)]);
+    setProducts([...products, newProduct(tab, products, RANK_PERK_ROWS)]);
     setOpen(products.length);
   }
 
@@ -276,6 +305,7 @@ export default function AdminStore() {
     const { errors: errs, cleaned } = validateProducts(list);
     if (errs.length) {
       setErrors(errs);
+      window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
 
@@ -357,22 +387,26 @@ export default function AdminStore() {
           </ul>
         </div>
       )}
-      {savedMsg && (
-        <p className="rounded-lg border border-emerald-900 bg-emerald-950/40 px-3 py-2 text-sm text-emerald-300">{savedMsg}</p>
-      )}
 
-      <div className="sticky bottom-0 -mx-4 flex flex-wrap items-center gap-2 border-t border-neutral-800 bg-neutral-950/95 px-4 py-3 backdrop-blur md:mx-0 md:rounded-xl md:border">
+      <div className="admin-savebar sticky z-20 -mx-4 flex flex-wrap items-center gap-2 border-t border-white/10 bg-neutral-950/95 px-4 py-3 backdrop-blur md:mx-0 md:rounded-xl md:border">
         {!jsonMode && (
           <Button variant="secondary" onClick={add}>
-            <Plus size={16} /> Tambah produk
+            <Plus size={16} /> Tambah
           </Button>
         )}
         <Button variant="secondary" onClick={toggleJson}>
-          <Code size={16} /> {jsonMode ? "Kembali ke editor" : "Mode JSON"}
+          <Code size={16} /> {jsonMode ? "Editor" : "JSON"}
         </Button>
-        <Button onClick={handleSave} disabled={saving} className="ml-auto">
-          <Save size={16} /> {saving ? "Menyimpan..." : "Simpan"}
-        </Button>
+        <div className="ml-auto flex items-center gap-3">
+          {savedMsg ? (
+            <span className="text-xs text-emerald-400">✓ Tersimpan</span>
+          ) : dirty[tab] ? (
+            <span className="text-xs text-amber-300">Belum disimpan</span>
+          ) : null}
+          <Button onClick={handleSave} disabled={saving}>
+            <Save size={16} /> {saving ? "Menyimpan..." : "Simpan"}
+          </Button>
+        </div>
       </div>
     </div>
   );

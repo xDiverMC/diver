@@ -188,7 +188,7 @@ export default function AdminLayout() {
         </div>
       </header>
 
-      <main className="min-w-0 flex-1 px-4 pb-28 pt-5 md:px-10 md:pb-10 md:pt-8">
+      <main className="min-w-0 flex-1 px-4 pb-40 pt-5 md:px-10 md:pb-10 md:pt-8">
         <div className="mx-auto max-w-4xl">
           <Outlet />
         </div>
