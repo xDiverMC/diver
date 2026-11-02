@@ -1,4 +1,14 @@
-/* Panel admin memakai font bersih (bukan font pixel website) supaya mudah dibaca. */
+/*
+ * Panel admin — gaya dasar.
+ *
+ * KENAPA ADA KELAS KHUSUS (.btn, .seg, .tab, ...):
+ * index.css punya aturan global TANPA @layer:
+ *     button { background: none; border: none; padding: 0 }
+ *     a      { color: inherit }
+ * CSS tanpa layer selalu menang atas utilitas Tailwind (yang ada di @layer), jadi
+ * bg-*, px-*, py-*, border-* pada <button> dan text-* pada <a> diabaikan di admin.
+ * Kelas di bawah ini juga tanpa layer + lebih spesifik, jadi menang atas aturan global.
+ */
 .admin-root {
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -13,7 +23,176 @@
   background: rgb(16 185 129 / 0.35);
 }
 
-/* Bar Simpan menempel di atas menu bawah (HP); di desktop menempel di dasar layar. */
+/* Cadangan: <button>/<a> polos di admin kembali memakai utilitas Tailwind. */
+.admin-root button {
+  background: revert-layer;
+  border: revert-layer;
+  padding: revert-layer;
+}
+.admin-root a {
+  color: revert-layer;
+  text-decoration: revert-layer;
+}
+
+/* ── Tombol ───────────────────────────────────────────────── */
+.admin-root .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  padding: 0.5rem 0.875rem;
+  border-radius: 0.625rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+  white-space: nowrap;
+  transition: background-color 0.15s, opacity 0.15s;
+}
+.admin-root .btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.admin-root .btn-primary {
+  background: #10b981;
+  color: #052e16;
+}
+.admin-root .btn-primary:hover:not(:disabled) {
+  background: #34d399;
+}
+.admin-root .btn-secondary {
+  background: rgb(255 255 255 / 0.08);
+  color: #f5f5f5;
+}
+.admin-root .btn-secondary:hover:not(:disabled) {
+  background: rgb(255 255 255 / 0.14);
+}
+.admin-root .btn-danger {
+  background: rgb(153 27 27 / 0.45);
+  color: #fca5a5;
+}
+.admin-root .btn-danger:hover:not(:disabled) {
+  background: rgb(153 27 27 / 0.8);
+}
+
+.admin-root .icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.375rem;
+  border-radius: 0.5rem;
+  color: #737373;
+  transition: background-color 0.15s, color 0.15s;
+}
+.admin-root .icon-btn:hover:not(:disabled) {
+  background: rgb(255 255 255 / 0.08);
+  color: #fff;
+}
+.admin-root .icon-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+.admin-root .icon-btn.danger {
+  color: #f87171;
+}
+.admin-root .icon-btn.danger:hover:not(:disabled) {
+  background: rgb(127 29 29 / 0.4);
+  color: #fca5a5;
+}
+
+/* ── Pilihan berbentuk pil ────────────────────────────────── */
+.admin-root .seg {
+  display: inline-flex;
+  max-width: 100%;
+  gap: 0.125rem;
+  overflow-x: auto;
+  padding: 0.25rem;
+  border-radius: 0.875rem;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  background: rgb(23 23 23 / 0.6);
+}
+.admin-root .seg button {
+  white-space: nowrap;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.625rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #a3a3a3;
+}
+.admin-root .seg button:hover {
+  color: #fff;
+}
+.admin-root .seg button.on {
+  background: #10b981;
+  color: #052e16;
+}
+
+/* ── Tab bergaris bawah ───────────────────────────────────── */
+.admin-root .tabs {
+  display: flex;
+  gap: 0.25rem;
+  border-bottom: 1px solid rgb(255 255 255 / 0.08);
+}
+.admin-root .tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.625rem 1rem;
+  margin-bottom: -1px;
+  border-bottom: 2px solid transparent;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #737373;
+  transition: color 0.15s;
+}
+.admin-root .tab:hover {
+  color: #d4d4d4;
+}
+.admin-root .tab.on {
+  color: #fff;
+  border-bottom-color: #10b981;
+}
+
+/* ── Navigasi ─────────────────────────────────────────────── */
+.admin-root .side-link {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  color: #a3a3a3;
+  text-align: left;
+  transition: background-color 0.15s, color 0.15s;
+}
+.admin-root .side-link:hover {
+  background: rgb(255 255 255 / 0.05);
+  color: #fff;
+}
+.admin-root .side-link.on {
+  background: rgb(255 255 255 / 0.08);
+  color: #fff;
+  font-weight: 500;
+}
+.admin-root .side-link.logout:hover {
+  color: #f87171;
+}
+
+.admin-root .tab-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.625rem 0;
+  font-size: 0.625rem;
+  font-weight: 500;
+  color: #737373;
+}
+.admin-root .tab-link.on {
+  color: #34d399;
+}
+
+/* Bar Simpan menempel di atas menu bawah (HP); di desktop di dasar layar. */
 .admin-savebar {
   bottom: calc(3.9rem + env(safe-area-inset-bottom));
 }

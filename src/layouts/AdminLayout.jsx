@@ -56,15 +56,11 @@ function SideLink({ link, todo }) {
     <NavLink
       to={link.to}
       end={link.end}
-      className={({ isActive }) =>
-        `group flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition ${
-          isActive ? "bg-white/[0.06] font-medium text-white" : "text-neutral-400 hover:bg-white/[0.04] hover:text-white"
-        }`
-      }
+      className={({ isActive }) => `side-link ${isActive ? "on" : ""}`}
     >
       {({ isActive }) => (
         <>
-          <Icon size={16} className={isActive ? "text-emerald-400" : "text-neutral-500 group-hover:text-neutral-300"} />
+          <Icon size={16} className={isActive ? "text-emerald-400" : "text-neutral-500"} />
           <span className="flex-1">{link.label}</span>
           {link.badge && todo > 0 && (
             <span className="rounded-full bg-red-500 px-1.5 py-0.5 text-[10px] font-semibold leading-none text-white">
@@ -83,11 +79,7 @@ function TabLink({ link, todo }) {
     <NavLink
       to={link.to}
       end={link.end}
-      className={({ isActive }) =>
-        `relative flex flex-col items-center gap-1 py-2.5 text-[10px] font-medium transition ${
-          isActive ? "text-emerald-400" : "text-neutral-500"
-        }`
-      }
+      className={({ isActive }) => `tab-link ${isActive ? "on" : ""}`}
     >
       <span className="relative">
         <Icon size={20} />
@@ -156,18 +148,10 @@ export default function AdminLayout() {
         </nav>
 
         <div className="flex flex-col gap-0.5 border-t border-white/5 pt-3">
-          <a
-            href="/"
-            target="_blank"
-            rel="noreferrer"
-            className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-neutral-400 hover:bg-white/[0.04] hover:text-white"
-          >
+          <a href="/" target="_blank" rel="noreferrer" className="side-link">
             <ExternalLink size={16} className="text-neutral-500" /> Lihat website
           </a>
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-3 rounded-lg px-3 py-2 text-left text-sm text-neutral-400 hover:bg-white/[0.04] hover:text-red-400"
-          >
+          <button onClick={handleLogout} className="side-link logout">
             <LogOut size={16} className="text-neutral-500" /> Keluar
           </button>
         </div>
@@ -177,12 +161,10 @@ export default function AdminLayout() {
       <header className="sticky top-0 z-20 flex items-center justify-between border-b border-white/5 bg-neutral-950/85 px-4 py-3 backdrop-blur md:hidden">
         <Logo />
         <div className="flex items-center gap-1">
-          <a href="/" target="_blank" rel="noreferrer" aria-label="Lihat website"
-            className="rounded-lg p-2 text-neutral-400 hover:bg-white/5 hover:text-white">
+          <a href="/" target="_blank" rel="noreferrer" aria-label="Lihat website" className="icon-btn">
             <ExternalLink size={18} />
           </a>
-          <button onClick={handleLogout} aria-label="Keluar"
-            className="rounded-lg p-2 text-neutral-400 hover:bg-white/5 hover:text-red-400">
+          <button onClick={handleLogout} aria-label="Keluar" className="icon-btn danger">
             <LogOut size={18} />
           </button>
         </div>

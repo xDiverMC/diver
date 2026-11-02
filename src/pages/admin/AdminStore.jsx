@@ -35,16 +35,13 @@ function ProductCard({ p, category, open, onToggle, onChange, onMove, onDelete, 
           <Badge tone={hasCommands ? "success" : "neutral"}>{hasCommands ? "Otomatis" : "Manual"}</Badge>
         </button>
         <div className="flex shrink-0 gap-1">
-          <button type="button" disabled={isFirst} onClick={() => onMove(-1)} aria-label="Naik"
-            className="rounded p-1.5 text-neutral-500 hover:bg-neutral-800 hover:text-white disabled:opacity-30">
+          <button type="button" disabled={isFirst} onClick={() => onMove(-1)} aria-label="Naik" className="icon-btn">
             <ChevronUp size={16} />
           </button>
-          <button type="button" disabled={isLast} onClick={() => onMove(1)} aria-label="Turun"
-            className="rounded p-1.5 text-neutral-500 hover:bg-neutral-800 hover:text-white disabled:opacity-30">
+          <button type="button" disabled={isLast} onClick={() => onMove(1)} aria-label="Turun" className="icon-btn">
             <ChevronDown size={16} />
           </button>
-          <button type="button" onClick={onDelete} aria-label="Hapus"
-            className="rounded p-1.5 text-red-400 hover:bg-red-950">
+          <button type="button" onClick={onDelete} aria-label="Hapus" className="icon-btn danger">
             <Trash2 size={16} />
           </button>
         </div>
@@ -330,14 +327,12 @@ export default function AdminStore() {
     <div className="space-y-4">
       <PageHeader title="Produk" description="Atur harga, isi, pengiriman otomatis, dan batas pembelian." />
 
-      <div className="flex gap-1 border-b border-neutral-800">
+      <div className="tabs">
         {CATEGORIES.map((c) => (
           <button
             key={c.key}
             onClick={() => changeTab(c.key)}
-            className={`-mb-px flex items-center gap-1.5 border-b-2 px-4 py-2.5 text-sm font-medium transition ${
-              tab === c.key ? "border-emerald-500 text-white" : "border-transparent text-neutral-500 hover:text-neutral-300"
-            }`}
+            className={`tab ${tab === c.key ? "on" : ""}`}
           >
             {c.label}
             {(dirty[c.key] || missing[c.key]) && <span className="h-1.5 w-1.5 rounded-full bg-amber-400" title="Belum disimpan" />}

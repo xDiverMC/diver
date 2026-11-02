@@ -155,7 +155,7 @@ export default function AdminStaffList() {
             <h2 className="font-semibold text-white">
               {editing === "new" ? "Tambah Staff" : "Edit Staff"}
             </h2>
-            <button onClick={closeForm} className="text-neutral-500 hover:text-white">
+            <button onClick={closeForm} className="icon-btn" aria-label="Tutup">
               <X size={18} />
             </button>
           </div>

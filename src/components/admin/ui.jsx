@@ -23,16 +23,10 @@ export function PageHeader({ title, description, action }) {
   );
 }
 
-const VARIANTS = {
-  primary: "bg-emerald-500 hover:bg-emerald-400 text-neutral-950",
-  secondary: "bg-white/[0.06] hover:bg-white/10 text-neutral-100",
-  danger: "bg-red-900/50 hover:bg-red-900 text-red-300",
-};
-
 export function Button({ variant = "primary", className = "", children, ...props }) {
   return (
     <button
-      className={`inline-flex items-center gap-1.5 text-sm font-medium px-3 py-2 rounded-lg transition disabled:opacity-50 ${VARIANTS[variant]} ${className}`}
+      className={`btn btn-${variant} ${className}`}
       {...props}
     >
       {children}
@@ -137,15 +131,13 @@ export function StatCard({ label, value, hint, delta, icon: Icon, tone = "neutra
 // Pilihan berbentuk pil (mis. 7 / 30 / 90 hari).
 export function Segmented({ options, value, onChange }) {
   return (
-    <div className="inline-flex max-w-full overflow-x-auto rounded-xl border border-white/[0.07] bg-neutral-900/60 p-1">
+    <div className="seg">
       {options.map((o) => (
         <button
           key={o.value}
           type="button"
           onClick={() => onChange(o.value)}
-          className={`whitespace-nowrap rounded-lg px-3 py-1.5 text-xs font-medium transition ${
-            value === o.value ? "bg-emerald-500 text-neutral-950" : "text-neutral-400 hover:text-white"
-          }`}
+          className={value === o.value ? "on" : ""}
         >
           {o.label}
         </button>

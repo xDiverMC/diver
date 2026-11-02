@@ -40,7 +40,7 @@ export default function AdminLogin() {
         </div>
         {error && <p className="text-red-400 text-sm">{error}</p>}
         <button type="submit" disabled={loading}
-          className="w-full rounded bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-medium py-2 transition">
+          className="btn btn-primary w-full">
           {loading ? "Loading..." : "Login"}
         </button>
       </form>

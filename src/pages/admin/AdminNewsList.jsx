@@ -1,9 +1,9 @@
 // src/pages/admin/AdminNewsList.jsx
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Plus, Pencil, Trash2, Newspaper } from "lucide-react";
+import { Plus, Pencil, Trash2, Newspaper, ExternalLink } from "lucide-react";
 import { supabase } from "../../lib/supabase";
-import { Card, PageHeader, Button, EmptyState, Spinner } from "../../components/admin/ui";
+import { Card, PageHeader, Button, EmptyState, Spinner, Badge } from "../../components/admin/ui";
 
 export default function AdminNewsList() {
   const [posts, setPosts] = useState([]);
@@ -24,7 +24,7 @@ export default function AdminNewsList() {
   }, []);
 
   async function handleDelete(id) {
-    if (!confirm("Hapus post ini?")) return;
+    if (!confirm("Hapus berita ini?")) return;
     await supabase.from("news_posts").delete().eq("id", id);
     load();
   }
@@ -32,12 +32,12 @@ export default function AdminNewsList() {
   return (
     <div>
       <PageHeader
-        title="News"
-        description="Kelola berita & pengumuman yang tampil di halaman /news"
+        title="Berita"
+        description="Kelola berita & pengumuman yang tampil di halaman /news."
         action={
           <Link to="/admin/news/new">
             <Button>
-              <Plus size={16} /> Tambah Post
+              <Plus size={16} /> Tambah berita
             </Button>
           </Link>
         }
@@ -48,8 +48,8 @@ export default function AdminNewsList() {
       {!loading && posts.length === 0 && (
         <EmptyState
           icon={Newspaper}
-          title="Belum ada post"
-          description="Tambah post pertama kamu buat mulai isi halaman News."
+          title="Belum ada berita"
+          description="Klik “Tambah berita” untuk menulis yang pertama."
         />
       )}
 
@@ -62,11 +62,16 @@ export default function AdminNewsList() {
             >
               <div className="min-w-0">
                 <div className="font-medium text-white truncate">{p.title}</div>
-                <div className="text-xs text-neutral-500 mt-0.5">
-                  /{p.slug} · {p.category}
+                <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-neutral-500">
+                  <Badge tone="info">{p.category}</Badge>
+                  <span>{p.post_date}</span>
+                  <span className="truncate">/{p.slug}</span>
                 </div>
               </div>
-              <div className="flex gap-2 shrink-0">
+              <div className="flex shrink-0 items-center gap-2">
+                <a href={`/news/${p.slug}`} target="_blank" rel="noreferrer" className="icon-btn" aria-label="Lihat">
+                  <ExternalLink size={16} />
+                </a>
                 <Link to={`/admin/news/${p.id}/edit`}>
                   <Button variant="secondary">
                     <Pencil size={14} /> Edit
