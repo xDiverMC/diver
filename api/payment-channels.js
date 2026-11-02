@@ -1,24 +1,33 @@
-// api/payment-channels.js
-// Vercel serverless function — proxies Tripay's payment-channel list so
-// the API key never reaches the browser.
+// api/payment-channels.js — proxy daftar metode pembayaran Tripay
+// (API key tidak pernah sampai ke browser). Selalu membalas pesan error yang jelas.
+import { tripayBase } from "./_lib/tripay.js";
+
 export default async function handler(req, res) {
   try {
-    const response = await fetch(
-      "https://tripay.co.id/api/merchant/payment-channel",
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.TRIPAY_API_KEY}`,
-        },
-      }
-    );
-    const json = await response.json();
-
-    if (!json.success) {
-      return res.status(400).json({ error: json.message || "Tripay error" });
+    const key = process.env.TRIPAY_API_KEY;
+    if (!key) {
+      return res.status(500).json({ error: "TRIPAY_API_KEY belum diisi di Vercel (Settings → Environment Variables), lalu Redeploy." });
     }
 
-    // Only send the fields the checkout UI actually needs.
-    const channels = json.data
+    const response = await fetch(`${tripayBase()}/merchant/payment-channel`, {
+      headers: { Authorization: `Bearer ${key}` },
+      signal: AbortSignal.timeout(8000),
+    });
+
+    let json;
+    try {
+      json = await response.json();
+    } catch {
+      return res.status(502).json({ error: `Tripay membalas dengan format tak terduga (HTTP ${response.status}).` });
+    }
+
+    if (!json.success) {
+      return res.status(400).json({
+        error: `${json.message || "Tripay menolak permintaan"} — cek TRIPAY_MODE (sandbox/production) cocok dengan API key, dan kosongkan IP Whitelist di dashboard Tripay.`,
+      });
+    }
+
+    const channels = (json.data ?? [])
       .filter((c) => c.active)
       .map((c) => ({
         code: c.code,
@@ -28,8 +37,14 @@ export default async function handler(req, res) {
         fee_customer: c.fee_customer,
       }));
 
+    if (channels.length === 0) {
+      return res.status(200).json({ channels, warning: "Tripay tidak mengembalikan metode pembayaran aktif." });
+    }
+
+    res.setHeader("Cache-Control", "public, s-maxage=300, stale-while-revalidate=600");
     res.status(200).json({ channels });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error(err);
+    res.status(502).json({ error: "Tidak bisa menghubungi Tripay: " + err.message });
   }
 }

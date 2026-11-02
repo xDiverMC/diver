@@ -19,6 +19,7 @@ import AdminNewsForm from "../pages/admin/AdminNewsForm";
 import AdminStaffList from "../pages/admin/AdminStaffList";
 import AdminStore from "../pages/admin/AdminStore";
 import AdminOrders from "../pages/admin/AdminOrders";
+import AdminDashboard from "../pages/admin/AdminDashboard";
 import AdminCoupons from "../pages/admin/AdminCoupons";
 import ProtectedRoute from "../components/admin/ProtectedRoute";
 
@@ -49,7 +50,7 @@ export const router = createBrowserRouter([
       </ProtectedRoute>
     ),
     children: [
-      { index: true, element: <AdminNewsList /> },
+      { index: true, element: <AdminDashboard /> },
       { path: "news", element: <AdminNewsList /> },
       { path: "news/new", element: <AdminNewsForm /> },
       { path: "news/:id/edit", element: <AdminNewsForm /> },

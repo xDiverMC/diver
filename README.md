@@ -14,6 +14,7 @@ Website server Minecraft: React + Vite, Supabase, pembayaran Tripay, hosting Ver
 | Cek pesanan | `/orders` — cari pakai username MC atau email, tanpa login |
 | Batas pembelian | `max_qty`, `once_per_player`, `limit_total`, `limit_per_day` per produk |
 | Order expired | Dibersihkan otomatis (cron) |
+| Panel admin | Dashboard + grafik pendapatan, editor produk visual (tanpa JSON), pesanan, kupon |
 
 ## Setup (urut)
 
@@ -29,8 +30,9 @@ Website server Minecraft: React + Vite, Supabase, pembayaran Tripay, hosting Ver
    Port RCON harus bisa dijangkau dari internet (Vercel tidak punya IP tetap). RCON tidak
    terenkripsi, jadi pakai password panjang dan jangan pakai ulang di tempat lain.
    Kalau server di Pterodactyl, port RCON harus terdaftar sebagai allocation.
-4. **Command produk** — di `/admin/store`, tambahkan `commands` ke tiap produk (lihat contoh di bawah).
-   Produk **tanpa** `commands` tetap dikirim manual (status "Perlu kirim manual").
+4. **Produk** — buka `/admin/store`, lalu **Simpan** di tiap tab (Ranks, Crate Keys, Currency) agar katalog
+   tersimpan di database (checkout hanya memproses produk yang tersimpan). Isi kolom *Pengiriman otomatis*
+   tiap produk dengan command RCON. Produk tanpa command tetap dikirim manual.
 5. **Cron** — `vercel.json` sudah menjadwalkan pembersihan harian. Untuk tiap 15 menit, tambahkan secret
    repo GitHub `SITE_URL` dan `CRON_SECRET` (workflow `.github/workflows/maintenance.yml`).
 6. **Discord** — Server Settings → Integrations → Webhooks → salin URL ke `DISCORD_WEBHOOK_URL`.
@@ -38,25 +40,14 @@ Website server Minecraft: React + Vite, Supabase, pembayaran Tripay, hosting Ver
 8. **Admin** — matikan *Allow new users to sign up* di Supabase Auth (semua akun yang login dianggap admin),
    atau isi `ADMIN_EMAILS` untuk membatasi tombol "Kirim ulang".
 
-## Contoh produk (`/admin/store`)
+## Contoh command produk (kolom *Pengiriman otomatis*)
 
-```json
-[
-  {
-    "key": "vip", "name": "VIP", "price": "$4.99",
-    "once_per_player": true,
-    "commands": ["lp user {player} parent add vip"]
-  }
-]
+Satu command per baris:
+
 ```
-```json
-[
-  {
-    "key": "common", "name": "Common Key", "price": "$2.99",
-    "max_qty": 10, "limit_per_day": 20,
-    "commands": ["crate give {player} common {qty}"]
-  }
-]
+lp user {player} parent add vip          ← rank
+crate give {player} common {qty}         ← crate key (jumlah = {qty})
+eco give {player} 10000                  ← currency; centang "ulangi sesuai jumlah"
 ```
 
 Placeholder: `{player}` username, `{qty}` jumlah, `{ref}` kode order. `repeat_per_qty: true`
@@ -65,6 +56,14 @@ sesuaikan dengan plugin permission/crate/economy di servermu.
 
 Pengiriman dianggap **gagal** jika output RCON mengandung "No player was found", "Unknown command",
 dsb. (ubah lewat `DELIVERY_FAIL_REGEX`). Command yang butuh player online akan di-retry otomatis.
+
+## Metode pembayaran tidak muncul?
+
+Halaman checkout sekarang menampilkan alasannya. Penyebab paling umum:
+
+1. `TRIPAY_MODE` tidak cocok dengan API key (key sandbox ≠ key production). Isi `sandbox` atau `production`.
+2. `TRIPAY_API_KEY` belum diisi di Vercel, atau lupa **Redeploy** setelah mengisi.
+3. *IP Whitelist* di dashboard Tripay terisi — kosongkan, karena IP Vercel berubah-ubah.
 
 ## Menjalankan lokal
 

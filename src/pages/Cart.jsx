@@ -6,6 +6,7 @@ import {
   Plus,
   Trash2,
   CheckCircle2,
+  Star,
 } from "lucide-react";
 import PixelBox from "../components/ui/PixelBox";
 import PixelButton from "../components/ui/PixelButton";
@@ -36,7 +37,7 @@ function ItemIcon({ item }) {
       />
     );
   }
-  const Icon = item.icon;
+  const Icon = item.icon ?? Star;
   return (
     <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-sm bg-black/25">
       {Icon && <Icon size={18} color="#fff" strokeWidth={2.25} />}

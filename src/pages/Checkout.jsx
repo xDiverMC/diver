@@ -1,7 +1,7 @@
 // src/pages/Checkout.jsx
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CreditCard, Loader2, Ticket } from "lucide-react";
+import { CreditCard, Loader2, RefreshCw, Ticket } from "lucide-react";
 import PixelBox from "../components/ui/PixelBox";
 import PixelButton from "../components/ui/PixelButton";
 import { useCart } from "../context/useCart";
@@ -10,13 +10,43 @@ import { useSeo } from "../hooks/useSeo";
 const MC_USERNAME_RE = /^\.?[A-Za-z0-9_]{3,16}$/;
 const idr = (n) => "Rp" + Number(n || 0).toLocaleString("id-ID");
 
+const PENDING_ORDER_KEY = "bdzone_pending_order";
+
+async function requestChannels() {
+  let res;
+  try {
+    res = await fetch("/api/payment-channels");
+  } catch {
+    throw new Error("Tidak bisa menghubungi server. Cek koneksi internet kamu lalu coba lagi.");
+  }
+  let data = null;
+  try {
+    data = await res.json();
+  } catch {
+    // balasan bukan JSON (mis. API belum ter-deploy / jalan lewat `npm run dev`)
+  }
+  if (!res.ok || !data) {
+    throw new Error(
+      data?.error ||
+        (res.status === 404 || !data
+          ? "API pembayaran tidak ditemukan. Pastikan situs sudah ter-deploy di Vercel (lokal: pakai `npx vercel dev`)."
+          : "Gagal memuat metode pembayaran.")
+    );
+  }
+  if (!data.channels?.length) {
+    throw new Error(data.warning || "Belum ada metode pembayaran aktif di Tripay.");
+  }
+  return data.channels;
+}
+
 export default function Checkout() {
   useSeo({ title: "Checkout", path: "/checkout", noindex: true });
-  const { items, subtotal, clearCart } = useCart();
+  const { items, subtotal } = useCart();
   const navigate = useNavigate();
 
   const [channels, setChannels] = useState([]);
   const [loadingChannels, setLoadingChannels] = useState(true);
+  const [channelError, setChannelError] = useState("");
   const [method, setMethod] = useState("");
   const [form, setForm] = useState({ name: "", email: "", mcUsername: "" });
   const [submitting, setSubmitting] = useState(false);
@@ -31,14 +61,24 @@ export default function Checkout() {
   }, [items, navigate]);
 
   useEffect(() => {
-    fetch("/api/payment-channels")
-      .then((r) => r.json())
-      .then((data) => {
-        setChannels(data.channels ?? []);
-        setLoadingChannels(false);
-      })
-      .catch(() => setLoadingChannels(false));
+    let cancelled = false;
+    requestChannels()
+      .then((list) => !cancelled && setChannels(list))
+      .catch((err) => !cancelled && setChannelError(err.message))
+      .finally(() => !cancelled && setLoadingChannels(false));
+    return () => {
+      cancelled = true;
+    };
   }, []);
+
+  function retryChannels() {
+    setLoadingChannels(true);
+    setChannelError("");
+    requestChannels()
+      .then(setChannels)
+      .catch((err) => setChannelError(err.message))
+      .finally(() => setLoadingChannels(false));
+  }
 
   async function applyCoupon() {
     const code = couponInput.trim();
@@ -111,7 +151,14 @@ export default function Checkout() {
         return;
       }
 
-      clearCart();
+      // Keranjang TIDAK dikosongkan di sini: baru dikosongkan setelah pembayaran
+      // terkonfirmasi (lihat OrderStatus). Jadi kalau user menekan Back dari
+      // halaman bayar, pesanannya masih ada.
+      try {
+        localStorage.setItem(PENDING_ORDER_KEY, data.merchant_ref ?? "");
+      } catch {
+        // storage diblokir — tidak apa-apa
+      }
       window.location.href = data.checkout_url; // ke halaman bayar Tripay
     } catch {
       setError("Terjadi kesalahan. Coba lagi.");
@@ -252,7 +299,18 @@ export default function Checkout() {
           {loadingChannels && (
             <p className="text-[12px] text-(--color-text-dim)">Memuat metode pembayaran...</p>
           )}
+          {!loadingChannels && channelError && (
+            <div className="flex flex-col gap-2">
+              <p className="text-[12px] text-red-400 bg-red-950/40 border border-red-900 rounded-sm px-3 py-2">
+                {channelError}
+              </p>
+              <PixelButton type="button" tone="neutral" size="sm" icon={RefreshCw} onClick={retryChannels}>
+                Coba lagi
+              </PixelButton>
+            </div>
+          )}
           {!loadingChannels &&
+            !channelError &&
             channels.map((c) => (
               <label
                 key={c.code}
@@ -289,11 +347,16 @@ export default function Checkout() {
           tone="success"
           filled
           icon={submitting ? Loader2 : CreditCard}
-          disabled={submitting}
+          disabled={submitting || !method}
           className="mt-6 w-full py-5!"
         >
           {submitting ? "Memproses..." : "Lanjut ke Pembayaran"}
         </PixelButton>
+        {!method && !loadingChannels && !channelError && (
+          <p className="mt-2 text-center text-[11px] text-(--color-text-dim)">
+            Pilih metode pembayaran dulu untuk melanjutkan.
+          </p>
+        )}
       </form>
     </section>
   );

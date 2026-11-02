@@ -5,6 +5,9 @@ import { CheckCircle2, Clock, XCircle, PartyPopper, Loader2 } from "lucide-react
 import PixelBox from "../components/ui/PixelBox";
 import PixelButton from "../components/ui/PixelButton";
 import { useSeo } from "../hooks/useSeo";
+import { useCart } from "../context/useCart";
+
+const PENDING_ORDER_KEY = "bdzone_pending_order";
 
 const STATUS_META = {
   PAID: { icon: PartyPopper, tone: "success", label: "Pembayaran Berhasil!" },
@@ -53,7 +56,26 @@ function DeliveryNote({ order }) {
 export default function OrderStatus() {
   useSeo({ title: "Status Pesanan", path: "/order", noindex: true });
   const { ref } = useParams();
+  const { clearCart } = useCart();
   const [order, setOrder] = useState(undefined); // undefined = loading
+
+  // Keranjang dikosongkan hanya kalau order yang barusan dibuat dari checkout
+  // ini sudah terbayar (bukan sekadar membuka link order lama).
+  const orderStatus = order?.status;
+  useEffect(() => {
+    if (!orderStatus) return;
+    try {
+      if (localStorage.getItem(PENDING_ORDER_KEY) !== ref) return;
+      if (orderStatus === "PAID") {
+        clearCart();
+        localStorage.removeItem(PENDING_ORDER_KEY);
+      } else if (["EXPIRED", "FAILED"].includes(orderStatus)) {
+        localStorage.removeItem(PENDING_ORDER_KEY);
+      }
+    } catch {
+      // abaikan
+    }
+  }, [orderStatus, ref, clearCart]);
 
   useEffect(() => {
     let cancelled = false;

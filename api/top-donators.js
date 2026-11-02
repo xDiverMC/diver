@@ -31,7 +31,7 @@ export default async function handler(req, res) {
     // Tier = rank termahal yang pernah dibeli player ini.
     const catalog = await loadCatalog();
     const rankPrice = new Map(
-      catalog.filter((p) => p.category === "ranks").map((p) => [p.key, { name: p.name, price: parseUsd(p.price) }])
+      catalog.filter((p) => p.category === "ranks").map((p) => [p.id, { name: p.name, price: parseUsd(p.price) }])
     );
 
     const byPlayer = new Map();
@@ -40,7 +40,7 @@ export default async function handler(req, res) {
       const cur = byPlayer.get(k) ?? { username: o.customer_mc_username, amount: 0, tier: null, tierPrice: -1 };
       cur.amount += Number(o.amount_idr) || 0; // rows urut terbaru → username pertama = ejaan terbaru
       for (const it of o.items ?? []) {
-        const r = rankPrice.get(it.sku);
+        const r = rankPrice.get(it.sku) ?? rankPrice.get(`rank-${it.sku}`);
         if (r && r.price > cur.tierPrice) {
           cur.tier = r.name;
           cur.tierPrice = r.price;

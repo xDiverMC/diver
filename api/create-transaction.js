@@ -7,6 +7,7 @@ import { priceCart, toOrderItems } from "./_lib/pricing.js";
 import { checkPurchaseLimits } from "./_lib/limits.js";
 import { resolveCoupon } from "./_lib/coupons.js";
 import { notifyDiscord, orderFields, COLORS } from "./_lib/discord.js";
+import { tripayBase } from "./_lib/tripay.js";
 
 const ORDER_TTL_MS = 24 * 60 * 60 * 1000;
 
@@ -62,7 +63,7 @@ export default async function handler(req, res) {
       .digest("hex");
 
     const expiresAt = new Date(Date.now() + ORDER_TTL_MS);
-    const tripayRes = await fetch("https://tripay.co.id/api/transaction/create", {
+    const tripayRes = await fetch(`${tripayBase()}/transaction/create`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${process.env.TRIPAY_API_KEY}`,
@@ -117,7 +118,7 @@ export default async function handler(req, res) {
       });
     }
 
-    res.status(200).json({ checkout_url: tripayJson.data.checkout_url });
+    res.status(200).json({ checkout_url: tripayJson.data.checkout_url, merchant_ref: merchantRef });
   } catch (err) {
     sendError(res, err);
   }

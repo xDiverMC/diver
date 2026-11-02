@@ -5,7 +5,7 @@
 //   repeat_per_qty: true  // jalankan commands sebanyak qty (dengan {qty}=1)
 // Produk tanpa `commands` → order ditandai MANUAL (admin kirim manual, seperti sebelumnya).
 import { supabaseAdmin } from "./supabase.js";
-import { loadCatalog } from "./pricing.js";
+import { loadCatalog, findProduct } from "./pricing.js";
 import { runRconCommands } from "./rcon.js";
 import { notifyDiscord, orderFields, COLORS } from "./discord.js";
 import { sendDeliveredEmail } from "./email.js";
@@ -74,7 +74,7 @@ export async function deliverOrder(ref, { from = ["PENDING"] } = {}) {
     for (const item of claimed.items ?? []) {
       if (doneSkus.has(item.sku)) continue;
 
-      const product = catalog.find((p) => p.key === item.sku);
+      const product = findProduct(catalog, item.sku);
       const tpl = product?.commands;
       if (!MC_USERNAME_RE.test(player) || !Array.isArray(tpl) || tpl.length === 0) {
         manual = true;

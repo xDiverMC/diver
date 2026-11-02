@@ -8,6 +8,19 @@ const DEFAULT_MAX_QTY = 99;
 
 const CATEGORIES = ["ranks", "crate_keys", "currency_packs"];
 
+// Harus sama dengan id yang dibuat di src/components/store/tabs/*:
+//   rank-<key>, crate-<key>, currency-<key>
+const ID_PREFIX = { ranks: "rank", crate_keys: "crate", currency_packs: "currency" };
+
+// Cari produk dari id keranjang ("rank-vip"). Untuk data lama, key polos ("vip")
+// juga diterima selama tidak ambigu.
+export function findProduct(catalog, id) {
+  const exact = catalog.find((p) => p.id === id);
+  if (exact) return exact;
+  const byKey = catalog.filter((p) => p.key === id);
+  return byKey.length === 1 ? byKey[0] : undefined;
+}
+
 export function parseUsd(priceStr) {
   return Number(String(priceStr).replace(/[^0-9.]/g, "")) || 0;
 }
@@ -22,7 +35,7 @@ export async function loadCatalog() {
   const catalog = [];
   for (const row of data ?? []) {
     for (const p of Array.isArray(row.data) ? row.data : []) {
-      catalog.push({ ...p, category: row.key });
+      catalog.push({ ...p, category: row.key, id: `${ID_PREFIX[row.key]}-${p.key}` });
     }
   }
   return catalog;
@@ -46,7 +59,7 @@ export async function priceCart(items) {
   const catalog = await loadCatalog();
   const lines = [];
   for (const [id, qty] of qtyById) {
-    const product = catalog.find((p) => p.key === id);
+    const product = findProduct(catalog, id);
     if (!product) {
       throw new ApiError(
         400,
@@ -61,7 +74,7 @@ export async function priceCart(items) {
     if (unitIdr <= 0) {
       throw new ApiError(400, `Harga ${product.name} belum diatur.`);
     }
-    lines.push({ product, sku: product.key, name: product.name, qty, unitIdr });
+    lines.push({ product, sku: product.id, name: product.name, qty, unitIdr });
   }
 
   if (lines.length === 0) throw new ApiError(400, "Keranjang tidak valid.");
