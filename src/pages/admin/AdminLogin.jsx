@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../lib/supabase";
+import "../../styles/admin.css";
 
 export default function AdminLogin() {
   const [email, setEmail] = useState("");
@@ -24,7 +25,7 @@ export default function AdminLogin() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-neutral-950 px-4">
+    <div className="admin-root min-h-screen flex items-center justify-center bg-neutral-950 px-4">
       <form onSubmit={handleSubmit} className="w-full max-w-sm bg-neutral-900 border border-neutral-800 rounded-lg p-6 space-y-4">
         <h1 className="text-xl font-bold text-white mb-2">Admin Login</h1>
         <div>

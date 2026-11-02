@@ -81,7 +81,7 @@ export default function AdminDashboard() {
       )}
 
       {needsAction > 0 && (
-        <Link to="/admin/orders" className="block">
+        <Link to="/admin/orders?tab=todo" className="block">
           <div className="flex items-center gap-3 rounded-xl border border-red-900 bg-red-950/40 p-4 text-sm text-red-200">
             <PackageCheck size={18} className="shrink-0" />
             <span className="flex-1">

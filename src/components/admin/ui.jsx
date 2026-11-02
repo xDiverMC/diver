@@ -3,7 +3,7 @@ import { Loader2, Inbox } from "lucide-react";
 
 export function Card({ children, className = "" }) {
   return (
-    <div className={`bg-neutral-900 border border-neutral-800 rounded-xl ${className}`}>
+    <div className={`bg-neutral-900/60 border border-white/[0.07] rounded-2xl ${className}`}>
       {children}
     </div>
   );
@@ -11,9 +11,9 @@ export function Card({ children, className = "" }) {
 
 export function PageHeader({ title, description, action }) {
   return (
-    <div className="flex items-start justify-between gap-4 mb-5">
+    <div className="flex flex-wrap items-start justify-between gap-3 mb-5">
       <div>
-        <h1 className="text-xl font-bold text-white">{title}</h1>
+        <h1 className="text-xl font-semibold tracking-tight text-white">{title}</h1>
         {description && (
           <p className="text-sm text-neutral-500 mt-1">{description}</p>
         )}
@@ -24,15 +24,15 @@ export function PageHeader({ title, description, action }) {
 }
 
 const VARIANTS = {
-  primary: "bg-emerald-600 hover:bg-emerald-500 text-white",
-  secondary: "bg-neutral-800 hover:bg-neutral-700 text-white",
+  primary: "bg-emerald-500 hover:bg-emerald-400 text-neutral-950",
+  secondary: "bg-white/[0.06] hover:bg-white/10 text-neutral-100",
   danger: "bg-red-900/50 hover:bg-red-900 text-red-300",
 };
 
 export function Button({ variant = "primary", className = "", children, ...props }) {
   return (
     <button
-      className={`inline-flex items-center gap-1.5 text-sm font-medium px-3 py-2 rounded-md transition disabled:opacity-50 ${VARIANTS[variant]} ${className}`}
+      className={`inline-flex items-center gap-1.5 text-sm font-medium px-3 py-2 rounded-lg transition disabled:opacity-50 ${VARIANTS[variant]} ${className}`}
       {...props}
     >
       {children}
@@ -51,7 +51,7 @@ export function Field({ label, hint, children }) {
 }
 
 const fieldBase =
-  "w-full rounded-md bg-neutral-800 border border-neutral-700 px-3 py-2 text-white outline-none focus:border-emerald-500";
+  "w-full rounded-lg bg-neutral-900 border border-white/10 px-3 py-2 text-sm text-white outline-none placeholder:text-neutral-600 focus:border-emerald-500/70";
 
 export function Input(props) {
   return <input className={fieldBase} {...props} />;
@@ -82,7 +82,7 @@ export function EmptyState({ icon: Icon = Inbox, title, description }) {
 export function Spinner() {
   return (
     <div className="flex items-center gap-2 text-neutral-400 text-sm py-8">
-      <Loader2 size={16} className="animate-spin" /> Loading...
+      <Loader2 size={16} className="animate-spin" /> Memuat...
     </div>
   );
 }
@@ -137,14 +137,14 @@ export function StatCard({ label, value, hint, delta, icon: Icon, tone = "neutra
 // Pilihan berbentuk pil (mis. 7 / 30 / 90 hari).
 export function Segmented({ options, value, onChange }) {
   return (
-    <div className="inline-flex rounded-lg bg-neutral-900 border border-neutral-800 p-0.5">
+    <div className="inline-flex max-w-full overflow-x-auto rounded-xl border border-white/[0.07] bg-neutral-900/60 p-1">
       {options.map((o) => (
         <button
           key={o.value}
           type="button"
           onClick={() => onChange(o.value)}
-          className={`px-3 py-1.5 text-xs font-medium rounded-md transition ${
-            value === o.value ? "bg-emerald-600 text-white" : "text-neutral-400 hover:text-white"
+          className={`whitespace-nowrap rounded-lg px-3 py-1.5 text-xs font-medium transition ${
+            value === o.value ? "bg-emerald-500 text-neutral-950" : "text-neutral-400 hover:text-white"
           }`}
         >
           {o.label}

@@ -1,5 +1,6 @@
 // src/pages/admin/AdminOrders.jsx — daftar pesanan, versi ringkas.
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { CheckCircle2, PackageCheck, RefreshCw, Search } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { Card, PageHeader, Button, EmptyState, Spinner, Badge, Segmented } from "../../components/admin/ui";
@@ -21,25 +22,35 @@ const needsAction = (o) => o.status === "PAID" && !o.fulfilled;
 export default function AdminOrders() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [tab, setTab] = useState("todo");
+  const [params] = useSearchParams();
+  const [tab, setTab] = useState(params.get("tab") === "todo" ? "todo" : "all");
+  const [error, setError] = useState("");
   const [search, setSearch] = useState("");
   const [limit, setLimit] = useState(PAGE_SIZE);
   const [busyRef, setBusyRef] = useState("");
   const [notice, setNotice] = useState("");
 
-  async function load() {
-    setLoading(true);
-    const { data, error } = await supabase
+  async function load(silent = false) {
+    if (!silent) setLoading(true);
+    const { data, error: err } = await supabase
       .from("orders")
       .select("*")
       .order("created_at", { ascending: false })
       .limit(500);
-    if (!error) setOrders(data ?? []);
-    setLoading(false);
+    if (err) {
+      setError(err.message);
+    } else {
+      setOrders(data ?? []);
+      setError("");
+    }
+    if (!silent) setLoading(false);
   }
 
+  // Muat saat dibuka + segarkan otomatis tiap 30 detik.
   useEffect(() => {
     load();
+    const t = setInterval(() => load(true), 30000);
+    return () => clearInterval(t);
   }, []);
 
   async function markFulfilled(id) {
@@ -105,8 +116,8 @@ export default function AdminOrders() {
             setLimit(PAGE_SIZE);
           }}
           options={[
-            { value: "todo", label: `Perlu ditangani (${todoCount})` },
-            { value: "all", label: "Semua" },
+            { value: "all", label: `Semua (${orders.length})` },
+            { value: "todo", label: todoCount ? `Perlu ditangani (${todoCount})` : "Perlu ditangani" },
             { value: "unpaid", label: "Belum bayar" },
           ]}
         />
@@ -118,7 +129,7 @@ export default function AdminOrders() {
               setSearch(e.target.value);
               setLimit(PAGE_SIZE);
             }}
-            placeholder="Cari username, email, atau ref…"
+            placeholder="Cari pesanan…"
             className="w-full rounded-lg border border-neutral-800 bg-neutral-900 py-2 pl-9 pr-3 text-sm text-white outline-none focus:border-emerald-500"
           />
         </div>
@@ -128,13 +139,35 @@ export default function AdminOrders() {
         <p className="rounded-lg border border-neutral-700 bg-neutral-800 px-3 py-2 text-sm text-neutral-200">{notice}</p>
       )}
 
+      {error && (
+        <div className="rounded-xl border border-red-900 bg-red-950/40 px-4 py-3 text-sm text-red-200">
+          <b>Pesanan gagal dimuat:</b> {error}
+          <div className="mt-1 text-xs text-red-300/80">
+            Kalau pesannya soal izin (permission/RLS), tambahkan policy SELECT untuk role <code>authenticated</code> di
+            tabel <code>orders</code>. Kalau soal kolom, jalankan <code>supabase/001_features.sql</code>.
+          </div>
+        </div>
+      )}
+
       {loading && orders.length === 0 && <Spinner />}
 
-      {!loading && visible.length === 0 && (
+      {!loading && !error && visible.length === 0 && (
         <EmptyState
           icon={PackageCheck}
-          title={tab === "todo" && !search ? "Semua pesanan beres 🎉" : "Tidak ada pesanan"}
-          description={search ? "Coba kata kunci lain." : "Pesanan dari checkout akan muncul di sini."}
+          title={
+            search
+              ? "Tidak ditemukan"
+              : tab === "todo"
+                ? "Semua pesanan beres 🎉"
+                : tab === "unpaid"
+                  ? "Tidak ada yang menunggu pembayaran"
+                  : "Belum ada pesanan"
+          }
+          description={
+            search
+              ? "Coba kata kunci lain."
+              : "Pesanan muncul di sini begitu pembeli menekan “Lanjut ke Pembayaran” di checkout, bahkan sebelum dibayar."
+          }
         />
       )}
 
@@ -217,6 +250,18 @@ export default function AdminOrders() {
           )}
         </div>
       )}
+    
+      <details className="rounded-xl border border-white/[0.07] bg-neutral-900/40 px-4 py-3 text-sm text-neutral-400">
+        <summary className="cursor-pointer text-neutral-300">Bagaimana alur pesanan?</summary>
+        <ol className="mt-3 list-inside list-decimal space-y-1.5 text-neutral-400">
+          <li><b className="text-neutral-200">Belum bayar</b> — pembeli menekan “Lanjut ke Pembayaran”. Pesanan langsung tercatat di sini.</li>
+          <li><b className="text-neutral-200">Dibayar</b> — Tripay mengabari server. Status berubah otomatis dan notif masuk ke Discord.</li>
+          <li><b className="text-neutral-200">Mengirim</b> — server menjalankan command RCON ke akun Minecraft pembeli.</li>
+          <li><b className="text-neutral-200">Terkirim</b> — selesai. Pembeli dapat email, dan status di halaman pesanannya ikut berubah.</li>
+          <li><b className="text-neutral-200">Gagal kirim / Kirim manual</b> — muncul di “Perlu ditangani”. Cek log, lalu “Kirim ulang” atau “Tandai terkirim”.</li>
+          <li><b className="text-neutral-200">Kedaluwarsa</b> — tidak dibayar dalam 24 jam, dibersihkan otomatis.</li>
+        </ol>
+      </details>
     </div>
   );
 }
