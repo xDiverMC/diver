@@ -6,6 +6,7 @@ import { supabaseAdmin } from "./_lib/supabase.js";
 import { notifyDiscord, orderFields, COLORS } from "./_lib/discord.js";
 import { sendPaidEmail } from "./_lib/email.js";
 import { deliverOrder } from "./_lib/delivery.js";
+import { logEvent } from "./_lib/logs.js";
 
 export const config = {
   api: { bodyParser: false }, // butuh raw body buat verifikasi signature
@@ -36,6 +37,9 @@ export default async function handler(req, res) {
     .digest("hex");
 
   if (!safeEqual(req.headers["x-callback-signature"], expected)) {
+    await logEvent("warn", "callback", "Callback Tripay dengan signature tidak valid ditolak", {
+      hint: "Pastikan TRIPAY_PRIVATE_KEY di Vercel benar & cocok dengan mode (sandbox/production).",
+    });
     return res.status(400).json({ success: false, message: "Invalid signature" });
   }
 
@@ -63,13 +67,14 @@ export default async function handler(req, res) {
       if (error) throw error;
 
       if (order) {
+        await logEvent("info", "callback", `Pembayaran ${merchant_ref} diterima (${order.customer_mc_username})`);
         if (order.coupon_code) {
           const { error: rpcError } = await supabaseAdmin.rpc("redeem_coupon", { p_code: order.coupon_code });
           if (rpcError) console.error("redeem_coupon gagal:", rpcError.message);
         }
         // Semua jalan paralel supaya callback cepat selesai.
         await Promise.allSettled([
-          notifyDiscord({ title: "💰 Pembayaran masuk", color: COLORS.success, fields: orderFields(order) }),
+          notifyDiscord({ event: "paid", title: "💰 Pembayaran masuk", color: COLORS.success, fields: orderFields(order) }),
           sendPaidEmail(order),
           deliverOrder(merchant_ref, { from: ["PENDING"] }),
         ]);
@@ -84,6 +89,7 @@ export default async function handler(req, res) {
       if (error) throw error;
       if (order) {
         await notifyDiscord({
+          event: "refund",
           title: "↩️ Refund — cek manual (item mungkin sudah terkirim)",
           color: COLORS.warning,
           fields: orderFields(order),
@@ -100,6 +106,7 @@ export default async function handler(req, res) {
     }
   } catch (err) {
     console.error("tripay-callback error:", err);
+    await logEvent("error", "callback", `Gagal memproses callback ${merchant_ref}: ${err.message}`);
     return res.status(500).json({ success: false }); // biar Tripay mencoba lagi
   }
 

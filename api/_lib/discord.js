@@ -1,5 +1,7 @@
-// api/_lib/discord.js — notifikasi Discord webhook (fitur 2). Gagal = diabaikan.
+// api/_lib/discord.js — notifikasi Discord webhook. Gagal = dicatat ke log, tidak pernah melempar error.
 import { formatIDR } from "./validate.js";
+import { getDiscordConfig } from "./settings.js";
+import { logEvent } from "./logs.js";
 
 export const COLORS = {
   info: 0x3b82f6,
@@ -8,37 +10,55 @@ export const COLORS = {
   danger: 0xef4444,
 };
 
-export async function notifyDiscord({ title, description, color = COLORS.info, fields = [] }) {
-  const url = process.env.DISCORD_WEBHOOK_URL;
-  if (!url) return false;
+function buildPayload({ title, description, color = COLORS.info, fields = [] }) {
+  return {
+    username: "SiestaNet Store",
+    allowed_mentions: { parse: [] }, // jangan pernah ping siapa pun
+    embeds: [
+      {
+        title: String(title).slice(0, 250),
+        description: description ? String(description).slice(0, 1800) : undefined,
+        color,
+        fields: fields.slice(0, 20).map((f) => ({
+          name: String(f.name).slice(0, 250),
+          value: String(f.value || "-").slice(0, 1000),
+          inline: !!f.inline,
+        })),
+        timestamp: new Date().toISOString(),
+      },
+    ],
+  };
+}
+
+// Kirim ke URL tertentu dan laporkan hasilnya (dipakai tombol "Kirim tes" di admin).
+export async function sendDiscord(url, message) {
   try {
     const res = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        username: "BDZONE Store",
-        allowed_mentions: { parse: [] }, // jangan pernah ping siapa pun
-        embeds: [
-          {
-            title: String(title).slice(0, 250),
-            description: description ? String(description).slice(0, 1800) : undefined,
-            color,
-            fields: fields.slice(0, 20).map((f) => ({
-              name: String(f.name).slice(0, 250),
-              value: String(f.value || "-").slice(0, 1000),
-              inline: !!f.inline,
-            })),
-            timestamp: new Date().toISOString(),
-          },
-        ],
-      }),
+      body: JSON.stringify(buildPayload(message)),
       signal: AbortSignal.timeout(4000),
     });
-    return res.ok;
+    if (res.ok) return { ok: true };
+    const text = (await res.text().catch(() => "")).slice(0, 120);
+    return { ok: false, error: `Discord membalas HTTP ${res.status}${text ? `: ${text}` : ""}` };
   } catch (err) {
-    console.error("Discord webhook gagal:", err.message);
-    return false;
+    return { ok: false, error: err.message };
   }
+}
+
+/**
+ * @param event  new_order | paid | delivered | failed | manual | refund
+ *               (bisa dimatikan satu per satu di /admin/settings)
+ */
+export async function notifyDiscord({ event, ...message }) {
+  const cfg = await getDiscordConfig();
+  if (!cfg.url || !cfg.enabled) return false;
+  if (event && cfg.events[event] === false) return false;
+
+  const r = await sendDiscord(cfg.url, message);
+  if (!r.ok) await logEvent("warn", "discord", `Webhook gagal: ${r.error}`);
+  return r.ok;
 }
 
 export function orderFields(order) {

@@ -2,7 +2,7 @@ import { useState, useMemo, useCallback, useEffect } from "react";
 import { CartContext } from "./cart-context";
 import { parsePrice, parseStoredCart, serializeCart } from "./cart-utils";
 
-const STORAGE_KEY = "bdzone_cart_v1";
+const STORAGE_KEY = "siestanet_cart_v1";
 
 // Keranjang disimpan di localStorage supaya tidak hilang saat refresh,
 // pindah halaman penuh (mis. ke Tripay lalu Back), atau tab ditutup.

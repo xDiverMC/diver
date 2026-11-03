@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { TriangleAlert, PackageCheck, RefreshCw, TrendingUp, Wallet, Receipt, Percent } from "lucide-react";
-import { supabase } from "../../lib/supabase";
+import { adminFetch } from "../../lib/adminApi";
 import { Card, PageHeader, Button, StatCard, Segmented, Spinner, Badge, EmptyState } from "../../components/admin/ui";
 import { AreaChart, BarList, Donut } from "../../components/admin/charts";
 import { buildStats, formatIDR, STATUS_META } from "../../lib/adminStats";
@@ -12,13 +12,13 @@ const RANGES = [
   { value: 30, label: "30 hari" },
   { value: 90, label: "90 hari" },
 ];
-const HISTORY_DAYS = 180; // cukup untuk membandingkan 90 hari dengan 90 hari sebelumnya
 const STATUS_TONE = { PAID: "success", UNPAID: "info", EXPIRED: "neutral", FAILED: "danger", REFUND: "warning" };
 
 export default function AdminDashboard() {
   const [orders, setOrders] = useState([]);
   const [needsAction, setNeedsAction] = useState(0);
   const [catalogMissing, setCatalogMissing] = useState(false);
+  const [schemaOutdated, setSchemaOutdated] = useState(false);
   const [range, setRange] = useState(30);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -26,23 +26,15 @@ export default function AdminDashboard() {
   async function load() {
     setLoading(true);
     setError("");
-    const since = new Date(Date.now() - HISTORY_DAYS * 86400e3).toISOString();
-
-    const [ordersRes, todoRes, catalogRes] = await Promise.all([
-      supabase
-        .from("orders")
-        .select("merchant_ref, created_at, paid_at, status, amount_idr, items, customer_mc_username, fulfilled, delivery_status")
-        .gte("created_at", since)
-        .order("created_at", { ascending: false })
-        .limit(5000),
-      supabase.from("orders").select("id", { count: "exact", head: true }).eq("status", "PAID").eq("fulfilled", false),
-      supabase.from("store_content").select("key").in("key", ["ranks", "crate_keys", "currency_packs"]),
-    ]);
-
-    if (ordersRes.error) setError(ordersRes.error.message);
-    else setOrders(ordersRes.data ?? []);
-    setNeedsAction(todoRes.count ?? 0);
-    setCatalogMissing(!catalogRes.error && (catalogRes.data?.length ?? 0) < 3);
+    try {
+      const d = await adminFetch("dashboard");
+      setOrders(d.orders ?? []);
+      setNeedsAction(d.todo ?? 0);
+      setCatalogMissing(Boolean(d.catalogMissing));
+      setSchemaOutdated(Boolean(d.schemaOutdated));
+    } catch (err) {
+      setError(err.message);
+    }
     setLoading(false);
   }
 
@@ -67,6 +59,18 @@ export default function AdminDashboard() {
           </div>
         }
       />
+
+      {schemaOutdated && (
+        <Link to="/admin/settings" className="block">
+          <div className="flex items-start gap-3 rounded-xl border border-red-900 bg-red-950/40 p-4 text-sm text-red-200">
+            <TriangleAlert size={18} className="mt-0.5 shrink-0" />
+            <span>
+              <b>Database belum diperbarui.</b> Pesanan baru tidak bisa tersimpan sampai file <code>supabase/setup.sql</code>{" "}
+              dijalankan di Supabase SQL Editor. Buka <u>Pengaturan → Cek sistem</u> untuk detailnya.
+            </span>
+          </div>
+        </Link>
+      )}
 
       {catalogMissing && (
         <Link to="/admin/store" className="block">

@@ -3,7 +3,7 @@ import { Loader2, Inbox } from "lucide-react";
 
 export function Card({ children, className = "" }) {
   return (
-    <div className={`bg-neutral-900/60 border border-white/[0.07] rounded-2xl ${className}`}>
+    <div className={`bg-neutral-900 border border-white/10 rounded-2xl shadow-sm ${className}`}>
       {children}
     </div>
   );

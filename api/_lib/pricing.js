@@ -63,7 +63,8 @@ export async function priceCart(items) {
     if (!product) {
       throw new ApiError(
         400,
-        `Produk "${id}" sudah tidak tersedia. Hapus dari keranjang lalu coba lagi.`
+        `Produk "${id}" sudah tidak tersedia. Hapus dari keranjang lalu coba lagi.`,
+        { log: true }
       );
     }
     const maxQty = Number(product.max_qty) || DEFAULT_MAX_QTY;

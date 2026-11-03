@@ -4,7 +4,7 @@ import { ShieldCheck } from "lucide-react";
 import PixelBox from "../components/ui/PixelBox";
 import PixelButton from "../components/ui/PixelButton";
 import { useAuth } from "../context/useAuth";
-import bdZoneLogo from "../assets/Logo/bd-zone-two.png";
+import siestaNetLogo from "../assets/Logo/bd-zone-two.png";
 import { useSeo } from "../hooks/useSeo";
 
 // Official 4-square Microsoft mark. Kept as a plain inline SVG (not a
@@ -47,7 +47,7 @@ export default function Login() {
   return (
     <section className="mx-auto flex min-h-[70vh] max-w-md flex-col items-center justify-center px-4 py-10 sm:px-6">
       <div className="w-80">
-        <img src={bdZoneLogo} alt="BDZONE" className="w-full  " />
+        <img src={siestaNetLogo} alt="SiestaNet" className="w-full  " />
       </div>
 
       <PixelBox
@@ -68,7 +68,7 @@ export default function Login() {
               </h1>
               <p className="mt-1 text-[11.5px] text-(--color-text-muted)">
                 {justSignedIn
-                  ? "Taking you back to BDZONE…"
+                  ? "Taking you back to SiestaNet…"
                   : "You're already signed in."}
               </p>
             </div>
@@ -83,7 +83,7 @@ export default function Login() {
         ) : (
           <>
             <h1 className="text-[18px] gold-gradient-text">
-              Sign in to BDZONE
+              Sign in to SiestaNet
             </h1>
             <p className="text-[11.5px] leading-relaxed text-(--color-text-muted)">
               Minecraft accounts are managed through Microsoft. Sign in with the

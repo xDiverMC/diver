@@ -7,6 +7,7 @@ import { priceCart, toOrderItems } from "./_lib/pricing.js";
 import { checkPurchaseLimits } from "./_lib/limits.js";
 import { resolveCoupon } from "./_lib/coupons.js";
 import { notifyDiscord, orderFields, COLORS } from "./_lib/discord.js";
+import { logEvent } from "./_lib/logs.js";
 import { tripayBase } from "./_lib/tripay.js";
 
 const ORDER_TTL_MS = 24 * 60 * 60 * 1000;
@@ -47,13 +48,13 @@ export default async function handler(req, res) {
 
     const amountIdr = subtotalIdr - discountIdr;
     const orderItems = toOrderItems(lines);
-    const merchantRef = `BDZ-${Date.now()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
+    const merchantRef = `SNT-${Date.now()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
 
     // Tripay mewajibkan amount == jumlah(price × qty) item. Kalau ada diskon,
     // kirim satu baris ringkasan; rincian asli tetap disimpan di database kita.
     const tripayItems =
       discountIdr > 0
-        ? [{ sku: "ORDER", name: `Pesanan BDZONE (kupon ${couponCode})`, price: amountIdr, quantity: 1 }]
+        ? [{ sku: "ORDER", name: `Pesanan SiestaNet (kupon ${couponCode})`, price: amountIdr, quantity: 1 }]
         : orderItems;
 
     const merchantCode = process.env.TRIPAY_MERCHANT_CODE;
@@ -84,7 +85,7 @@ export default async function handler(req, res) {
     });
     const tripayJson = await tripayRes.json();
     if (!tripayJson.success) {
-      throw new ApiError(400, tripayJson.message || "Tripay menolak transaksi");
+      throw new ApiError(400, tripayJson.message || "Tripay menolak transaksi", { log: true });
     }
 
     const row = {
@@ -107,19 +108,31 @@ export default async function handler(req, res) {
     const { error: insertError } = await supabaseAdmin.from("orders").insert(row);
     if (insertError) {
       console.error("Gagal simpan order", merchantRef, insertError);
+      await logEvent("error", "checkout", `Gagal menyimpan order ${merchantRef}: ${insertError.message}`, {
+        hint: "Kolom/tabel orders belum lengkap? Jalankan supabase/setup.sql di Supabase SQL Editor.",
+        code: insertError.code,
+      });
       throw new ApiError(500, "Gagal menyimpan pesanan. Jangan bayar dulu, coba lagi.");
     }
 
-    if (process.env.DISCORD_NOTIFY_NEW_ORDER !== "false") {
-      await notifyDiscord({
-        title: "🛒 Order baru (menunggu pembayaran)",
-        color: COLORS.info,
-        fields: orderFields(row),
-      });
-    }
+    await logEvent("info", "order", `Order ${merchantRef} dibuat (${player}, Rp${amountIdr})`, {
+      items: orderItems.map((i) => `${i.name} x${i.quantity}`),
+      coupon: couponCode,
+    });
+    await notifyDiscord({
+      event: "new_order",
+      title: "🛒 Order baru (menunggu pembayaran)",
+      color: COLORS.info,
+      fields: orderFields(row),
+    });
 
     res.status(200).json({ checkout_url: tripayJson.data.checkout_url, merchant_ref: merchantRef });
   } catch (err) {
+    if (!(err instanceof ApiError) || err.status >= 500 || err.log) {
+      await logEvent(err instanceof ApiError && err.status < 500 ? "warn" : "error", "checkout", err.message, {
+        player: req.body?.customer_mc_username,
+      });
+    }
     sendError(res, err);
   }
 }

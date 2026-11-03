@@ -16,7 +16,7 @@ const blank = () => ({
   image: "",
   category: "Update",
   post_date: todayLabel(),
-  author: "BD Zone Team",
+  author: "SiestaNet Team",
 });
 
 function Preview({ blocks }) {
@@ -99,7 +99,7 @@ export default function AdminNewsForm() {
       image: form.image.trim(),
       category: form.category.trim() || "Update",
       post_date: form.post_date.trim() || todayLabel(),
-      author: form.author.trim() || "BD Zone Team",
+      author: form.author.trim() || "SiestaNet Team",
       content: blocks,
     };
 

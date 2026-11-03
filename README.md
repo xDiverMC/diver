@@ -1,4 +1,4 @@
-# BDZONE Store
+# SiestaNet Store
 
 Website server Minecraft: React + Vite, Supabase, pembayaran Tripay, hosting Vercel.
 
@@ -14,12 +14,13 @@ Website server Minecraft: React + Vite, Supabase, pembayaran Tripay, hosting Ver
 | Cek pesanan | `/orders` — cari pakai username MC atau email, tanpa login |
 | Batas pembelian | `max_qty`, `once_per_player`, `limit_total`, `limit_per_day` per produk |
 | Order expired | Dibersihkan otomatis (cron) |
-| Panel admin | Dashboard + grafik pendapatan, editor produk visual (tanpa JSON), pesanan, kupon |
+| Panel admin | Tema terang. Dashboard + grafik, produk, pesanan, kupon, berita, **Log**, **Pengaturan** (Discord + cek sistem) |
 
 ## Setup (urut)
 
-1. **Database** — buka Supabase → SQL Editor, jalankan `supabase/001_features.sql` (aman diulang).
+1. **Database** — buka Supabase → SQL Editor, tempel isi `supabase/setup.sql` lalu **Run** (aman diulang).
    Order lama otomatis ditandai agar *tidak* dikirim ulang oleh sistem baru.
+   (`setup.sql` = gabungan `001_features.sql` + `002_settings_logs.sql`.)
 2. **Env Vercel** — isi semua variabel di `.env.example` (Project → Settings → Environment Variables), lalu redeploy.
 3. **RCON** di `server.properties` server Minecraft:
    ```
@@ -35,7 +36,8 @@ Website server Minecraft: React + Vite, Supabase, pembayaran Tripay, hosting Ver
    tiap produk dengan command RCON. Produk tanpa command tetap dikirim manual.
 5. **Cron** — `vercel.json` sudah menjadwalkan pembersihan harian. Untuk tiap 15 menit, tambahkan secret
    repo GitHub `SITE_URL` dan `CRON_SECRET` (workflow `.github/workflows/maintenance.yml`).
-6. **Discord** — Server Settings → Integrations → Webhooks → salin URL ke `DISCORD_WEBHOOK_URL`.
+6. **Discord** — cukup tempel URL webhook di **Admin → Pengaturan → Notifikasi Discord**, klik Simpan lalu *Kirim tes*.
+   Event bisa dinyalakan/dimatikan satu per satu. (`DISCORD_WEBHOOK_URL` di Vercel hanya cadangan.)
 7. **Email** — daftar di resend.com, verifikasi domain, isi `RESEND_API_KEY` dan `EMAIL_FROM`.
 8. **Admin** — matikan *Allow new users to sign up* di Supabase Auth (semua akun yang login dianggap admin),
    atau isi `ADMIN_EMAILS` untuk membatasi tombol "Kirim ulang".
@@ -56,6 +58,11 @@ sesuaikan dengan plugin permission/crate/economy di servermu.
 
 Pengiriman dianggap **gagal** jika output RCON mengandung "No player was found", "Unknown command",
 dsb. (ubah lewat `DELIVERY_FAIL_REGEX`). Command yang butuh player online akan di-retry otomatis.
+
+## Pesanan tidak muncul / ada yang tidak jalan?
+
+Buka **Admin → Pengaturan → Cek sistem**. Halaman itu memeriksa env, tabel database, katalog produk, Tripay, dan RCON,
+lengkap dengan cara memperbaikinya. **Admin → Log** menampilkan alasan tiap kegagalan checkout, callback, dan pengiriman.
 
 ## Metode pembayaran tidak muncul?
 

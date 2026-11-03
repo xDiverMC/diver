@@ -20,7 +20,7 @@ export default function News() {
   useSeo({
     title: "News",
     description:
-      "Season recaps, community events, and every announcement from the BDZONE Minecraft server.",
+      "Season recaps, community events, and every announcement from the SiestaNet Minecraft server.",
     path: "/news",
   });
   return (

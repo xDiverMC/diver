@@ -20,7 +20,7 @@ export default function Votes() {
   useSeo({
     title: "Vote",
     description:
-      "Vote for BDZONE on top server lists to earn in-game rewards. Check leaderboards, voting sites, and the wall of fame.",
+      "Vote for SiestaNet on top server lists to earn in-game rewards. Check leaderboards, voting sites, and the wall of fame.",
     path: "/votes",
   });
   

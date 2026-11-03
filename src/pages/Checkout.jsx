@@ -10,7 +10,7 @@ import { useSeo } from "../hooks/useSeo";
 const MC_USERNAME_RE = /^\.?[A-Za-z0-9_]{3,16}$/;
 const idr = (n) => "Rp" + Number(n || 0).toLocaleString("id-ID");
 
-const PENDING_ORDER_KEY = "bdzone_pending_order";
+const PENDING_ORDER_KEY = "siestanet_pending_order";
 
 async function requestChannels() {
   let res;

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Copy, Check } from "lucide-react";
 import PixelBox from "../../ui/PixelBox";
 import PixelButton from "../../ui/PixelButton";
+import { SERVER_JAVA_ADDRESS, SERVER_BEDROCK_ADDRESS } from "../../../config/site";
 
 const STEPS = [
   {
@@ -31,7 +32,7 @@ const EDITIONS = [
     key: "java",
     title: "Java Edition",
     subtitle: "For PC Minecraft",
-    address: "play.bdzonemc.com",
+    address: SERVER_JAVA_ADDRESS,
     tone: "primary",
     recommended: true,
     textCol: "gold-gradient-text",
@@ -40,7 +41,7 @@ const EDITIONS = [
     key: "bedrock",
     title: "Bedrock Edition",
     subtitle: "For Mobile, Console & Windows 10",
-    address: "pe.bdzonemc.com",
+    address: SERVER_BEDROCK_ADDRESS,
     tone: "success",
     recommended: false,
     textCol: "green-gradient-text",

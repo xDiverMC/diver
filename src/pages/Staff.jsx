@@ -149,7 +149,7 @@ export default function Staff() {
    useSeo({
     title: "Staff",
     description:
-      "Meet the BDZONE team — owners, admins, moderators, and helpers who build and run the server.",
+      "Meet the SiestaNet team — owners, admins, moderators, and helpers who build and run the server.",
     path: "/staff",
   });
 
@@ -165,7 +165,7 @@ export default function Staff() {
     <section className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
       <h1 className="title gold-gradient-text">Staff</h1>
       <p className="p">
-        The people building, running, and moderating BDZONE — say hi if you
+        The people building, running, and moderating SiestaNet — say hi if you
         spot us in-game or on Discord.
       </p>
       <p className="mt-1 text-center text-[11px] text-(--color-text-dim)">

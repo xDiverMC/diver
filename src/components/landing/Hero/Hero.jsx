@@ -4,9 +4,10 @@ import { useState } from "react";
 import { ClipboardList, Check } from "lucide-react";
 import PixelButton from "../../ui/PixelButton";
 import HeroBackground from "./HeroBackground";
-import bdZoneLogo from "../../../assets/Logo/bd-zone-two.png";
+import siestaNetLogo from "../../../assets/Logo/bd-zone-two.png";
+import { SERVER_JAVA_ADDRESS } from "../../../config/site";
 
-const SERVER_IP = "play.bdzonemc.com";
+const SERVER_IP = SERVER_JAVA_ADDRESS;
 
 export default function Hero() {
   const [copied, setCopied] = useState(false);
@@ -42,7 +43,7 @@ export default function Hero() {
       {/* Dawn mark — plain opacity diye, background-er upore transparent hoye boshe */}
       <div className="relative z-90  flex items-center justify-center mt-20 sm:mt-20 md:mt-20 lg:mt-20 ">
         <img
-          src={bdZoneLogo}
+          src={siestaNetLogo}
           alt="Dawn"
           className="relative  w-auto opacity-100 mix-blend-overlay h-30 xs:h-20 sm:h-40 md:h-50 lg:h-60"
         />
@@ -51,7 +52,7 @@ export default function Hero() {
       {/* Content — ekhon fully centered, logo r nichey */}
       <div className="relative z-100 mx-auto  w-full max-w-200 lg:mt-15 md:mt-15 sm:mt-15 mt-15 xs:mt-15">
         <h1 className="gradient-text  leading-tight pointer-events-none xs:text-[30px] md:text-[36px] text-[20px] sm:text-[36px] px-2">
-          Welcome to <span className="gold-gradient-text">BDZONE</span>
+          Welcome to <span className="gold-gradient-text">SiestaNet</span>
         </h1>
         <p className="text-(--color-text) lg:text-[15px] md:text-[15px] sm:text-[15px] text-[13px] pt-4 leading-relaxed sm:pt-6 sm:px-6 px-4">
           Experience a unique world where nature meets adventure. Join our

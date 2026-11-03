@@ -59,7 +59,7 @@ export function fetchMonthlyGoal() {
   return resolve({
     current: 3420,
     target: 6000,
-    currency: "৳",
+    currency: "Rp",
     supporters: 47,
     endsAt: getMonthResetAt(),
   });

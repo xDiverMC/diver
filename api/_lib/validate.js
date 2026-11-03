@@ -1,8 +1,9 @@
 // api/_lib/validate.js
 export class ApiError extends Error {
-  constructor(status, message) {
+  constructor(status, message, { log = false } = {}) {
     super(message);
     this.status = status;
+    this.log = log; // true → dicatat ke system_logs (kegagalan yang perlu diselidiki admin)
   }
 }
 

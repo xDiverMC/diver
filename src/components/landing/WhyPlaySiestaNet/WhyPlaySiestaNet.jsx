@@ -1,5 +1,5 @@
 import PixelBox from "../../ui/PixelBox";
-import "./WhyPlayBdZone.css";
+import "./WhyPlaySiestaNet.css";
 
 import lagFree from "../../../assets/reasons/lag-free.png";
 import uptime from "../../../assets/reasons/uptime.png";
@@ -80,14 +80,14 @@ function ReasonCard({ image, title, description }) {
   );
 }
 
-export default function WhyPlayBdZone() {
+export default function WhyPlaySiestaNet() {
   const items = [...REASONS, ...REASONS];
 
   return (
     <section className="mx-auto max-w-7xl px-4 pt-25 sm:px-6">
       <div className="flex flex-col items-center text-center">
         <h2 className="title gold-gradient-text">
-          Why Play on BD ZONE?
+          Why Play on SiestaNet?
         </h2>
         <p className="p">Experience the difference with our premium Minecraft server</p>
       </div>

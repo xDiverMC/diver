@@ -19,7 +19,7 @@ export default function Store() {
   useSeo({
     title: "Store",
     description:
-      "Support BDZONE and get ranks, crate keys, and in-game currency. Instant delivery on every purchase.",
+      "Support SiestaNet and get ranks, crate keys, and in-game currency. Instant delivery on every purchase.",
     path: "/store",
   });
 

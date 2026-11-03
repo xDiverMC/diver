@@ -1,15 +1,58 @@
 /*
- * Panel admin — gaya dasar.
+ * Panel admin — tema TERANG.
+ *
+ * Cara kerja: Tailwind v4 memakai variabel CSS untuk semua warna (bg-neutral-900 =
+ * var(--color-neutral-900), dst). Di bawah, palet "neutral" dibalik HANYA di dalam
+ * .admin-root: yang tadinya paling gelap jadi putih/krem, yang tadinya putih jadi teks
+ * gelap. Website publik tidak terpengaruh. Mau ganti suasana warna? Ubah blok variabel ini.
  *
  * KENAPA ADA KELAS KHUSUS (.btn, .seg, .tab, ...):
  * index.css punya aturan global TANPA @layer:
  *     button { background: none; border: none; padding: 0 }
  *     a      { color: inherit }
- * CSS tanpa layer selalu menang atas utilitas Tailwind (yang ada di @layer), jadi
- * bg-*, px-*, py-*, border-* pada <button> dan text-* pada <a> diabaikan di admin.
- * Kelas di bawah ini juga tanpa layer + lebih spesifik, jadi menang atas aturan global.
+ * CSS tanpa layer selalu menang atas utilitas Tailwind, jadi bg-*, px-*, border-* pada
+ * <button> dan text-* pada <a> diabaikan. Kelas di bawah ini juga tanpa layer + lebih spesifik.
  */
 .admin-root {
+  color-scheme: light;
+
+  /* Permukaan & teks (dibalik dari gelap → terang) */
+  --color-neutral-950: #f7f5f0; /* latar halaman */
+  --color-neutral-900: #ffffff; /* kartu, sidebar, input */
+  --color-neutral-800: #efebe4; /* pil, garis pemisah, hover */
+  --color-neutral-700: #e0dacf;
+  --color-neutral-600: #aaa196; /* teks sangat redup */
+  --color-neutral-500: #7a7268; /* teks redup */
+  --color-neutral-400: #5a534b; /* teks sekunder */
+  --color-neutral-300: #443f39;
+  --color-neutral-200: #2c2925;
+  --color-neutral-100: #1c1a17; /* teks utama */
+  --color-white: #1c1a17;       /* "putih" di dark = teks gelap di terang */
+
+  /* Warna status (versi terang agar kontras di atas putih) */
+  --color-emerald-400: #059669;
+  --color-emerald-300: #047857;
+  --color-emerald-900: #d1fae5;
+  --color-red-950: #fef2f2;
+  --color-red-900: #fecaca;
+  --color-red-400: #dc2626;
+  --color-red-300: #b91c1c;
+  --color-red-200: #991b1b;
+  --color-amber-950: #fffbeb;
+  --color-amber-900: #fde68a;
+  --color-amber-400: #d97706;
+  --color-amber-300: #b45309;
+  --color-amber-200: #92400e;
+  --color-sky-400: #0284c7;
+  --color-sky-900: #e0f2fe;
+  --color-blue-300: #1d4ed8;
+  --color-blue-900: #dbeafe;
+
+  /* Aksen */
+  --adm-accent: #059669;
+  --adm-accent-hover: #047857;
+  --adm-accent-soft: rgb(5 150 105 / 0.1);
+
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   font-smooth: auto;
@@ -20,7 +63,7 @@
   image-rendering: auto;
 }
 .admin-root ::selection {
-  background: rgb(16 185 129 / 0.35);
+  background: rgb(5 150 105 / 0.25);
 }
 
 /* Cadangan: <button>/<a> polos di admin kembali memakai utilitas Tailwind. */
@@ -41,62 +84,64 @@
   justify-content: center;
   gap: 0.375rem;
   padding: 0.5rem 0.875rem;
-  border-radius: 0.625rem;
+  border-radius: 0.75rem;
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 1.25rem;
   white-space: nowrap;
-  transition: background-color 0.15s, opacity 0.15s;
+  transition: background-color 0.15s, opacity 0.15s, box-shadow 0.15s;
 }
 .admin-root .btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 .admin-root .btn-primary {
-  background: #10b981;
-  color: #052e16;
+  background: var(--adm-accent);
+  color: #fff;
+  box-shadow: 0 1px 2px rgb(5 150 105 / 0.25);
 }
 .admin-root .btn-primary:hover:not(:disabled) {
-  background: #34d399;
+  background: var(--adm-accent-hover);
 }
 .admin-root .btn-secondary {
-  background: rgb(255 255 255 / 0.08);
-  color: #f5f5f5;
+  background: #fff;
+  color: #1c1a17;
+  border: 1px solid #e0dacf;
 }
 .admin-root .btn-secondary:hover:not(:disabled) {
-  background: rgb(255 255 255 / 0.14);
+  background: #f7f5f0;
 }
 .admin-root .btn-danger {
-  background: rgb(153 27 27 / 0.45);
-  color: #fca5a5;
+  background: #fee2e2;
+  color: #b91c1c;
 }
 .admin-root .btn-danger:hover:not(:disabled) {
-  background: rgb(153 27 27 / 0.8);
+  background: #fecaca;
 }
 
 .admin-root .icon-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.375rem;
-  border-radius: 0.5rem;
-  color: #737373;
+  padding: 0.4rem;
+  border-radius: 0.6rem;
+  color: #7a7268;
   transition: background-color 0.15s, color 0.15s;
 }
 .admin-root .icon-btn:hover:not(:disabled) {
-  background: rgb(255 255 255 / 0.08);
-  color: #fff;
+  background: rgb(28 26 23 / 0.07);
+  color: #1c1a17;
 }
 .admin-root .icon-btn:disabled {
   opacity: 0.3;
   cursor: not-allowed;
 }
 .admin-root .icon-btn.danger {
-  color: #f87171;
+  color: #dc2626;
 }
 .admin-root .icon-btn.danger:hover:not(:disabled) {
-  background: rgb(127 29 29 / 0.4);
-  color: #fca5a5;
+  background: #fee2e2;
+  color: #b91c1c;
 }
 
 /* ── Pilihan berbentuk pil ────────────────────────────────── */
@@ -106,50 +151,50 @@
   gap: 0.125rem;
   overflow-x: auto;
   padding: 0.25rem;
-  border-radius: 0.875rem;
-  border: 1px solid rgb(255 255 255 / 0.08);
-  background: rgb(23 23 23 / 0.6);
+  border-radius: 0.9rem;
+  border: 1px solid #e0dacf;
+  background: #fff;
 }
 .admin-root .seg button {
   white-space: nowrap;
-  padding: 0.375rem 0.75rem;
-  border-radius: 0.625rem;
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: #a3a3a3;
+  padding: 0.375rem 0.8rem;
+  border-radius: 0.65rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #7a7268;
 }
 .admin-root .seg button:hover {
-  color: #fff;
+  color: #1c1a17;
 }
 .admin-root .seg button.on {
-  background: #10b981;
-  color: #052e16;
+  background: var(--adm-accent);
+  color: #fff;
 }
 
 /* ── Tab bergaris bawah ───────────────────────────────────── */
 .admin-root .tabs {
   display: flex;
   gap: 0.25rem;
-  border-bottom: 1px solid rgb(255 255 255 / 0.08);
+  border-bottom: 1px solid #e0dacf;
 }
 .admin-root .tab {
   display: inline-flex;
   align-items: center;
   gap: 0.375rem;
-  padding: 0.625rem 1rem;
+  padding: 0.65rem 1rem;
   margin-bottom: -1px;
   border-bottom: 2px solid transparent;
   font-size: 0.875rem;
-  font-weight: 500;
-  color: #737373;
+  font-weight: 600;
+  color: #7a7268;
   transition: color 0.15s;
 }
 .admin-root .tab:hover {
-  color: #d4d4d4;
+  color: #1c1a17;
 }
 .admin-root .tab.on {
-  color: #fff;
-  border-bottom-color: #10b981;
+  color: #1c1a17;
+  border-bottom-color: var(--adm-accent);
 }
 
 /* ── Navigasi ─────────────────────────────────────────────── */
@@ -158,24 +203,26 @@
   width: 100%;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.5rem 0.75rem;
-  border-radius: 0.5rem;
+  padding: 0.55rem 0.75rem;
+  border-radius: 0.65rem;
   font-size: 0.875rem;
-  color: #a3a3a3;
+  font-weight: 500;
+  color: #5a534b;
   text-align: left;
   transition: background-color 0.15s, color 0.15s;
 }
 .admin-root .side-link:hover {
-  background: rgb(255 255 255 / 0.05);
-  color: #fff;
+  background: rgb(28 26 23 / 0.05);
+  color: #1c1a17;
 }
 .admin-root .side-link.on {
-  background: rgb(255 255 255 / 0.08);
-  color: #fff;
-  font-weight: 500;
+  background: var(--adm-accent-soft);
+  color: #065f46;
+  font-weight: 600;
 }
 .admin-root .side-link.logout:hover {
-  color: #f87171;
+  background: #fee2e2;
+  color: #b91c1c;
 }
 
 .admin-root .tab-link {
@@ -183,13 +230,26 @@
   flex-direction: column;
   align-items: center;
   gap: 0.25rem;
-  padding: 0.625rem 0;
+  padding: 0.6rem 0;
   font-size: 0.625rem;
-  font-weight: 500;
-  color: #737373;
+  font-weight: 600;
+  color: #7a7268;
 }
 .admin-root .tab-link.on {
-  color: #34d399;
+  color: var(--adm-accent);
+}
+
+.admin-root .badge-count {
+  display: inline-grid;
+  min-width: 1.1rem;
+  place-items: center;
+  padding: 0 0.3rem;
+  border-radius: 999px;
+  background: #ef4444;
+  color: #fff;
+  font-size: 0.625rem;
+  font-weight: 700;
+  line-height: 1.1rem;
 }
 
 /* Bar Simpan menempel di atas menu bawah (HP); di desktop di dasar layar. */

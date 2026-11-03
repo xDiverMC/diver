@@ -1,8 +1,9 @@
 // src/pages/admin/AdminOrders.jsx — daftar pesanan, versi ringkas.
 import { useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { CheckCircle2, PackageCheck, RefreshCw, Search } from "lucide-react";
 import { supabase } from "../../lib/supabase";
+import { adminFetch } from "../../lib/adminApi";
 import { Card, PageHeader, Button, EmptyState, Spinner, Badge, Segmented } from "../../components/admin/ui";
 import { formatIDR, STATUS_META } from "../../lib/adminStats";
 
@@ -32,16 +33,12 @@ export default function AdminOrders() {
 
   async function load(silent = false) {
     if (!silent) setLoading(true);
-    const { data, error: err } = await supabase
-      .from("orders")
-      .select("*")
-      .order("created_at", { ascending: false })
-      .limit(500);
-    if (err) {
-      setError(err.message);
-    } else {
-      setOrders(data ?? []);
+    try {
+      const { orders: rows } = await adminFetch("orders");
+      setOrders(rows ?? []);
       setError("");
+    } catch (err) {
+      setError(err.message);
     }
     if (!silent) setLoading(false);
   }
@@ -54,10 +51,11 @@ export default function AdminOrders() {
   }, []);
 
   async function markFulfilled(id) {
-    await supabase
-      .from("orders")
-      .update({ fulfilled: true, delivery_status: "DELIVERED", delivered_at: new Date().toISOString() })
-      .eq("id", id);
+    try {
+      await adminFetch("fulfill", { method: "POST", body: { id } });
+    } catch (err) {
+      setNotice(err.message);
+    }
     load();
   }
 
@@ -142,9 +140,12 @@ export default function AdminOrders() {
       {error && (
         <div className="rounded-xl border border-red-900 bg-red-950/40 px-4 py-3 text-sm text-red-200">
           <b>Pesanan gagal dimuat:</b> {error}
-          <div className="mt-1 text-xs text-red-300/80">
-            Kalau pesannya soal izin (permission/RLS), tambahkan policy SELECT untuk role <code>authenticated</code> di
-            tabel <code>orders</code>. Kalau soal kolom, jalankan <code>supabase/001_features.sql</code>.
+          <div className="mt-1 text-xs">
+            Buka{" "}
+            <Link to="/admin/settings" className="underline">
+              Pengaturan → Cek sistem
+            </Link>{" "}
+            untuk melihat penyebabnya.
           </div>
         </div>
       )}

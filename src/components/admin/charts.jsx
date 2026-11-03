@@ -39,8 +39,8 @@ export function AreaChart({ data, valueKey = "revenue", format = formatIDR, axis
       <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-auto select-none" role="img" aria-label="Grafik pendapatan">
         <defs>
           <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#10b981" stopOpacity="0.35" />
-            <stop offset="100%" stopColor="#10b981" stopOpacity="0" />
+            <stop offset="0%" stopColor="#059669" stopOpacity="0.28" />
+            <stop offset="100%" stopColor="#059669" stopOpacity="0" />
           </linearGradient>
         </defs>
 
@@ -48,8 +48,8 @@ export function AreaChart({ data, valueKey = "revenue", format = formatIDR, axis
           const y = PT + (innerH * i) / 3;
           return (
             <g key={i}>
-              <line x1={PL} x2={W - PR} y1={y} y2={y} stroke="#262626" strokeWidth="1" />
-              <text x={PL - 6} y={y + 3} textAnchor="end" fontSize="10" fill="#737373">
+              <line x1={PL} x2={W - PR} y1={y} y2={y} stroke="#e7e1d6" strokeWidth="1" />
+              <text x={PL - 6} y={y + 3} textAnchor="end" fontSize="10" fill="#7a7268">
                 {axisFormat(max * (1 - i / 3))}
               </text>
             </g>
@@ -57,7 +57,7 @@ export function AreaChart({ data, valueKey = "revenue", format = formatIDR, axis
         })}
 
         <path d={area} fill={`url(#${gradId})`} />
-        <path d={line} fill="none" stroke="#10b981" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />
+        <path d={line} fill="none" stroke="#059669" strokeWidth="2.25" strokeLinejoin="round" strokeLinecap="round" />
 
         {labelIdx.map((i, n) => (
           <text
@@ -65,15 +65,15 @@ export function AreaChart({ data, valueKey = "revenue", format = formatIDR, axis
             x={pts[i][0]}
             y={H - 8}
             fontSize="10"
-            fill="#737373"
+            fill="#7a7268"
             textAnchor={n === 0 ? "start" : n === 2 ? "end" : "middle"}
           >
             {data[i].label}
           </text>
         ))}
 
-        <line x1={pts[idx][0]} x2={pts[idx][0]} y1={PT} y2={PT + innerH} stroke="#10b981" strokeOpacity="0.35" strokeDasharray="3 3" />
-        <circle cx={pts[idx][0]} cy={pts[idx][1]} r="4" fill="#10b981" stroke="#0a0a0a" strokeWidth="2" />
+        <line x1={pts[idx][0]} x2={pts[idx][0]} y1={PT} y2={PT + innerH} stroke="#059669" strokeOpacity="0.4" strokeDasharray="3 3" />
+        <circle cx={pts[idx][0]} cy={pts[idx][1]} r="4" fill="#059669" stroke="#ffffff" strokeWidth="2" />
 
         {/* area sentuh/hover per hari */}
         {data.map((_, i) => (
@@ -96,7 +96,7 @@ export function AreaChart({ data, valueKey = "revenue", format = formatIDR, axis
 }
 
 // ── Daftar batang horizontal (produk terlaris) ──────────────
-export function BarList({ items, valueKey = "qty", suffix = "x", color = "#10b981" }) {
+export function BarList({ items, valueKey = "qty", suffix = "x", color = "#059669" }) {
   if (!items?.length) return null;
   const max = Math.max(...items.map((i) => i[valueKey]), 1);
   return (
@@ -136,7 +136,7 @@ export function Donut({ segments, centerLabel = "order" }) {
     <div className="flex items-center gap-5">
       <svg viewBox="0 0 120 120" className="h-32 w-32 shrink-0" role="img" aria-label="Status pesanan">
         <g transform="rotate(-90 60 60)">
-          <circle cx="60" cy="60" r={R} fill="none" stroke="#262626" strokeWidth="14" />
+          <circle cx="60" cy="60" r={R} fill="none" stroke="#efebe4" strokeWidth="14" />
           {segments.map((s) => {
             const len = (s.value / total) * C;
             const el = (
@@ -156,10 +156,10 @@ export function Donut({ segments, centerLabel = "order" }) {
             return el;
           })}
         </g>
-        <text x="60" y="58" textAnchor="middle" fontSize="20" fontWeight="700" fill="#fff">
+        <text x="60" y="58" textAnchor="middle" fontSize="20" fontWeight="700" fill="#1c1a17">
           {total}
         </text>
-        <text x="60" y="74" textAnchor="middle" fontSize="9" fill="#737373">
+        <text x="60" y="74" textAnchor="middle" fontSize="9" fill="#7a7268">
           {centerLabel}
         </text>
       </svg>

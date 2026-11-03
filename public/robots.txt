@@ -3,4 +3,4 @@ Allow: /
 Disallow: /cart
 Disallow: /login
 
-Sitemap: https://www.bdzone.net/sitemap.xml
+Sitemap: https://diver-delta.vercel.app/sitemap.xml

@@ -6,7 +6,7 @@ const esc = (s) =>
 
 export async function sendEmail({ to, subject, html }) {
   const key = process.env.RESEND_API_KEY;
-  const from = process.env.EMAIL_FROM; // contoh: "BDZONE <noreply@domainmu.com>"
+  const from = process.env.EMAIL_FROM; // contoh: "SiestaNet <noreply@domainmu.com>"
   if (!key || !from || !to) return false;
   try {
     const res = await fetch("https://api.resend.com/emails", {

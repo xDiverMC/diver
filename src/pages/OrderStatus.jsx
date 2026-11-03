@@ -1,13 +1,13 @@
 // src/pages/OrderStatus.jsx
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { CheckCircle2, Clock, XCircle, PartyPopper, Loader2 } from "lucide-react";
+import { Clock, XCircle, PartyPopper, Loader2 } from "lucide-react";
 import PixelBox from "../components/ui/PixelBox";
 import PixelButton from "../components/ui/PixelButton";
 import { useSeo } from "../hooks/useSeo";
 import { useCart } from "../context/useCart";
 
-const PENDING_ORDER_KEY = "bdzone_pending_order";
+const PENDING_ORDER_KEY = "siestanet_pending_order";
 
 const STATUS_META = {
   PAID: { icon: PartyPopper, tone: "success", label: "Pembayaran Berhasil!" },

@@ -7,8 +7,8 @@ export default function RouteError() {
 
   function resetAndReload() {
     try {
-      localStorage.removeItem("bdzone_cart_v1");
-      localStorage.removeItem("bdzone_pending_order");
+      localStorage.removeItem("siestanet_cart_v1");
+      localStorage.removeItem("siestanet_pending_order");
     } catch {
       // abaikan
     }

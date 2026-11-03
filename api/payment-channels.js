@@ -1,6 +1,7 @@
 // api/payment-channels.js — proxy daftar metode pembayaran Tripay
 // (API key tidak pernah sampai ke browser). Selalu membalas pesan error yang jelas.
 import { tripayBase } from "./_lib/tripay.js";
+import { logEvent } from "./_lib/logs.js";
 
 export default async function handler(req, res) {
   try {
@@ -22,6 +23,7 @@ export default async function handler(req, res) {
     }
 
     if (!json.success) {
+      await logEvent("warn", "tripay", `Daftar metode pembayaran ditolak Tripay: ${json.message}`);
       return res.status(400).json({
         error: `${json.message || "Tripay menolak permintaan"} — cek TRIPAY_MODE (sandbox/production) cocok dengan API key, dan kosongkan IP Whitelist di dashboard Tripay.`,
       });

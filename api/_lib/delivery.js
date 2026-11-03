@@ -9,6 +9,7 @@ import { loadCatalog, findProduct } from "./pricing.js";
 import { runRconCommands } from "./rcon.js";
 import { notifyDiscord, orderFields, COLORS } from "./discord.js";
 import { sendDeliveredEmail } from "./email.js";
+import { logEvent } from "./logs.js";
 import { MC_USERNAME_RE } from "./validate.js";
 
 export const MAX_ATTEMPTS = Number(process.env.DELIVERY_MAX_ATTEMPTS) || 5;
@@ -131,15 +132,22 @@ export async function deliverOrder(ref, { from = ["PENDING"] } = {}) {
   await supabaseAdmin.from("orders").update(patch).eq("id", order.id);
 
   const updated = { ...claimed, ...patch };
+  await logEvent(
+    finalStatus === "DELIVERED" ? "info" : finalStatus === "FAILED" ? "error" : "warn",
+    "delivery",
+    `Pengiriman ${ref}: ${finalStatus}${errorText ? ` — ${errorText}` : ""}`,
+    { attempts, player: claimed.customer_mc_username }
+  );
   try {
     if (finalStatus === "DELIVERED") {
       await Promise.allSettled([
-        notifyDiscord({ title: "📦 Item terkirim otomatis", color: COLORS.success, fields: orderFields(updated) }),
+        notifyDiscord({ event: "delivered", title: "📦 Item terkirim otomatis", color: COLORS.success, fields: orderFields(updated) }),
         sendDeliveredEmail(updated),
       ]);
     } else if (finalStatus === "FAILED") {
       const giveUp = attempts >= MAX_ATTEMPTS;
       await notifyDiscord({
+        event: "failed",
         title: giveUp ? "🚨 Pengiriman GAGAL — kirim manual!" : "⚠️ Pengiriman gagal (akan dicoba lagi)",
         description: `Percobaan ${attempts}/${MAX_ATTEMPTS}. ${errorText}`,
         color: COLORS.danger,
@@ -147,6 +155,7 @@ export async function deliverOrder(ref, { from = ["PENDING"] } = {}) {
       });
     } else if (finalStatus === "MANUAL") {
       await notifyDiscord({
+        event: "manual",
         title: "🛠️ Perlu kirim manual",
         description: errorText || "Ada produk tanpa commands otomatis.",
         color: COLORS.warning,

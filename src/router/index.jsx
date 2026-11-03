@@ -21,6 +21,8 @@ import AdminStore from "../pages/admin/AdminStore";
 import AdminOrders from "../pages/admin/AdminOrders";
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import AdminCoupons from "../pages/admin/AdminCoupons";
+import AdminLogs from "../pages/admin/AdminLogs";
+import AdminSettings from "../pages/admin/AdminSettings";
 import ProtectedRoute from "../components/admin/ProtectedRoute";
 import RouteError from "../components/RouteError";
 
@@ -61,6 +63,8 @@ export const router = createBrowserRouter([
       { path: "store", element: <AdminStore /> },
       { path: "orders", element: <AdminOrders /> },
       { path: "coupons", element: <AdminCoupons /> },
+      { path: "logs", element: <AdminLogs /> },
+      { path: "settings", element: <AdminSettings /> },
     ],
   },
 ]);
