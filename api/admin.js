@@ -1,7 +1,7 @@
 // api/admin.js — satu endpoint untuk semua kebutuhan panel admin (?action=...).
 // Dibaca/ditulis lewat service role di server, jadi TIDAK bergantung pada RLS tabel di Supabase.
 // Semua aksi wajib login admin (token Supabase di header Authorization).
-import { supabaseAdmin } from "./_lib/supabase.js";
+import { supabaseAdmin, describeServiceKey, keyHasServerPrivileges } from "./_lib/supabase.js";
 import { ApiError, sendError } from "./_lib/validate.js";
 import { requireAdmin } from "./_lib/adminAuth.js";
 import { loadCatalog } from "./_lib/pricing.js";
@@ -23,6 +23,24 @@ const DASH_COLS_FULL =
 const DASH_COLS_BASIC =
   "merchant_ref, created_at, status, amount_idr, items, customer_mc_username, fulfilled";
 
+// Ubah error database jadi pesan yang bisa ditindaklanjuti.
+function dbFail(prefix, error) {
+  const k = describeServiceKey();
+  if (error?.code === "42501" || /permission denied/i.test(error?.message ?? "")) {
+    const why =
+      k.kind === "anon" || k.kind === "publishable"
+        ? "SUPABASE_SERVICE_ROLE_KEY di Vercel berisi kunci anon/publishable (kunci untuk browser), bukan service_role/secret."
+        : k.kind === "missing"
+          ? "SUPABASE_SERVICE_ROLE_KEY belum diisi di Vercel."
+          : "Server tidak punya izin ke tabel ini.";
+    return new ApiError(
+      500,
+      `${prefix}: izin ditolak. ${why} Buka Pengaturan → Cek sistem untuk langkah perbaikannya.`
+    );
+  }
+  return new ApiError(500, `${prefix}: ${error?.message ?? "error tidak diketahui"}`);
+}
+
 async function countTodo() {
   const { count } = await supabaseAdmin
     .from("orders")
@@ -38,6 +56,26 @@ const present = (v) => Boolean(String(v ?? "").trim());
 async function runHealth({ rcon }) {
   const checks = [];
   const add = (id, title, status, detail, fix) => checks.push({ id, title, status, detail, fix });
+
+  // 0) Kunci Supabase: penyebab paling umum "permission denied for table orders"
+  const key = describeServiceKey();
+  const keyLabel = {
+    service_role: "Kunci service_role ✓",
+    secret: "Kunci secret (sb_secret_…) ✓",
+    anon: "Ini kunci ANON (untuk browser), bukan service_role",
+    publishable: "Ini kunci PUBLISHABLE (untuk browser), bukan secret",
+    missing: "Belum diisi",
+    unknown: "Format kunci tidak dikenali",
+  }[key.kind];
+  add(
+    "supabase-key",
+    "Kunci Supabase di server (SUPABASE_SERVICE_ROLE_KEY)",
+    keyHasServerPrivileges(key) ? "ok" : "fail",
+    keyLabel,
+    keyHasServerPrivileges(key)
+      ? undefined
+      : "Supabase → Project Settings → API: salin kunci 'service_role' (atau 'Secret key' sb_secret_…), BUKAN 'anon/publishable'. Tempel ke Vercel → Settings → Environment Variables → SUPABASE_SERVICE_ROLE_KEY (tanpa spasi/tanda kutip), lalu Redeploy."
+  );
 
   // 1) Environment
   const mode = process.env.TRIPAY_MODE === "sandbox" ? "sandbox" : "production";
@@ -90,9 +128,11 @@ async function runHealth({ rcon }) {
     "db-orders",
     "Tabel orders (kolom baru)",
     ordersCols.error ? "fail" : "ok",
-    ordersCols.error ? `Kolom belum lengkap: ${ordersCols.error.message}` : "Lengkap",
+    ordersCols.error ? `Gagal membaca: ${ordersCols.error.message}` : "Lengkap",
     ordersCols.error
-      ? `Inilah penyebab pesanan tidak tersimpan saat checkout. ${dbFix}`
+      ? /permission denied/i.test(ordersCols.error.message)
+        ? "Ini masalah KUNCI Supabase (lihat pengecekan paling atas), bukan kolom. Perbaiki kuncinya dulu."
+        : `Inilah penyebab pesanan tidak tersimpan saat checkout. ${dbFix}`
       : undefined
   );
   add("db-coupons", "Tabel kupon", coupons.error ? "fail" : "ok", coupons.error ? coupons.error.message : "Ada", coupons.error ? dbFix : undefined);
@@ -219,7 +259,7 @@ export default async function handler(req, res) {
           .select("*")
           .order("created_at", { ascending: false })
           .limit(500);
-        if (error) throw new ApiError(500, `Gagal membaca pesanan: ${error.message}`);
+        if (error) throw dbFail("Gagal membaca pesanan", error);
         return res.status(200).json({ orders: data ?? [] });
       }
 
@@ -240,7 +280,7 @@ export default async function handler(req, res) {
           schemaOutdated = true;
           r = await run(DASH_COLS_BASIC);
         }
-        if (r.error) throw new ApiError(500, `Gagal membaca pesanan: ${r.error.message}`);
+        if (r.error) throw dbFail("Gagal membaca pesanan", r.error);
         rows = r.data ?? [];
 
         const { data: cat } = await supabaseAdmin
