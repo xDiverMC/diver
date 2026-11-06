@@ -162,6 +162,91 @@ function DiscordSection() {
   );
 }
 
+function StoreSection() {
+  const [target, setTarget] = useState("");
+  const [hidden, setHidden] = useState("");
+  const [loaded, setLoaded] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [msg, setMsg] = useState({ ok: true, text: "" });
+
+  useEffect(() => {
+    adminFetch("settings")
+      .then((d) => {
+        setTarget(d.goal?.monthly_target_idr ? String(d.goal.monthly_target_idr) : "");
+        setHidden((d.leaderboard?.hidden ?? []).join("\n"));
+      })
+      .catch((err) => setMsg({ ok: false, text: err.message }))
+      .finally(() => setLoaded(true));
+  }, []);
+
+  async function save() {
+    setSaving(true);
+    setMsg({ ok: true, text: "" });
+    try {
+      await adminFetch("settings-save", {
+        method: "POST",
+        body: {
+          goal: { monthly_target_idr: target.trim() === "" ? 0 : Number(target.replace(/[^0-9]/g, "")) },
+          leaderboard: { hidden },
+        },
+      });
+      setMsg({ ok: true, text: "Tersimpan. Perubahan di website bisa butuh beberapa menit (cache)." });
+    } catch (err) {
+      setMsg({ ok: false, text: err.message });
+    }
+    setSaving(false);
+  }
+
+  if (!loaded) return <Spinner />;
+
+  return (
+    <Card className="space-y-4 p-5">
+      <div>
+        <h2 className="text-base font-semibold text-white">Target & papan donatur</h2>
+        <p className="mt-0.5 text-sm text-neutral-500">
+          Angka "Total raised" dan jumlah donatur di halaman Store dihitung otomatis dari pesanan yang sudah dibayar.
+        </p>
+      </div>
+
+      <Field
+        label="Target donasi bulanan (Rp)"
+        hint="Contoh: 2500000. Kosongkan atau 0 untuk menyembunyikan blok target di website."
+      >
+        <Input inputMode="numeric" value={target} onChange={(e) => setTarget(e.target.value)} placeholder="0" />
+      </Field>
+
+      <Field
+        label="Sembunyikan dari papan donatur"
+        hint="Satu username per baris. Untuk pemain yang meminta namanya tidak ditampilkan. Pembelian mereka tetap tercatat."
+      >
+        <textarea
+          rows={3}
+          value={hidden}
+          onChange={(e) => setHidden(e.target.value)}
+          className="w-full rounded-lg border border-white/10 bg-neutral-900 px-3 py-2 text-sm text-white outline-none placeholder:text-neutral-600 focus:border-emerald-500/70"
+          placeholder={"Steve123\n.AlexBedrock"}
+        />
+      </Field>
+
+      {msg.text && (
+        <p
+          className={`rounded-lg border px-3 py-2 text-sm ${
+            msg.ok
+              ? "border-emerald-900 bg-emerald-900/40 text-emerald-300"
+              : "border-red-900 bg-red-950/40 text-red-300"
+          }`}
+        >
+          {msg.text}
+        </p>
+      )}
+
+      <Button onClick={save} disabled={saving}>
+        <Save size={16} /> {saving ? "Menyimpan..." : "Simpan"}
+      </Button>
+    </Card>
+  );
+}
+
 function HealthSection() {
   const [checks, setChecks] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -243,8 +328,9 @@ function HealthSection() {
 export default function AdminSettings() {
   return (
     <div className="space-y-5">
-      <PageHeader title="Pengaturan" description="Notifikasi Discord dan pemeriksaan sistem toko." />
+      <PageHeader title="Pengaturan" description="Notifikasi Discord, target donasi, dan pemeriksaan sistem toko." />
       <DiscordSection />
+      <StoreSection />
       <HealthSection />
     </div>
   );

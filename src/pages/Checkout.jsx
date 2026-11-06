@@ -1,6 +1,6 @@
 // src/pages/Checkout.jsx
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CreditCard, Loader2, RefreshCw, Ticket } from "lucide-react";
 import PixelBox from "../components/ui/PixelBox";
 import PixelButton from "../components/ui/PixelButton";
@@ -50,6 +50,7 @@ export default function Checkout() {
   const [method, setMethod] = useState("");
   const [form, setForm] = useState({ name: "", email: "", mcUsername: "" });
   const [submitting, setSubmitting] = useState(false);
+  const [agree, setAgree] = useState(false);
   const [error, setError] = useState("");
   const [couponInput, setCouponInput] = useState("");
   const [coupon, setCoupon] = useState(null); // { code, label, subtotal_idr, discount_idr, total_idr }
@@ -342,19 +343,35 @@ export default function Checkout() {
           </p>
         )}
 
+        <label className="mt-6 flex items-start gap-2.5 text-[11.5px] leading-relaxed text-(--color-text-muted)">
+          <input
+            type="checkbox"
+            checked={agree}
+            onChange={(e) => setAgree(e.target.checked)}
+            className="mt-0.5 h-4 w-4 shrink-0"
+          />
+          <span>
+            Saya sudah membaca dan setuju dengan{" "}
+            <Link to="/terms" target="_blank" className="underline text-(--color-primary)">Syarat &amp; Ketentuan</Link>,{" "}
+            <Link to="/privacy" target="_blank" className="underline text-(--color-primary)">Kebijakan Privasi</Link>, dan{" "}
+            <Link to="/refund" target="_blank" className="underline text-(--color-primary)">Kebijakan Refund</Link>.
+          </span>
+        </label>
         <PixelButton
           type="submit"
           tone="success"
           filled
           icon={submitting ? Loader2 : CreditCard}
-          disabled={submitting || !method}
-          className="mt-6 w-full py-5!"
+          disabled={submitting || !method || !agree}
+          className="mt-4 w-full py-5!"
         >
           {submitting ? "Memproses..." : "Lanjut ke Pembayaran"}
         </PixelButton>
-        {!method && !loadingChannels && !channelError && (
+        {(!method || !agree) && !loadingChannels && !channelError && (
           <p className="mt-2 text-center text-[11px] text-(--color-text-dim)">
-            Pilih metode pembayaran dulu untuk melanjutkan.
+            {!method
+              ? "Pilih metode pembayaran dulu untuk melanjutkan."
+              : "Centang persetujuan di atas untuk melanjutkan."}
           </p>
         )}
       </form>

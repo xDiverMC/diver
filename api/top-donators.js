@@ -2,6 +2,7 @@
 import { supabaseAdmin } from "./_lib/supabase.js";
 import { loadCatalog, parseUsd } from "./_lib/pricing.js";
 import { startOfMonthUtc, sendError } from "./_lib/validate.js";
+import { getSettings } from "./_lib/settings.js";
 
 const PAGE = 1000;
 const MAX_ROWS = 20000;
@@ -10,6 +11,8 @@ export default async function handler(req, res) {
   try {
     const period = req.query.period === "allTime" ? "allTime" : "monthly";
     const monthStart = startOfMonthUtc().toISOString();
+
+    const hidden = new Set(((await getSettings()).leaderboard?.hidden ?? []).map((n) => String(n).toLowerCase()));
 
     const rows = [];
     for (let from = 0; from < MAX_ROWS; from += PAGE) {
@@ -37,6 +40,7 @@ export default async function handler(req, res) {
     const byPlayer = new Map();
     for (const o of rows) {
       const k = o.mc_username_lower;
+      if (hidden.has(k)) continue; // pemain yang meminta disembunyikan dari papan donatur
       const cur = byPlayer.get(k) ?? { username: o.customer_mc_username, amount: 0, tier: null, tierPrice: -1 };
       cur.amount += Number(o.amount_idr) || 0; // rows urut terbaru → username pertama = ejaan terbaru
       for (const it of o.items ?? []) {

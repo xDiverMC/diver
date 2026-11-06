@@ -14,6 +14,9 @@ Website server Minecraft: React + Vite, Supabase, pembayaran Tripay, hosting Ver
 | Cek pesanan | `/orders` — cari pakai username MC atau email, tanpa login |
 | Batas pembelian | `max_qty`, `once_per_player`, `limit_total`, `limit_per_day` per produk |
 | Order expired | Dibersihkan otomatis (cron) |
+| Halaman legal | `/terms`, `/privacy`, `/refund` (draf bahasa Indonesia di `src/pages/legal/legalContent.js` — baca & sesuaikan). Checkout meminta persetujuan |
+| Statistik toko | "Total raised", donatur, dan target bulanan dihitung dari pesanan PAID asli (`/api/store-stats`). Target diatur di Admin → Pengaturan |
+| Upload gambar | Form berita bisa upload gambar (dikecilkan di browser, disimpan di Supabase Storage bucket `site-images`, dibuat otomatis) |
 | Panel admin | Tema terang. Dashboard + grafik, produk, pesanan, kupon, berita, **Log**, **Pengaturan** (Discord + cek sistem) |
 
 ## Setup (urut)
@@ -58,6 +61,18 @@ sesuaikan dengan plugin permission/crate/economy di servermu.
 
 Pengiriman dianggap **gagal** jika output RCON mengandung "No player was found", "Unknown command",
 dsb. (ubah lewat `DELIVERY_FAIL_REGEX`). Command yang butuh player online akan di-retry otomatis.
+
+## Yang perlu diisi sendiri
+
+Di `src/config/site.js`: `SERVER_JAVA_ADDRESS`, `SERVER_BEDROCK_ADDRESS`, `CONTACT_EMAIL`, `DISCORD_INVITE_URL`, dan `SOCIAL_LINKS`
+(sosial media yang kosong disembunyikan dari footer). Ganti juga logo `src/assets/Logo/bd-zone-two.png`.
+Halaman `/votes` masih memakai data contoh (belum ada backend vote).
+
+## "permission denied for table ..."?
+
+Jalankan `supabase/grants.sql` di Supabase SQL Editor (aman diulang). Proyek Supabase baru tidak memberi izin tabel
+otomatis, jadi server (`service_role`), pengunjung (`anon`), dan admin (`authenticated`) perlu diberi izin eksplisit.
+Catatan: isi `commands` produk ikut terbaca publik karena katalog dibaca langsung oleh website.
 
 ## Pesanan tidak muncul / ada yang tidak jalan?
 

@@ -29,7 +29,7 @@ const REASONS = [
   {
     image: events,
     title: "Regular Events",
-    description: "Weekly events and tournaments with amazing prizes",
+    description: "Events and tournaments for the community",
   },
   {
     image: fairPlay,
@@ -45,7 +45,7 @@ const REASONS = [
   {
     image: community,
     title: "Active Community",
-    description: "Join thousands of players in our vibrant Discord community",
+    description: "Join our friendly Discord community",
   },
   {
     image: customFeatures,

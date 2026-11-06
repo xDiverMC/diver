@@ -10,6 +10,10 @@ import Cart from "../pages/Cart";
 import Checkout from "../pages/Checkout";
 import OrderStatus from "../pages/OrderStatus";
 import CekPesanan from "../pages/CekPesanan";
+import NotFound from "../pages/NotFound";
+import Terms from "../pages/legal/Terms";
+import Privacy from "../pages/legal/Privacy";
+import Refund from "../pages/legal/Refund";
 import Login from "../pages/Login";
 
 import AdminLayout from "../layouts/AdminLayout";
@@ -42,7 +46,11 @@ export const router = createBrowserRouter([
       { path: "checkout", element: <Checkout /> },
       { path: "order/:ref", element: <OrderStatus /> },
       { path: "orders", element: <CekPesanan /> },
+      { path: "terms", element: <Terms /> },
+      { path: "privacy", element: <Privacy /> },
+      { path: "refund", element: <Refund /> },
       { path: "login", element: <Login /> },
+      { path: "*", element: <NotFound /> },
     ],
   },
   { path: "/admin/login", element: <AdminLogin /> },

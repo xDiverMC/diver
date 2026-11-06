@@ -46,10 +46,11 @@ export default function StoreOverview() {
     };
   }, []);
 
-  const pct = goal ? Math.min(100, (goal.current / goal.target) * 100) : 0;
+  const pct = goal && goal.target > 0 ? Math.min(100, (goal.current / goal.target) * 100) : 0;
 
   return (
     <div>
+      {(!goal || goal.target > 0) && (
       <PixelBox
         tone="success"
         className="mt-6"
@@ -94,6 +95,7 @@ export default function StoreOverview() {
           </>
         )}
       </PixelBox>
+      )}
       {stats && (
         <div className="mt-8 grid grid-cols-2 gap-4">
           <StatCard

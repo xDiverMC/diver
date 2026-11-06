@@ -97,3 +97,10 @@
   font-size: 11px;
   color: var(--color-text-dim);
 }
+
+.site-footer__disclaimer {
+  display: block;
+  margin-top: 6px;
+  opacity: 0.7;
+  font-size: 0.85em;
+}

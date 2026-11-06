@@ -1,10 +1,11 @@
 // src/pages/admin/AdminNewsForm.jsx — tambah / edit berita (tanpa JSON).
 import { useEffect, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
-import { ArrowLeft, Save } from "lucide-react";
+import { ArrowLeft, Save, Upload } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { Card, PageHeader, Button, Field, Input, Textarea, Spinner } from "../../components/admin/ui";
 import { blocksToText, slugifyTitle, textToBlocks, todayLabel } from "../../lib/newsContent";
+import { uploadImage } from "../../lib/imageUpload";
 
 const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const CATEGORIES = ["Update", "Event", "Pengumuman", "Maintenance", "Komunitas"];
@@ -50,6 +51,7 @@ export default function AdminNewsForm() {
   const [slugTouched, setSlugTouched] = useState(isEdit);
   const [loading, setLoading] = useState(isEdit);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -77,6 +79,21 @@ export default function AdminNewsForm() {
   }
 
   const blocks = textToBlocks(body);
+
+  async function handleFile(e) {
+    const file = e.target.files?.[0];
+    e.target.value = ""; // supaya file yang sama bisa dipilih lagi
+    if (!file) return;
+    setError("");
+    setUploading(true);
+    try {
+      const url = await uploadImage(file);
+      setForm((f) => ({ ...f, image: url }));
+    } catch (err) {
+      setError(err.message);
+    }
+    setUploading(false);
+  }
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -151,8 +168,25 @@ export default function AdminNewsForm() {
             </Field>
           </div>
 
-          <Field label="Gambar (URL)" hint="Opsional. Tempel link gambar (https://…).">
-            <Input value={form.image} onChange={set("image")} placeholder="https://…" />
+          <Field label="Gambar" hint="Upload dari galeri (otomatis dikecilkan), atau tempel link gambar (https://…).">
+            <div className="flex gap-2">
+              <Input
+                value={form.image}
+                onChange={set("image")}
+                placeholder="https://…"
+                disabled={uploading}
+              />
+              <label className={`btn btn-secondary shrink-0 cursor-pointer ${uploading ? "opacity-50" : ""}`}>
+                <Upload size={16} /> {uploading ? "Mengunggah…" : "Upload"}
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  className="hidden"
+                  onChange={handleFile}
+                  disabled={uploading}
+                />
+              </label>
+            </div>
           </Field>
           {form.image.trim() && (
             <img

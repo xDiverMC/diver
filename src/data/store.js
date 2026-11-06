@@ -46,23 +46,34 @@ function getMonthResetAt() {
   return d.toISOString();
 }
 
-// ── Overview stats ────────────────────────────────────────────
-export function fetchStoreStats() {
-  return resolve({
-    totalRaised: 128400,
-    totalDonators: 612,
-  });
+// ── Statistik toko (dari pesanan PAID asli lewat /api/store-stats) ─────────
+// Satu request dipakai bersama oleh kartu statistik dan target bulanan.
+let statsPromise = null;
+function loadStoreStats() {
+  if (!statsPromise) {
+    statsPromise = fetch("/api/store-stats")
+      .then((r) => (r.ok ? r.json() : null))
+      .catch(() => null);
+    setTimeout(() => (statsPromise = null), 30_000);
+  }
+  return statsPromise;
 }
 
-// ── Monthly hosting goal ─────────────────────────────────────
-export function fetchMonthlyGoal() {
-  return resolve({
-    current: 3420,
-    target: 6000,
+export async function fetchStoreStats() {
+  const d = await loadStoreStats();
+  return { totalRaised: d?.totalRaised ?? 0, totalDonators: d?.totalDonators ?? 0 };
+}
+
+// target = 0 → target bulanan belum diatur di Admin → Pengaturan, blok target disembunyikan.
+export async function fetchMonthlyGoal() {
+  const d = await loadStoreStats();
+  return {
+    current: d?.month?.current ?? 0,
+    target: d?.month?.target ?? 0,
     currency: "Rp",
-    supporters: 47,
-    endsAt: getMonthResetAt(),
-  });
+    supporters: d?.month?.supporters ?? 0,
+    endsAt: d?.month?.endsAt ?? getMonthResetAt(),
+  };
 }
 
 // ── Ranks ─────────────────────────────────────────────────────

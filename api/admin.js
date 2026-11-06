@@ -2,7 +2,8 @@
 // Dibaca/ditulis lewat service role di server, jadi TIDAK bergantung pada RLS tabel di Supabase.
 // Semua aksi wajib login admin (token Supabase di header Authorization).
 import { supabaseAdmin, describeServiceKey, keyHasServerPrivileges } from "./_lib/supabase.js";
-import { ApiError, sendError } from "./_lib/validate.js";
+import crypto from "node:crypto";
+import { ApiError, MC_USERNAME_RE, sendError } from "./_lib/validate.js";
 import { requireAdmin } from "./_lib/adminAuth.js";
 import { loadCatalog } from "./_lib/pricing.js";
 import { tripayBase } from "./_lib/tripay.js";
@@ -23,6 +24,16 @@ const DASH_COLS_FULL =
 const DASH_COLS_BASIC =
   "merchant_ref, created_at, status, amount_idr, items, customer_mc_username, fulfilled";
 
+const isDenied = (res) =>
+  Boolean(res?.error) &&
+  (res.error.code === "42501" ||
+    /permission denied/i.test(res.error.message ?? "") ||
+    (!res.error.message && (res.status === 401 || res.status === 403)));
+const msgOf = (res) =>
+  res?.error?.message || (isDenied(res) ? "permission denied (izin ditolak)" : `gagal${res?.status ? ` (HTTP ${res.status})` : ""}`);
+const GRANT_FIX =
+  "Database belum memberi izin ke server. Supabase → SQL Editor → tempel isi supabase/grants.sql → Run, lalu klik Periksa ulang.";
+
 // Ubah error database jadi pesan yang bisa ditindaklanjuti.
 function dbFail(prefix, error) {
   const k = describeServiceKey();
@@ -32,10 +43,10 @@ function dbFail(prefix, error) {
         ? "SUPABASE_SERVICE_ROLE_KEY di Vercel berisi kunci anon/publishable (kunci untuk browser), bukan service_role/secret."
         : k.kind === "missing"
           ? "SUPABASE_SERVICE_ROLE_KEY belum diisi di Vercel."
-          : "Server tidak punya izin ke tabel ini.";
+          : "Kunci sudah benar, tapi database belum memberi izin ke server — jalankan supabase/grants.sql di Supabase SQL Editor.";
     return new ApiError(
       500,
-      `${prefix}: izin ditolak. ${why} Buka Pengaturan → Cek sistem untuk langkah perbaikannya.`
+      `${prefix}: izin ditolak. ${why} Buka Pengaturan → Cek sistem untuk langkahnya.`
     );
   }
   return new ApiError(500, `${prefix}: ${error?.message ?? "error tidak diketahui"}`);
@@ -128,26 +139,30 @@ async function runHealth({ rcon }) {
     "db-orders",
     "Tabel orders (kolom baru)",
     ordersCols.error ? "fail" : "ok",
-    ordersCols.error ? `Gagal membaca: ${ordersCols.error.message}` : "Lengkap",
+    ordersCols.error ? `Gagal membaca: ${msgOf(ordersCols)}` : "Lengkap",
     ordersCols.error
-      ? /permission denied/i.test(ordersCols.error.message)
-        ? "Ini masalah KUNCI Supabase (lihat pengecekan paling atas), bukan kolom. Perbaiki kuncinya dulu."
+      ? isDenied(ordersCols)
+        ? ["anon", "publishable", "missing"].includes(key.kind)
+          ? "Kunci Supabase di server salah (lihat pengecekan paling atas)."
+          : GRANT_FIX
         : `Inilah penyebab pesanan tidak tersimpan saat checkout. ${dbFix}`
       : undefined
   );
-  add("db-coupons", "Tabel kupon", coupons.error ? "fail" : "ok", coupons.error ? coupons.error.message : "Ada", coupons.error ? dbFix : undefined);
-  add("db-settings", "Tabel pengaturan", settings.error ? "fail" : "ok", settings.error ? settings.error.message : "Ada", settings.error ? dbFix : undefined);
-  add("db-logs", "Tabel log", logs.error ? "fail" : "ok", logs.error ? logs.error.message : "Ada", logs.error ? dbFix : undefined);
+  add("db-coupons", "Tabel kupon", coupons.error ? "fail" : "ok", coupons.error ? msgOf(coupons) : "Ada", coupons.error ? (isDenied(coupons) ? GRANT_FIX : dbFix) : undefined);
+  add("db-settings", "Tabel pengaturan", settings.error ? "fail" : "ok", settings.error ? msgOf(settings) : "Ada", settings.error ? (isDenied(settings) ? GRANT_FIX : dbFix) : undefined);
+  add("db-logs", "Tabel log", logs.error ? "fail" : "ok", logs.error ? msgOf(logs) : "Ada", logs.error ? (isDenied(logs) ? GRANT_FIX : dbFix) : undefined);
 
   const ordersTotal = await supabaseAdmin.from("orders").select("id", { count: "exact", head: true });
   add(
     "orders-count",
     "Jumlah pesanan tercatat",
     ordersTotal.error ? "fail" : "ok",
-    ordersTotal.error ? ordersTotal.error.message : `${ordersTotal.count ?? 0} pesanan`,
-    ordersTotal.count === 0
-      ? "Belum ada pesanan. Kalau sudah mencoba checkout, lihat menu Log untuk alasan kegagalannya."
-      : undefined
+    ordersTotal.error ? msgOf(ordersTotal) : `${ordersTotal.count ?? 0} pesanan`,
+    ordersTotal.error
+      ? isDenied(ordersTotal) ? GRANT_FIX : undefined
+      : ordersTotal.count === 0
+        ? "Belum ada pesanan. Kalau sudah mencoba checkout, lihat menu Log untuk alasan kegagalannya."
+        : undefined
   );
 
   // 3) Katalog produk
@@ -176,7 +191,13 @@ async function runHealth({ rcon }) {
       auto === 0 ? "Isi kolom 'Pengiriman otomatis' di Produk agar item terkirim sendiri. Tanpa itu, semua order dikirim manual." : undefined
     );
   } catch (err) {
-    add("catalog", "Katalog produk di database", "fail", err.message, "Cek koneksi Supabase.");
+    add(
+      "catalog",
+      "Katalog produk di database",
+      "fail",
+      err.message,
+      /permission denied/i.test(err.message) ? GRANT_FIX : "Cek koneksi Supabase."
+    );
   }
 
   // 4) Tripay (panggilan nyata)
@@ -235,6 +256,53 @@ async function runHealth({ rcon }) {
   );
 
   return checks;
+}
+
+// ── Upload gambar (berita, dll) ─────────────────────────────
+const IMAGE_BUCKET = "site-images";
+const IMAGE_MAX_BYTES = 3 * 1024 * 1024;
+const IMAGE_TYPES = {
+  "image/jpeg": { ext: "jpg", magic: (b) => b[0] === 0xff && b[1] === 0xd8 && b[2] === 0xff },
+  "image/png": { ext: "png", magic: (b) => b[0] === 0x89 && b[1] === 0x50 && b[2] === 0x4e && b[3] === 0x47 },
+  "image/webp": {
+    ext: "webp",
+    magic: (b) => b.toString("ascii", 0, 4) === "RIFF" && b.toString("ascii", 8, 12) === "WEBP",
+  },
+};
+
+export async function uploadImage(dataUrl) {
+  const m = /^data:(image\/(?:jpeg|png|webp));base64,([A-Za-z0-9+/=]+)$/.exec(String(dataUrl ?? ""));
+  if (!m) throw new ApiError(400, "Format gambar tidak didukung. Pakai JPG, PNG, atau WebP.");
+  const type = IMAGE_TYPES[m[1]];
+  const buf = Buffer.from(m[2], "base64");
+  if (buf.length > IMAGE_MAX_BYTES) throw new ApiError(413, "Gambar terlalu besar (maksimal 3 MB).");
+  // Cek isi file, bukan hanya label tipenya (mencegah file berbahaya bermasker gambar).
+  if (buf.length < 12 || !type.magic(buf)) throw new ApiError(400, "Isi file bukan gambar yang valid.");
+
+  const { data: bucket } = await supabaseAdmin.storage.getBucket(IMAGE_BUCKET);
+  if (!bucket) {
+    const { error } = await supabaseAdmin.storage.createBucket(IMAGE_BUCKET, {
+      public: true,
+      fileSizeLimit: IMAGE_MAX_BYTES,
+      allowedMimeTypes: Object.keys(IMAGE_TYPES),
+    });
+    if (error && !/already exists/i.test(error.message)) {
+      throw new ApiError(500, `Gagal menyiapkan penyimpanan gambar: ${error.message}`);
+    }
+  }
+
+  const now = new Date();
+  const path = `news/${now.getUTCFullYear()}${String(now.getUTCMonth() + 1).padStart(2, "0")}/${crypto
+    .randomBytes(9)
+    .toString("hex")}.${type.ext}`;
+  const { error } = await supabaseAdmin.storage
+    .from(IMAGE_BUCKET)
+    .upload(path, buf, { contentType: m[1], cacheControl: "31536000", upsert: false });
+  if (error) throw new ApiError(500, `Gagal mengunggah gambar: ${error.message}`);
+
+  const { data } = supabaseAdmin.storage.from(IMAGE_BUCKET).getPublicUrl(path);
+  await logEvent("info", "admin", `Gambar diunggah: ${path}`);
+  return { url: data.publicUrl };
 }
 
 // ── Handler ────────────────────────────────────────────────
@@ -342,34 +410,58 @@ export default async function handler(req, res) {
           },
           eventsList: DISCORD_EVENTS,
           saved: Boolean(s.discord),
+          goal: { monthly_target_idr: Math.max(0, Math.floor(Number(s.goal?.monthly_target_idr) || 0)) },
+          leaderboard: { hidden: Array.isArray(s.leaderboard?.hidden) ? s.leaderboard.hidden : [] },
         });
       }
 
       case "settings-save": {
         needPost();
-        const input = req.body?.discord ?? {};
-        const current = (await getSettings({ force: true })).discord ?? {};
-        const next = { ...current };
-
-        if (typeof input.url === "string") {
-          const url = input.url.trim();
-          if (url && !DISCORD_WEBHOOK_RE.test(url)) {
-            throw new ApiError(400, "URL tidak valid. Harus berbentuk https://discord.com/api/webhooks/…");
-          }
-          next.url = url;
-        }
-        if (typeof input.enabled === "boolean") next.enabled = input.enabled;
-        if (input.events && typeof input.events === "object") {
-          next.events = Object.fromEntries(DISCORD_EVENTS.map((e) => [e.key, input.events[e.key] !== false]));
-        }
-
-        const error = await saveSetting("discord", next);
-        if (error) {
-          throw new ApiError(
+        const body = req.body ?? {};
+        const failSave = (error) =>
+          new ApiError(
             500,
-            `Gagal menyimpan: ${error.message}. Jalankan supabase/setup.sql di Supabase SQL Editor dulu.`
+            `Gagal menyimpan: ${error.message}. Jalankan supabase/setup.sql dan supabase/grants.sql di Supabase SQL Editor dulu.`
           );
+
+        if (body.discord) {
+          const input = body.discord;
+          const current = (await getSettings({ force: true })).discord ?? {};
+          const next = { ...current };
+          if (typeof input.url === "string") {
+            const url = input.url.trim();
+            if (url && !DISCORD_WEBHOOK_RE.test(url)) {
+              throw new ApiError(400, "URL tidak valid. Harus berbentuk https://discord.com/api/webhooks/…");
+            }
+            next.url = url;
+          }
+          if (typeof input.enabled === "boolean") next.enabled = input.enabled;
+          if (input.events && typeof input.events === "object") {
+            next.events = Object.fromEntries(DISCORD_EVENTS.map((e) => [e.key, input.events[e.key] !== false]));
+          }
+          const error = await saveSetting("discord", next);
+          if (error) throw failSave(error);
         }
+
+        if (body.goal) {
+          const t = Math.floor(Number(body.goal.monthly_target_idr));
+          if (!Number.isFinite(t) || t < 0 || t > 1e10) throw new ApiError(400, "Target donasi tidak valid.");
+          const error = await saveSetting("goal", { monthly_target_idr: t });
+          if (error) throw failSave(error);
+        }
+
+        if (body.leaderboard) {
+          const raw = Array.isArray(body.leaderboard.hidden)
+            ? body.leaderboard.hidden
+            : String(body.leaderboard.hidden ?? "").split(/[\s,]+/);
+          const names = [...new Set(raw.map((n) => String(n).trim().toLowerCase()).filter(Boolean))];
+          const bad = names.find((n) => !MC_USERNAME_RE.test(n));
+          if (bad) throw new ApiError(400, `Username tidak valid: ${bad.slice(0, 20)}`);
+          if (names.length > 200) throw new ApiError(400, "Maksimal 200 username.");
+          const error = await saveSetting("leaderboard", { hidden: names });
+          if (error) throw failSave(error);
+        }
+
         return res.status(200).json({ ok: true });
       }
 
@@ -384,6 +476,11 @@ export default async function handler(req, res) {
         });
         if (!r.ok) throw new ApiError(502, `Gagal mengirim ke Discord: ${r.error}`);
         return res.status(200).json({ ok: true });
+      }
+
+      case "upload-image": {
+        needPost();
+        return res.status(200).json(await uploadImage(req.body?.dataUrl));
       }
 
       case "health": {
